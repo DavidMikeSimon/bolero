@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from ext2 import ext2
+from pyext2 import ext2
 
 try:
 	fs = ext2.Fs("../testpart")
