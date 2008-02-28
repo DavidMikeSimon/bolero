@@ -31,12 +31,19 @@ int Inode::dir_iteration(ext2_dir_entry* dirent, int offset, int blocksize, char
 void Inode::set_inode(Fs& fs, ext2_ino_t inum, ext2_inode& inode) {
 	m_e2inode = inode;
 	ext2fs_block_iterate(fs.m_e2fs, inum, 0, NULL, &block_iteration, this);
+	for (unsigned long i = 0; i < m_blocks.size(); ++i) {
+		fs.m_usedBlocks[m_blocks[i]] = 1;
+	}
 	if (is_dir()) {
 		ext2fs_dir_iterate(fs.m_e2fs, inum, 0, NULL, &dir_iteration, this);
-		for (std::vector<DirEntry>::iterator i = m_dirEntries.begin(); i < m_dirEntries.end(); ++i) {
-			fs.m_inodes[i->inode()].m_links.push_back(inum);
+		for (unsigned long i = 0; i < m_dirEntries.size(); ++i) {
+			fs.m_inodes[m_dirEntries[i].inode()].m_links.push_back(DirRef(inum, i));
 		}
 	}
+}
+
+std::string Inode::data() {
+	
 }
 
 bool Inode::is_sock() {
@@ -89,6 +96,11 @@ Fs::Fs(const std::string& path) throw(Ext2Error) {
 	
 	// There is no inode 0, so the first real inode is at index 1.
 	m_inodes = std::vector<Inode>(m_e2fs->super->s_inodes_count+1);
+
+	// FIXME: This needs to figure out which blocks are occupied by metadata and other stuff
+	// However, i'm not sure whether the "blocks" referred to in inodes are physical blocks or just include potential data blocks
+	// Either figure out the pattern for that, or figure out how to read the blocks bitmap from the filesystem
+	m_usedBlocks = std::vector<bool>(m_e2fs->super->s_blocks_count);
 	
 	e = ext2fs_open_inode_scan(m_e2fs, 0, &m_e2scan);
 	if (e) { 
