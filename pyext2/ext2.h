@@ -1,3 +1,5 @@
+// Based partially upon code from "resize" in the e2fsprogs package
+
 #include <ext2fs/ext2_fs.h>
 #include <ext2fs/ext2fs.h>
 #include <string>
@@ -72,11 +74,14 @@ class Fs {
 		ext2_inode_scan m_e2scan;
 		std::vector<Inode> m_inodes;
 		std::vector<bool> m_usedBlocks;
+		ext2_badblocks_list m_badBlockList;
 		
 		Fs(const Fs& other) throw(Ext2Error) { throw Ext2Error("Cannot copy Fs object", 0); }
 	public:
 		Fs(const std::string& path) throw(Ext2Error);
 		bool scanning() throw(Ext2Error); // Scans some of the filesystem. Returns true if more scanning needed, false when finished.
+		void swapInodes(unsigned int a, unsigned int b) throw(Ext2Error); // Swaps two inode entries, updates all references from directory tables
+		void swapBlocks(unsigned int a, unsigned int b) throw(Ext2Error); // Swaps two data blocks, updates all references from inodes, bitmaps, etc.
 		const std::vector<Inode>& inodes() { return m_inodes; } // Allows you to scan through the inode table
 		const std::vector<bool>& usedBlocks() { return m_usedBlocks; } //Allows you to check the free blocks table
 		~Fs();

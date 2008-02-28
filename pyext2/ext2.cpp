@@ -1,3 +1,5 @@
+// Based partially upon code from "resize" in the e2fsprogs package
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <sstream>
@@ -101,6 +103,12 @@ Fs::Fs(const std::string& path) throw(Ext2Error) {
 	// However, i'm not sure whether the "blocks" referred to in inodes are physical blocks or just include potential data blocks
 	// Either figure out the pattern for that, or figure out how to read the blocks bitmap from the filesystem
 	m_usedBlocks = std::vector<bool>(m_e2fs->super->s_blocks_count);
+
+	e = ext2fs_read_bb_inode(m_e2fs, &m_badBlockList);
+	if (e) {
+		ext2fs_close(m_e2fs);
+		throw Ext2Error("Error while reading bad blocks bitmap", e);
+	}
 	
 	e = ext2fs_open_inode_scan(m_e2fs, 0, &m_e2scan);
 	if (e) { 
@@ -127,6 +135,31 @@ bool Fs::scanning() throw(Ext2Error) {
 		++n;
 	}
 	return true;
+}
+
+void Fs::swapInodes(unsigned int a, unsigned int b) throw(Ext2Error) {
+	//FIXME: Implement this
+}
+
+void Fs::swapBlocks(unsigned int a, unsigned int b) throw(Ext2Error) {
+	//FIXME: Mark/unmark block bitmap
+	//FIXME: Update inode references
+	//FIXME: Really, this should take a pattern of swaps, so we don't have to alloc/flush/dealloc after each swap
+	errcode_t e;
+	unsigned int bsize = 1024 << m_e2fs->super->s_log_block_size;
+	unsigned char buf_a[bsize];
+	unsigned char buf_b[bsize];
+	
+	e = io_channel_read_blk(m_e2fs->io, a, 1, buf_a);
+	if (e) { throw Ext2Error("Couldn't read inode a", e); }
+	e = io_channel_read_blk(m_e2fs->io, b, 1, buf_b);
+	if (e) { throw Ext2Error("Couldn't read inode b", e); }
+	e = io_channel_write_blk(m_e2fs->io, a, 1, buf_b);
+	if (e) { throw Ext2Error("Failed writing to inode a", e); }
+	e = io_channel_write_blk(m_e2fs->io, b, 1, buf_a);
+	if (e) { throw Ext2Error("Failed writing to inode b", e); }
+	
+	io_channel_flush(m_e2fs->io);
 }
 
 Fs::~Fs() {
