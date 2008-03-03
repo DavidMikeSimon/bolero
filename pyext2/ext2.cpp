@@ -31,8 +31,13 @@ int Inode::blockIteration(ext2_filsys e2fs, blk_t* blocknr, e2_blkcnt_t blockcnt
 	iteration_env* env = reinterpret_cast<iteration_env*>(prv);
 	
 	env->inode->m_blocks.push_back(*blocknr);
-	if (rblk != 0) { roffset /= sizeof(blk_t); } // If referencer is an indirect block, we get roffset in bytes, but we want it in address length units
-	env->fs->m_blkRefs[*blocknr] = BlkRef(env->inum, env->inode->m_blocks.size()-1, rblk, roffset); // Mark target block with a link back to this inode
+	
+	// If referencer is an indirect block, we get roffset in bytes, but we want it in address length units
+	if (rblk != 0) { roffset /= sizeof(blk_t); }
+	// Mark this block with a link back to referencing block or inode
+	env->fs->m_blkRefs[*blocknr] = BlkRef(env->inum, env->inode->m_blocks.size()-1, rblk, roffset);
+	// Mark referencing block (if any) with a link to this block
+	if (rblk != 0) { env->fs->m_indirectBlkEntries[rblk].push_back(*blocknr); }
 	
 	return 0;
 }
@@ -40,13 +45,15 @@ int Inode::blockIteration(ext2_filsys e2fs, blk_t* blocknr, e2_blkcnt_t blockcnt
 int Inode::dirIteration(ext2_dir_entry* dirent, int offset, int blocksize, char* buf, void* prv) {
 	iteration_env* env = reinterpret_cast<iteration_env*>(prv);
 	
+	// FIXME: This appears to be buggy. That's why the dirEntry scanning part of scan.py is commented out.
+
 	env->inode->m_dirEntries.push_back(DirEntry(std::string(dirent->name, dirent->name_len), dirent->inode)); 
 	env->fs->m_inodes[dirent->inode].m_links.push_back(DirRef(env->inum, env->inode->m_dirEntries.size()-1)); // Add backlink to target inode
 	
 	return 0;
 }
 
-Inode::Inode(Fs& fs, ext2_ino_t inum, ext2_inode& inode) {
+void Inode::scanInode(Fs& fs, ext2_ino_t inum, ext2_inode& inode) {
 	m_e2inode = inode;
 	
 	iteration_env ienv;
@@ -105,6 +112,12 @@ void Fs::assertScanned() {
 	if (!m_scanned) { throw Ext2Error("Operation requires that filesystem was scanned, but it hasn't been", 0); }
 }
 
+// Let's us write/read addresses from indirect reference blocks being accessed as arrays of unsigned char
+union UBlkAddr {
+	blk_t addr;
+	unsigned char bytes[sizeof(blk_t)];
+};
+
 // Changes the indicated block reference to point to blk
 // Doesn't change the contents of the BlkRef structure itself
 void Fs::alterBlockRef(const BlkRef& blkRef, unsigned long blk) {
@@ -114,6 +127,18 @@ void Fs::alterBlockRef(const BlkRef& blkRef, unsigned long blk) {
 		e = ext2fs_write_inode(m_e2fs, blkRef.inode, &m_inodes[blkRef.inode].m_e2inode);
 		if (e) { throw Ext2Error("Unable to write inode table entry. FS is probably inconsistent now!", blkRef.inode); }
 	} else {
+		// This is a silly way of doing this, but it's simple
+		unsigned char buf[m_e2fs->blocksize];
+		e = io_channel_read_blk(m_e2fs->io, blkRef.rblk, 1, buf);
+		if (e) { throw Ext2Error("Couldn't read indirect reference block", e); }
+		UBlkAddr u;
+		u.addr = blk;
+		// FIXME: This kind of thing probably causes an endianness bug
+		for (int i = 0; i < sizeof(blk_t); ++i) {
+			buf[blkRef.offset*sizeof(blk_t) + i] = u.bytes[i];
+		}
+		e = io_channel_write_blk(m_e2fs->io, blkRef.rblk, 1, buf);
+		if (e) { throw Ext2Error("Failed writing to indirect reference block. FS is probably inconsistent now!", e); }
 	}
 }
 
@@ -133,7 +158,8 @@ Fs::Fs(const std::string& path) throw(Ext2Error) {
 	}
 	
 	m_inodes = std::vector<Inode>(m_e2fs->super->s_inodes_count+1); // There is no inode 0, so the first real inode is at index 1.
-	m_blkRefs = std::vector<BlkRef>(m_e2fs->super->s_blocks_count);
+	m_blkRefs = std::vector<BlkRef>(m_e2fs->super->s_blocks_count); // FIXME: Vector might be the wrong data structure for this
+	m_indirectBlkEntries = std::vector< std::vector<unsigned int> >(m_e2fs->super->s_blocks_count); // FIXME: Vector is the wrong data structure for this
 	m_scanned = false;
 	
 	e = ext2fs_read_bitmaps(m_e2fs);
@@ -165,7 +191,7 @@ bool Fs::scanning() throw(Ext2Error) {
 			return false;
 		}
 		if (isInodeUsed(inum)) {
-			m_inodes[inum] = Inode(*this, inum, inode);
+			m_inodes[inum].scanInode(*this, inum, inode);
 		}
 		++n;
 	}
@@ -176,6 +202,8 @@ void Fs::swapInodes(unsigned long a, unsigned long b) throw(Ext2Error) {
 	assertValidInode(a);
 	assertValidInode(b);
 	assertScanned();
+
+	// TODO: Implement
 }
 
 void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
@@ -187,9 +215,9 @@ void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
 	errcode_t e;
 	unsigned char buf_a[m_e2fs->blocksize], buf_b[m_e2fs->blocksize];
 	e = io_channel_read_blk(m_e2fs->io, a, 1, buf_a);
-	if (e) { throw Ext2Error("Couldn't read inode a", e); }
+	if (e) { throw Ext2Error("Couldn't read block a", e); }
 	e = io_channel_read_blk(m_e2fs->io, b, 1, buf_b);
-	if (e) { throw Ext2Error("Couldn't read inode b", e); }
+	if (e) { throw Ext2Error("Couldn't read block b", e); }
 	
 	// Update the block usage bitmap with the newly swapped values, if necessary
 	bool a_used = isBlockUsed(a);
@@ -210,11 +238,20 @@ void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
 	m_blkRefs[a] = b_ref;
 	m_blkRefs[b] = a_ref;
 	
+	// Also need to alter any m_blkRefs that refer back to these blocks, if these blocks are themselves indirect reference blocks
+	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
+		m_blkRefs[*i].rblk = b;
+	}
+	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
+		m_blkRefs[*i].rblk = a;
+	}
+	m_indirectBlkEntries[a].swap(m_indirectBlkEntries[b]);
+	
 	// Write the data back out to new blocks
 	e = io_channel_write_blk(m_e2fs->io, a, 1, buf_b);
-	if (e) { throw Ext2Error("Failed writing to inode a. FS is probably inconsistent now!", e); }
+	if (e) { throw Ext2Error("Failed writing to block a. FS is probably inconsistent now!", e); }
 	e = io_channel_write_blk(m_e2fs->io, b, 1, buf_a);
-	if (e) { throw Ext2Error("Failed writing to inode b. FS is probably inconsistent now!", e); }
+	if (e) { throw Ext2Error("Failed writing to block b. FS is probably inconsistent now!", e); }
 }
 
 bool Fs::isBlockUsed(unsigned long blk) throw(Ext2Error) {

@@ -61,7 +61,7 @@ class Inode {
 		
 		static int blockIteration(ext2_filsys e2fs, blk_t* blocknr, e2_blkcnt_t blockcnt, blk_t rblk, int roffset, void* prv);
 		static int dirIteration(ext2_dir_entry* dirent, int offset, int blocksize, char* buf, void* prv);
-		Inode(Fs& fs, ext2_ino_t inum, ext2_inode& inode); // Constructor used during scanning process to fill inode table
+		void scanInode(Fs& fs, ext2_ino_t inum, ext2_inode& inode); // Used during scanning process when in-use inodes encountered
 	public:
 		Inode() {}
 		const std::vector<unsigned long>& blocks() { return m_blocks; }
@@ -85,6 +85,7 @@ class Fs {
 		ext2_inode_scan m_e2scan;
 		std::vector<Inode> m_inodes;
 		std::vector<BlkRef> m_blkRefs;
+		std::vector< std::vector<unsigned int> > m_indirectBlkEntries; //Mapping of indirect reference blocks to a vector of their entries
 		bool m_scanned;
 		
 		Fs(const Fs& other) throw(Ext2Error) { throw Ext2Error("Cannot copy Fs object", 0); }
