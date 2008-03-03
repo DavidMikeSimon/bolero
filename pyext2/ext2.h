@@ -13,7 +13,7 @@ class Fs;
 //Exception class representing when something has gone terribly wrong
 class Ext2Error {
 		std::string m_msg;
-		int m_code;
+		unsigned long m_code;
 	public:
 		const std::string& msg() const { return m_msg; }
 		const int code() const { return m_code; }
@@ -32,12 +32,24 @@ class DirEntry {
 		unsigned long inode() { return m_inode; }
 };
 
-// Represents some DirEntry in some Inode
+// Represents some DirEntry in some directory Inode
 struct DirRef {
 	unsigned long inode;
 	unsigned long entry;
 	DirRef() { inode = 0; entry = 0; }
 	DirRef(unsigned long in_inode, unsigned long in_entry) { inode = in_inode; entry = in_entry; }
+};
+
+// Represents where some data or indirection block is referenced from
+struct BlkRef {
+	unsigned long inode; // Index in the Fs's m_inodes vector (aka, the inum)
+	unsigned long index; // Index in the Inode's m_blocks vector
+	unsigned long rblk; // Index of referencing block. If 0, then target block is directly referenced from Inode.
+	unsigned int offset; // Offset into whatever is referred to by rblk, in units of address length
+	BlkRef() { inode = 0; index = 0; rblk = 0; offset = 0; }
+	BlkRef(unsigned long in_inode, unsigned long in_index, unsigned long in_rblk, unsigned int in_offset) {
+		inode = in_inode; index = in_index; rblk = in_rblk; offset = in_offset;
+	}
 };
 
 class Inode {
@@ -47,15 +59,14 @@ class Inode {
 		std::vector<DirEntry> m_dirEntries;
 		std::vector<DirRef> m_links; //Which directory inodes link to this inode
 		
-		static int block_iteration(ext2_filsys e2fs, blk_t* blocknr, int blockcnt, void* prv);
-		static int dir_iteration(ext2_dir_entry* dirent, int offset, int blocksize, char* buf, void* prv);
-		void set_inode(Fs& fs, ext2_ino_t inum, ext2_inode& inode);
+		static int blockIteration(ext2_filsys e2fs, blk_t* blocknr, e2_blkcnt_t blockcnt, blk_t rblk, int roffset, void* prv);
+		static int dirIteration(ext2_dir_entry* dirent, int offset, int blocksize, char* buf, void* prv);
+		Inode(Fs& fs, ext2_ino_t inum, ext2_inode& inode); // Constructor used during scanning process to fill inode table
 	public:
 		Inode() {}
 		const std::vector<unsigned long>& blocks() { return m_blocks; }
 		const std::vector<DirEntry>& dirEntries() { return m_dirEntries; }
 		const std::vector<DirRef>& links() { return m_links; }
-		std::string data();
 		bool is_sock(); //Is it a socket?
 		bool is_lnk(); //Is it a symlink?
 		bool is_reg(); //Is it a regular file?
@@ -73,17 +84,25 @@ class Fs {
 		ext2_filsys m_e2fs;
 		ext2_inode_scan m_e2scan;
 		std::vector<Inode> m_inodes;
-		std::vector<bool> m_usedBlocks;
-		ext2_badblocks_list m_badBlockList;
+		std::vector<BlkRef> m_blkRefs;
+		bool m_scanned;
 		
 		Fs(const Fs& other) throw(Ext2Error) { throw Ext2Error("Cannot copy Fs object", 0); }
+		void assertValidBlock(unsigned long blk);
+		void assertValidInode(unsigned long ino);
+		void assertScanned();
+		void alterBlockRef(const BlkRef& blkRef, unsigned long blk);
 	public:
 		Fs(const std::string& path) throw(Ext2Error);
 		bool scanning() throw(Ext2Error); // Scans some of the filesystem. Returns true if more scanning needed, false when finished.
-		void swapInodes(unsigned int a, unsigned int b) throw(Ext2Error); // Swaps two inode entries, updates all references from directory tables
-		void swapBlocks(unsigned int a, unsigned int b) throw(Ext2Error); // Swaps two data blocks, updates all references from inodes, bitmaps, etc.
+		void swapInodes(unsigned long a, unsigned long b) throw(Ext2Error); // Swaps two inode entries, updates all references from directory tables
+		void swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error); // Swaps two data blocks, updates all references from inodes, bitmaps, etc.
 		const std::vector<Inode>& inodes() { return m_inodes; } // Allows you to scan through the inode table
-		const std::vector<bool>& usedBlocks() { return m_usedBlocks; } //Allows you to check the free blocks table
+		const std::vector<BlkRef>& blockRefs() { return m_blkRefs; } // Allows you to scan through the block reference table
+		bool isBlockUsed(unsigned long blk) throw(Ext2Error); // Returns true if the given block is in use, false otherwise
+		bool isInodeUsed(unsigned long ino) throw(Ext2Error); // Returns true if the given inode is in use, false otherwise
+		unsigned long blocksCount(); // Returns the total number of blocks, free or used. Valid block indexes are 1 .. blocksCount-1
+		unsigned long inodesCount(); // Returns the total number of inodes, free or used. Valid inode indexes are 1 .. inodesCount
 		~Fs();
 		
 		friend class Inode;

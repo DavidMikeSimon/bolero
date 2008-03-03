@@ -9,8 +9,6 @@ try:
 		pass
 	a = int(sys.argv[2])
 	b = int(sys.argv[3])
-	if a < 0 or b < 0 or a == b or a >= len(fs.usedBlocks()) or b >= len(fs.usedBlocks()):
-		raise IndexError()
 	fs.swapBlocks(a, b)
 except ext2.Ext2Error, e:
 	print e.str()
