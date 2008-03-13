@@ -89,6 +89,7 @@ class Fs {
 		bool m_scanned;
 		
 		Fs(const Fs& other) throw(Ext2Error) { throw Ext2Error("Cannot copy Fs object", 0); }
+		void assertSwappableBlock(unsigned long blk);
 		void assertValidBlock(unsigned long blk);
 		void assertValidInode(unsigned long ino);
 		void assertScanned();
@@ -100,6 +101,7 @@ class Fs {
 		void swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error); // Swaps two data blocks, updates all references from inodes, bitmaps, etc.
 		const std::vector<Inode>& inodes() { return m_inodes; } // Allows you to scan through the inode table
 		const std::vector<BlkRef>& blockRefs() { return m_blkRefs; } // Allows you to scan through the block reference table
+		bool isSwappableBlock(unsigned long blk) throw(Ext2Error); // Returns true if the given block can be swapped
 		bool isBlockUsed(unsigned long blk) throw(Ext2Error); // Returns true if the given block is in use, false otherwise
 		bool isInodeUsed(unsigned long ino) throw(Ext2Error); // Returns true if the given inode is in use, false otherwise
 		unsigned long blocksCount(); // Returns the total number of blocks, free or used. Valid block indexes are 1 .. blocksCount-1

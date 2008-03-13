@@ -46,7 +46,7 @@ int Inode::dirIteration(ext2_dir_entry* dirent, int offset, int blocksize, char*
 	iteration_env* env = reinterpret_cast<iteration_env*>(prv);
 	
 	// FIXME: This appears to be buggy. That's why the dirEntry scanning part of scan.py is commented out.
-
+	
 	env->inode->m_dirEntries.push_back(DirEntry(std::string(dirent->name, dirent->name_len), dirent->inode)); 
 	env->fs->m_inodes[dirent->inode].m_links.push_back(DirRef(env->inum, env->inode->m_dirEntries.size()-1)); // Add backlink to target inode
 	
@@ -100,6 +100,11 @@ Inode::~Inode() {
 // Fs
 //
 
+void Fs::assertSwappableBlock(unsigned long blk) {
+	// isSwappableBlock calls assertValidBlock in turn
+	if (!isSwappableBlock(blk)) { throw Ext2Error("Invalid data block index", blk); }
+}
+
 void Fs::assertValidBlock(unsigned long blk) {
 	if (blk == 0 || blk >= blocksCount()) { throw Ext2Error("Invalid block index", blk); }
 }
@@ -119,7 +124,7 @@ union UBlkAddr {
 };
 
 // Changes the indicated block reference to point to blk
-// Doesn't change the contents of the BlkRef structure itself
+// Doesn't change the contents of any pyext2 structures, just the ext2 data structures they represent
 void Fs::alterBlockRef(const BlkRef& blkRef, unsigned long blk) {
 	errcode_t e;
 	if (blkRef.rblk == 0) {
@@ -151,10 +156,10 @@ Fs::Fs(const std::string& path) throw(Ext2Error) {
 		unix_io_manager,
 		&m_e2fs);
 	if (e) { throw Ext2Error("Error while opening filesystem (perhaps it's mounted or needs to be fscked)", e); }
-
+	
 	if (m_e2fs->super->s_state != EXT2_VALID_FS) {
 		ext2fs_close(m_e2fs);
-		throw Ext2Error("Filesystem's state is dirty. Perhaps it's mounted or needs to be fscked", m_e2fs->super->s_state);
+		throw Ext2Error("Filesystem's state is dirty. Perhaps it's mounted or needs to be fscked", 0);
 	}
 	
 	m_inodes = std::vector<Inode>(m_e2fs->super->s_inodes_count+1); // There is no inode 0, so the first real inode is at index 1.
@@ -207,9 +212,30 @@ void Fs::swapInodes(unsigned long a, unsigned long b) throw(Ext2Error) {
 }
 
 void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
-	assertValidBlock(a);
-	assertValidBlock(b);
+	assertSwappableBlock(a);
+	assertSwappableBlock(b);
 	assertScanned();
+
+//	printf("BEFORE:\n");
+//	printf("%u BLKREF INODE:%u\n", a, m_blkRefs[a].inode);
+//	printf("%u BLKREF IDX:%u\n", a, m_blkRefs[a].index);
+//	printf("%u BLKREF RBLK:%u\n", a, m_blkRefs[a].rblk);
+//	printf("%u BLKREF OFFSET:%u\n", a, m_blkRefs[a].offset);
+//	printf("%u INDIRECT ENTRIES: ");
+//	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
+//		printf("%u ", *i);
+//	}
+//	printf("\n");
+//	printf("%u BLKREF INODE:%u\n", b, m_blkRefs[b].inode);
+//	printf("%u BLKREF IDX:%u\n", b, m_blkRefs[b].index);
+//	printf("%u BLKREF RBLK:%u\n", b, m_blkRefs[b].rblk);
+//	printf("%u BLKREF OFFSET:%u\n", b, m_blkRefs[b].offset);
+//	printf("%u INDIRECT ENTRIES: ");
+//	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
+//		printf("%u ", *i);
+//	}
+//	printf("\n");
+//	printf("\n");
 	
 	// Read in the data from the blocks
 	errcode_t e;
@@ -225,12 +251,33 @@ void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
 	if (a_used && !b_used) {
 		ext2fs_unmark_block_bitmap(m_e2fs->block_map, a);
 		ext2fs_mark_block_bitmap(m_e2fs->block_map, b);
+		ext2fs_mark_bb_dirty(m_e2fs);
 	} else if (!a_used && b_used) {
 		ext2fs_mark_block_bitmap(m_e2fs->block_map, a);
 		ext2fs_unmark_block_bitmap(m_e2fs->block_map, b);
+		ext2fs_mark_bb_dirty(m_e2fs);
 	}
 	
-	// Update any references to these blocks in the inode table
+	// Write the data back out to new blocks
+	e = io_channel_write_blk(m_e2fs->io, a, 1, buf_b);
+	if (e) { throw Ext2Error("Failed writing to block a. FS is probably inconsistent now!", e); }
+	e = io_channel_write_blk(m_e2fs->io, b, 1, buf_a);
+	if (e) { throw Ext2Error("Failed writing to block b. FS is probably inconsistent now!", e); }
+	
+	// TODO: Update Inode m_blocks entries
+	
+	// Also need to alter any m_blkRefs that refer back to these blocks, if these blocks are themselves indirect reference blocks
+	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
+		m_blkRefs[*i].rblk = b;
+		if (*i == b) { *i = a; }
+	}
+	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
+		m_blkRefs[*i].rblk = a;
+		if (*i == a) { *i = b; }
+	}
+	m_indirectBlkEntries[a].swap(m_indirectBlkEntries[b]);
+	
+	// Update any references to these blocks in the inode table and/or indirect reference blocks
 	BlkRef a_ref = m_blkRefs[a];
 	BlkRef b_ref = m_blkRefs[b];
 	if (a_ref.inode != 0) { alterBlockRef(a_ref, b); }
@@ -238,20 +285,34 @@ void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
 	m_blkRefs[a] = b_ref;
 	m_blkRefs[b] = a_ref;
 	
-	// Also need to alter any m_blkRefs that refer back to these blocks, if these blocks are themselves indirect reference blocks
-	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
-		m_blkRefs[*i].rblk = b;
-	}
-	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
-		m_blkRefs[*i].rblk = a;
-	}
-	m_indirectBlkEntries[a].swap(m_indirectBlkEntries[b]);
-	
-	// Write the data back out to new blocks
-	e = io_channel_write_blk(m_e2fs->io, a, 1, buf_b);
-	if (e) { throw Ext2Error("Failed writing to block a. FS is probably inconsistent now!", e); }
-	e = io_channel_write_blk(m_e2fs->io, b, 1, buf_a);
-	if (e) { throw Ext2Error("Failed writing to block b. FS is probably inconsistent now!", e); }
+//	printf("AFTER:\n");
+//	printf("%u BLKREF INODE:%u\n", a, m_blkRefs[a].inode);
+//	printf("%u BLKREF IDX:%u\n", a, m_blkRefs[a].index);
+//	printf("%u BLKREF RBLK:%u\n", a, m_blkRefs[a].rblk);
+//	printf("%u BLKREF OFFSET:%u\n", a, m_blkRefs[a].offset);
+//	printf("%u INDIRECT ENTRIES: ");
+//	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
+//		printf("%u ", *i);
+//	}
+//	printf("\n");
+//	printf("%u BLKREF INODE:%u\n", b, m_blkRefs[b].inode);
+//	printf("%u BLKREF IDX:%u\n", b, m_blkRefs[b].index);
+//	printf("%u BLKREF RBLK:%u\n", b, m_blkRefs[b].rblk);
+//	printf("%u BLKREF OFFSET:%u\n", b, m_blkRefs[b].offset);
+//	printf("%u INDIRECT ENTRIES: ");
+//	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
+//		printf("%u ", *i);
+//	}
+//	printf("\n");
+//	printf("\n");
+}
+
+bool Fs::isSwappableBlock(unsigned long blk) throw(Ext2Error) {
+	assertValidBlock(blk);
+	// It's a swappable block if it's unused, or if it is referenced by any inode, except for inode 7.
+	// Inode 7 is the "reserved group descriptors" inode, which I'm unclear on the purpose of...
+	// However, attempting to alter it often results in inconsistencies in the filesystem (undocumented libext2fs activity, maybe?)
+	return (!ext2fs_test_block_bitmap(m_e2fs->block_map, blk)) || (m_blkRefs[blk].inode != 0 && m_blkRefs[blk].inode != 7);
 }
 
 bool Fs::isBlockUsed(unsigned long blk) throw(Ext2Error) {
@@ -273,7 +334,7 @@ unsigned long Fs::inodesCount() {
 }
 
 Fs::~Fs() {	
-	io_channel_flush(m_e2fs->io);
 	ext2fs_close_inode_scan(m_e2scan);
+	io_channel_flush(m_e2fs->io);
 	ext2fs_close(m_e2fs);
 }
