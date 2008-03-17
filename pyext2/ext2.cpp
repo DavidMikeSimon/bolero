@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sstream>
+#include <algorithm>
 
 #include "ext2.h"
 
@@ -117,14 +118,65 @@ void Fs::assertScanned() {
 	if (!m_scanned) { throw Ext2Error("Operation requires that filesystem was scanned, but it hasn't been", 0); }
 }
 
-// Let's us write/read addresses from indirect reference blocks being accessed as arrays of unsigned char
+void Fs::assertConsistency() {
+	std::vector<unsigned long> seenBlocks = std::vector<unsigned long>(blocksCount(), 0);
+	for (unsigned long i = 0; i < m_inodes.size(); ++i) {
+		for (unsigned long b = 0; b < m_inodes[i].m_blocks.size(); ++b) {
+			if (seenBlocks[m_inodes[i].m_blocks[b]] > 0) {
+				printf("Inconsistency: Block %u is referenced from both inodes %u and %u!\n",
+					m_inodes[i].m_blocks[b], seenBlocks[m_inodes[i].m_blocks[b]], i);
+				throw Ext2Error("Inconsistency detected", 0);
+			} else {
+				seenBlocks[m_inodes[i].m_blocks[b]] = i;
+			}
+			
+			if (m_blkRefs[m_inodes[i].m_blocks[b]].inode != i) {
+				printf("Inconsistency: Block %u is supposed to be owned by inode %u, but BlkRef disagrees!\n", m_inodes[i].m_blocks[b], i);
+				throw Ext2Error("Inconsistency detected", 1);
+			}
+		}
+	}
+	
+	for (unsigned long i = 0; i < m_blkRefs.size(); ++i) {
+		if (m_blkRefs[i].inode != 0) {
+			if (m_inodes[m_blkRefs[i].inode].m_blocks[m_blkRefs[i].index] != i) {
+				printf("Inconsistency: Block %u was supposed to be at inode %u index %u, but wasn't!\n", i, m_blkRefs[i].inode, m_blkRefs[i].index);
+				throw Ext2Error("Inconsistency detected", 2);
+			}
+			
+			if (m_blkRefs[i].rblk != 0) {
+				if (m_indirectBlkEntries[m_blkRefs[i].rblk][m_blkRefs[i].offset] != i) {
+					printf("Inconsistency: Block %u was supposed to be at indirectBlkEntries[%u][%u], but wasn't!\n", i, m_blkRefs[i].rblk, m_blkRefs[i].offset);
+					throw Ext2Error("Inconsistency detected", 3);
+				}
+			}
+		} else {
+			if (m_blkRefs[i].index != 0 || m_blkRefs[i].rblk != 0 || m_blkRefs[i].offset != 0) {
+				printf("Inconsistency: Block %u has a BlkRef with an inode of 0 but other non-zero information!\n", i);
+				throw Ext2Error("Inconsistency detected", 4);
+			}
+		}
+	}
+	
+	for (unsigned long i = 0; i < m_indirectBlkEntries.size(); ++i) {
+		for (unsigned long b = 0; b < m_indirectBlkEntries[i].size(); ++b) {
+			if (m_blkRefs[m_indirectBlkEntries[i][b]].rblk != i) {
+				printf("Inconsistency: Block %u was supposed to have rblk of %u, but instead it was %u!\n",
+					m_indirectBlkEntries[i][b], i, m_blkRefs[m_indirectBlkEntries[i][b]].rblk);
+				throw Ext2Error("Inconsistency detected", 5);
+			}
+		}
+	}
+}
+
+// Lets us write/read addresses from indirect reference blocks being accessed as arrays of unsigned char
 union UBlkAddr {
 	blk_t addr;
 	unsigned char bytes[sizeof(blk_t)];
 };
 
 // Changes the indicated block reference to point to blk
-// Doesn't change the contents of any pyext2 structures, just the ext2 data structures they represent
+// Doesn't change the contents of any pyext2 structures, just the real ext2 structures they represent
 void Fs::alterBlockRef(const BlkRef& blkRef, unsigned long blk) {
 	errcode_t e;
 	if (blkRef.rblk == 0) {
@@ -132,7 +184,7 @@ void Fs::alterBlockRef(const BlkRef& blkRef, unsigned long blk) {
 		e = ext2fs_write_inode(m_e2fs, blkRef.inode, &m_inodes[blkRef.inode].m_e2inode);
 		if (e) { throw Ext2Error("Unable to write inode table entry. FS is probably inconsistent now!", blkRef.inode); }
 	} else {
-		// This is a silly way of doing this, but it's simple
+		// This is a silly and somewhat wasteful way of doing this, but it's simple
 		unsigned char buf[m_e2fs->blocksize];
 		e = io_channel_read_blk(m_e2fs->io, blkRef.rblk, 1, buf);
 		if (e) { throw Ext2Error("Couldn't read indirect reference block", e); }
@@ -216,26 +268,10 @@ void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
 	assertSwappableBlock(b);
 	assertScanned();
 
-//	printf("BEFORE:\n");
-//	printf("%u BLKREF INODE:%u\n", a, m_blkRefs[a].inode);
-//	printf("%u BLKREF IDX:%u\n", a, m_blkRefs[a].index);
-//	printf("%u BLKREF RBLK:%u\n", a, m_blkRefs[a].rblk);
-//	printf("%u BLKREF OFFSET:%u\n", a, m_blkRefs[a].offset);
-//	printf("%u INDIRECT ENTRIES: ");
-//	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
-//		printf("%u ", *i);
-//	}
-//	printf("\n");
-//	printf("%u BLKREF INODE:%u\n", b, m_blkRefs[b].inode);
-//	printf("%u BLKREF IDX:%u\n", b, m_blkRefs[b].index);
-//	printf("%u BLKREF RBLK:%u\n", b, m_blkRefs[b].rblk);
-//	printf("%u BLKREF OFFSET:%u\n", b, m_blkRefs[b].offset);
-//	printf("%u INDIRECT ENTRIES: ");
-//	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
-//		printf("%u ", *i);
-//	}
-//	printf("\n");
-//	printf("\n");
+	if (a == b) {
+		// Well, looks like my work here is done. No, no need for thanks, good citizen. Just doing my job.
+		return;
+	}
 	
 	// Read in the data from the blocks
 	errcode_t e;
@@ -264,47 +300,40 @@ void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
 	e = io_channel_write_blk(m_e2fs->io, b, 1, buf_a);
 	if (e) { throw Ext2Error("Failed writing to block b. FS is probably inconsistent now!", e); }
 	
-	// TODO: Update Inode m_blocks entries
-	
-	// Also need to alter any m_blkRefs that refer back to these blocks, if these blocks are themselves indirect reference blocks
-	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
-		m_blkRefs[*i].rblk = b;
-		if (*i == b) { *i = a; }
+	// Update references among inodes (and possibly indirect reference blocks) that own these blocks
+	if (m_blkRefs[a].inode != 0) {
+		m_inodes[m_blkRefs[a].inode].m_blocks[m_blkRefs[a].index] = b;
+		if (m_blkRefs[a].rblk != 0) {
+			m_indirectBlkEntries[m_blkRefs[a].rblk][m_blkRefs[a].offset] = b;
+		}
 	}
-	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
-		m_blkRefs[*i].rblk = a;
-		if (*i == a) { *i = b; }
+	if (m_blkRefs[b].inode != 0) {
+		m_inodes[m_blkRefs[b].inode].m_blocks[m_blkRefs[b].index] = a;
+		if (m_blkRefs[b].rblk != 0) {
+			m_indirectBlkEntries[m_blkRefs[b].rblk][m_blkRefs[b].offset] = a;
+		}
 	}
-	m_indirectBlkEntries[a].swap(m_indirectBlkEntries[b]);
 	
-	// Update any references to these blocks in the inode table and/or indirect reference blocks
+	// Swap m_blkRef entries
 	BlkRef a_ref = m_blkRefs[a];
 	BlkRef b_ref = m_blkRefs[b];
-	if (a_ref.inode != 0) { alterBlockRef(a_ref, b); }
-	if (b_ref.inode != 0) { alterBlockRef(b_ref, a); }
 	m_blkRefs[a] = b_ref;
 	m_blkRefs[b] = a_ref;
 	
-//	printf("AFTER:\n");
-//	printf("%u BLKREF INODE:%u\n", a, m_blkRefs[a].inode);
-//	printf("%u BLKREF IDX:%u\n", a, m_blkRefs[a].index);
-//	printf("%u BLKREF RBLK:%u\n", a, m_blkRefs[a].rblk);
-//	printf("%u BLKREF OFFSET:%u\n", a, m_blkRefs[a].offset);
-//	printf("%u INDIRECT ENTRIES: ");
-//	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
-//		printf("%u ", *i);
-//	}
-//	printf("\n");
-//	printf("%u BLKREF INODE:%u\n", b, m_blkRefs[b].inode);
-//	printf("%u BLKREF IDX:%u\n", b, m_blkRefs[b].index);
-//	printf("%u BLKREF RBLK:%u\n", b, m_blkRefs[b].rblk);
-//	printf("%u BLKREF OFFSET:%u\n", b, m_blkRefs[b].offset);
-//	printf("%u INDIRECT ENTRIES: ");
-//	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
-//		printf("%u ", *i);
-//	}
-//	printf("\n");
-//	printf("\n");
+	// Also need to alter any m_blkRefs that mention being referenced by these blocks, if these blocks are themselves indirect reference blocks
+	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
+		m_blkRefs[*i].rblk = b;
+	}
+	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
+		m_blkRefs[*i].rblk = a;
+	}
+	m_indirectBlkEntries[a].swap(m_indirectBlkEntries[b]);
+	
+	// Finally, update the actual filesystem to match the new pyext2 state
+	if (m_blkRefs[a].inode != 0) { alterBlockRef(m_blkRefs[a], a); }
+	if (m_blkRefs[b].inode != 0) { alterBlockRef(m_blkRefs[b], b); }
+	
+	//assertConsistency();
 }
 
 bool Fs::isSwappableBlock(unsigned long blk) throw(Ext2Error) {

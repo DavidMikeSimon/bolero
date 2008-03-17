@@ -93,6 +93,7 @@ class Fs {
 		void assertValidBlock(unsigned long blk);
 		void assertValidInode(unsigned long ino);
 		void assertScanned();
+		void assertConsistency();
 		void alterBlockRef(const BlkRef& blkRef, unsigned long blk);
 	public:
 		Fs(const std::string& path) throw(Ext2Error);

@@ -15,7 +15,7 @@ try:
 	
 	for i in dblocks:
 		t = random.choice(dblocks)
-		print "%04u <-> %04u" % (i, t)
+		print "%04u<->%04u " % (i, t)
 		fs.swapBlocks(i, t)
 except ext2.Ext2Error, e:
 	print e.str()
