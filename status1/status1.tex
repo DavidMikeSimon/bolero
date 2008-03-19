@@ -1,0 +1,80 @@
+\documentclass[10pt]{article}
+
+\usepackage{fullpage}
+
+\author{David Simon}
+\title{BOLERO Status Report}
+
+\begin{document}
+
+\maketitle
+
+\section{Project Status Overview}
+
+Bolero is the Block Organizer that Localizes Empirically Related Objects, specifically file data within \texttt{ext2} filesystems. It's an elaboration on the idea of disk defragmentation, where file clusters are reorganized on disk into the order in which they will be accessed. Bolero will do not only this, but also organizes the actual \emph{files} into an order that, based on prior observation, they are very likely to be accessed in.
+
+Currently, Bolero is capable of acting only as a simple \texttt{ext2} defragmenter. The next step in development will be to move forward to the more interesting features mentioned above: observation of filesystem activity, and more subtle reorganization of the filesystem based on data recorded during that observation.
+
+\section{Accomplishments}
+
+At the present time, Bolero consists of a library capable of manipulating and scanning some ext2 structures, and a few simple programs which make use of this library. The library, which I call pyext2, is written in C++ and intended to be accessible from client Python applications via SWIG. It is implemented in terms of the standard \texttt{ext2} manipulation library \texttt{libext2fs}, the same library used to by \texttt{e2fsck} and various other tools. 
+
+Pyext2 can open \texttt{ext2} filesystems and scan them for structural information about how their files (or, more technically, inodes) and file data is organized. It then allows the client program to easily swap any two data blocks on the filesystem, which moves both the actual file data itself as well as correcting all references to the data within both the \texttt{ext2}'s data structures and pyext2's representations of those structures. That is, after performing one or more block swaps, it's not necessary to tell pyext2 to rescan the filesystem; the client program will immediately see that change reflected in the state of the filesystem reported by pyext2's examination functions. This is important, not so much for the client program, but so that pyext2 can be used to perform many block swaps in sequence without losing track of what needs to be updated or having to re-generate that information by scanning the filesystem again. This is crucial for a defragmentation program.
+
+In addition to pyext2 itself, a few small client Python programs have been developed, mostly for the purpose of testing. One allows you to swap arbitrary blocks within the filesystem, and another reports the current state of the filesystem's data blocks in some detail. Another program can be used to defragment \texttt{ext2} filesystems, although it lacks the capabilities of a full-fledged defragmenter, such as the ability to perform only as many swaps as necessary, or to avoid splitting files over unmovable blocks. Finally, another program has been written which \emph{en}fragments filesystems, by randomly swapping all movable data blocks around. This was mostly useful for testing the defragmenter and the correctness of pyext2 itself; running the enfragmenter and defragmenter on various test filesystems, and verifying their integrity afterwords, is the source of my confidence in the ability of pyext2 to alter filesystems without ruining them.
+
+\section{Difficulties}
+
+The actual development time, once the intent of the project had been settled and the proposal written, was spent handling three types of technical issues.
+
+The first issue, which was most significant near the beginning, was learning how to use SWIG and deal with its idiosyncrasies. SWIG is a tool which allows you to write libraries in C or C++ and access them from various interpreted languages, such as Python. SWIG's tutorial was very helpful in helping me get started, although it glossed over a couple issues which I had to seek out separate solutions for:
+\begin{itemize}
+ \item The filesystem representation in pyext2 is implemented largely with C++ STL structures, which I wanted to be able to access directly from Python as though they were Python structures. I initially thought that SWIG would handle this by itself, but the result was mysterious instability. I looked further into it, and discovered that this could be corrected by explicitly telling SWIG about which STL template instantiations I was interested in sharing with the Python script. After learning how to do that, everything worked as expected.
+ \item I wished to be able to throw exceptions out of my C++ library and catch them within the Python script. Doing so was the source of a number of strange crashes. My exception class consists of only a string and an integer, but under some circumstances, attempting to copy certain integers out of \texttt{libext2fs} structures and into such an exception before returning it resulted in segfaults. This problem went away when I simply assigned a constant to that value instead. I am still unable to explain this problem, but the workaround is effective enough.
+\end{itemize}
+
+
+The second issue, which presented issues throughout the development process, was dealing with the poor documentation for both the \texttt{ext2} filesystem itself and for \texttt{libext2fs} in particular. The documentation I was able to find for the filesystem itself was generally complete, but also tended to be somewhat outdated. The documentation for \texttt{libext2fs}, on the other hand, was only semi-complete; those functions which were documented tended to be documented thoroughly (with some gotchas), but other functions were entirely without description, even in the library's source. To get around this, I used another program which comes with the library, \texttt{e2resize}, as a source of \texttt{libext2fs} use examples. This was a great help in allowing me to work around a number of odd issues, such as:
+\begin{itemize}
+ \item Problems with changes to the block usage bitmap not being applied when the filesystem was closed. It turns out that it's necessary to manually mark this bitmap as being dirty after calling functions which manipulate it, or else the function which closes and flushes the filesystem ignores my changes.
+ \item Incompleteness in the description of the superblock flag indicating whether the filesystem is dirty. It turns out that this can (and did) take on various other valid, but undocumented, states. I simply changed my code to explicitly check for the one good state, rather than for the unfortunately incomplete list of bad states.
+ \item A lack of documentation on the direct meaning and valid range of block and inode indexes returned and accepted by various functions. This was solved mostly through trial and error.
+\item There being no documentation at all (not even a mention in the function list) for the tools necessary to read, write, and flush \texttt{libext2fs}'s low-level IO system, necessary for reading and writing physical block data.
+\item Various gotchas involving reserved low-numbered inodes. In particular, I discovered that it does not seem to be possible to, via \texttt{libext2fs}, change inode \#7, described simply but somewhat mysteriously as the ''Reserved Group Descriptors Inode''. I examined the source of \texttt{libext2fs} to try and figure out why this was so, but the only function which seems directly concerned with that inode is one which I do not, directly or indirectly, call from pyext2. This particular issue is still somewhat of a mystery.
+\end{itemize}
+
+The third issue was entirely within my own code. I had a hard time in the block swapping mechanism with keeping both the \texttt{ext2} data structures and pyext2's internal representation of the filesystem consistent and correct after swaps. This was a particular problem with border cases, such as swapping an indirect reference block (a file data block which, in turn, lists more file data blocks) with a second block referenced by the first. I was eventually able to solve this with two steps. The first was to build a consistency checker for pyext2 that could make sure its internal representation made sense. Doing so made it easy to spot where I was making mistakes within my non-\texttt{libext2fs} code. The second step was to separate the block swap into two steps. The first step is to manipulate those internal pyext2 structures which could be verified by the consistency checker. The second step is to then update the actual \texttt{ext2} filesystem structures to match the newly changed pyext2 structures. Before, when these steps were more intertwined, and the second was started before the first was finished, debugging border conditions was much more difficult.
+
+\section{Code Structure}
+
+The simple Python applications included with Bolero currently are:
+\begin{description}
+ \item[bswap.py] performs one or more block swaps on a filesystem in sequence. This was useful for checking various types of block swaps or block swap patterns and making sure they worked as expected.
+ \item[defragment.py] orders the data blocks in a filesystem. This basic script will later be expanded to do more sophisticated types of filesystem optimization.
+ \item[enfragment.py] randomly shuffles the data blocks in a filesystem. This was helpful in testing \texttt{defragment.py} and in making sure I didn't have any border case problems left in the block swapping routines.
+ \item[scan.py] displays all the in-use inodes in a filesystem, what type of inodes they are, and which data blocks they use. This was very useful in debugging \texttt{defragment.py} and \texttt{enfragment.py}
+\end{description}
+
+The library where most of the work went, pyext2, consists of just two major source files, \texttt{ext2.h} and \texttt{ext2.cpp}. The former is just a complete header describing all the structures and methods in the latter. Roughly, these structures are:
+\begin{description}
+ \item[Fs] is the main class used to interact with the library. To open a filesystem and scan or manipulate it, a Python program must instantiate an \texttt{Fs}, and then repeatedly call its \texttt{scanning} method to populate the Fs's various structures, which gives the client program an opportunity to indicate to the user that it's actually busy and not just frozen. Once the \texttt{Fs} is ready, the client program can iterate through its various structures, and/or call \texttt{swapBlocks} to manipulate the filesystem. There is also a \texttt{swapInodes} method, but it is currently unimplemented.
+ \item[Ext2Error] is an exception class. It contains just a descriptive string and an integer with context-sensitive meaning. This exception can be thrown from the C++ program and caught in the Python program.
+ \item[Inode] represents an entry in the filesystem's inode table. Inodes do not describe file names, but otherwise contain all information about files, such as permissions, and the list of data blocks which make up a file.
+ \item[DirEntry] represents an entry in a directory, pointing to an inode. These entries are what make up the familiar hierarchical structure of the filesystem. The code relating to this structure currently does not work, and is mostly commented out.
+ \item[DirRef] is the inverse of \texttt{DirEntry}, representing which DirEntries point to a particular Inode.
+ \item[BlkRef] is analogous to \texttt{DirRef}, but refers to data blocks, which are referenced from Inodes. A BlkRef represents which Inode points to a particular block, and how it does so. There is no structure for a data block itself (these are represented through merely the index of the block on the filesystem), so there is no structure analogous to \texttt{DirEntry}.
+\end{description}
+
+There is also a file in the pyext2 directory called \texttt{ext2.i}, which describes to SWIG how to connect the library with Python client applications. Pyext2 can be built with the \texttt{build.sh} script; if more source files are added to Pyext2 later, it may be worth replacing this with an actual Makefile or other build system.
+
+\section{Continuing Work}
+
+Next quarter, I intend to do the following:
+\begin{itemize}
+ \item Investigate various methods of observing filesystem activity. These include altering the Linux kernel so that it provides activity logs via \texttt{/proc} or some other means, or using/modifying existing tools such as \texttt{lsof} or \texttt{strace} to provide the necessary information.
+ \item Once one of these methods is selected, I use it to glean useful observations about the start-up of various Linux applications. These will include at least some of both workstation-oriented applications (i.e. X, KDE, OpenOffice) and server-oriented applications (i.e. Squid, Apache, MySQL, Postfix).
+ \item This information will then be used to try and organize the partition containing each application's various resources into a more optimal manner. The overall goal is to try and get the application to start up more quickly.
+ \item These steps will require the creation of new pyext2 client applications, and also possibly the expansion of pyext2's features. For example, I will certainly need to figure out what's going wrong with the creation of the \texttt{DirEntry} table, so that it is possible to associate inodes with their filename(s). I may also want to implement \texttt{swapInodes}, in order to test the effect of inode table reorganization on performance. Gathering timing and disk access data first may help me to decide of that latter step is worth doing.
+\end{itemize}
+
+\end{document}
