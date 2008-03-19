@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-# FIXME: This needs to do the following:
-# - Actually work on fullish partitions (this is just a quickie algorithm, I need to make a real one, probably something like selection sort)
+# TODO: This needs to do the following:
 # - Notice when mid-disk blocks cannot be moved, and attempt to avoid letting them split a file into pieces
 # - Try to move blocks so that they're near to the center of the disk, rather than right at the beginning
+# - Move inode table entries as well (though, this first needs to be implemented in pyext2)
 
 import sys
 from pyext2 import ext2
@@ -18,21 +18,22 @@ try:
 		if fs.isSwappableBlock(b):
 			dblocks.append(b)
 	
-	inodes = []
+	iblocks = []
 	for i in fs.inodes():
-		iblocks = []
 		for b in i.blocks():
 			if fs.isSwappableBlock(b):
 				iblocks.append(b)
-		if len(iblocks) > 0:
-			inodes.append(iblocks)
 	
-	for i in inodes:
-		for b in i:
-			d = dblocks[0]
-			print "%u<->%u" % (b, d)
-			fs.swapBlocks(b, d)
-			dblocks.pop(0)
+	for d in dblocks:
+		if len(iblocks) == 0:
+			break
+		b = iblocks.pop(0)
+		print "%u<->%u" % (b, d)
+		fs.swapBlocks(b, d)
+		for idx in range(len(iblocks)):
+			if iblocks[idx] == d:
+				iblocks[idx] = b
+				break
 
 except ext2.Ext2Error, e:
 	print e.str()
