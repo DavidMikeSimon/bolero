@@ -46,10 +46,9 @@ int Inode::blockIteration(ext2_filsys e2fs, blk_t* blocknr, e2_blkcnt_t blockcnt
 int Inode::dirIteration(ext2_dir_entry* dirent, int offset, int blocksize, char* buf, void* prv) {
 	iteration_env* env = reinterpret_cast<iteration_env*>(prv);
 	
-	// FIXME: This appears to be buggy. That's why the dirEntry scanning part of scan.py is commented out.
-	
-	env->inode->m_dirEntries.push_back(DirEntry(std::string(dirent->name, dirent->name_len), dirent->inode)); 
-	env->fs->m_inodes[dirent->inode].m_links.push_back(DirRef(env->inum, env->inode->m_dirEntries.size()-1)); // Add backlink to target inode
+	ext2_dir_entry_2* dirent2 = (ext2_dir_entry_2*)dirent;
+	env->inode->m_dirEntries.push_back(DirEntry(std::string(dirent2->name, dirent2->name_len), dirent2->inode)); 
+	env->fs->m_inodes[dirent2->inode].m_links.push_back(DirRef(env->inum, env->inode->m_dirEntries.size()-1)); // Add backlink to target inode
 	
 	return 0;
 }
