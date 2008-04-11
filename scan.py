@@ -3,8 +3,11 @@
 import sys
 from pyext2 import ext2
 
+# Although it is possible and safe to run this script on a mounted filesystem, if that filesystem changes during the scan, output is not to be trusted
+# The worst that can happen, though, is that scan will crash; the filesystem is opened read-only by this script, so no worries
+
 try:
-	fs = ext2.Fs(sys.argv[1])
+	fs = ext2.Fs(sys.argv[1], True)
 	while (fs.scanning()):
 		pass
 	for e, i in enumerate(fs.inodes()):

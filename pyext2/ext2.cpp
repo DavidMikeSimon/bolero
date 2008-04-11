@@ -168,6 +168,12 @@ void Fs::assertConsistency() {
 	}
 }
 
+void Fs::assertWritable() {
+	if (m_readonly) {
+		throw Ext2Error("Cannot perform this operation on a filesystem opened read-only", 0);
+	}
+}
+
 // Lets us write/read addresses from indirect reference blocks being accessed as arrays of unsigned char
 union UBlkAddr {
 	blk_t addr;
@@ -198,24 +204,32 @@ void Fs::alterBlockRef(const BlkRef& blkRef, unsigned long blk) {
 	}
 }
 
-Fs::Fs(const std::string& path) throw(Ext2Error) {
+Fs::Fs(const std::string& path, bool readonly) throw(Ext2Error) {
+	m_readonly = readonly;
+	
 	errcode_t e = ext2fs_open(
 		path.c_str(),
-		EXT2_FLAG_RW | EXT2_FLAG_EXCLUSIVE,
+		(m_readonly ? 0 : EXT2_FLAG_RW | EXT2_FLAG_EXCLUSIVE),
 		0,
 		0,
 		unix_io_manager,
 		&m_e2fs);
 	if (e) { throw Ext2Error("Error while opening filesystem (perhaps it's mounted or needs to be fscked)", e); }
 	
-	if (m_e2fs->super->s_state != EXT2_VALID_FS) {
-		ext2fs_close(m_e2fs);
-		throw Ext2Error("Filesystem's state is dirty. Perhaps it's mounted or needs to be fscked", 0);
+	if (!m_readonly) {
+		if (m_e2fs->super->s_state != EXT2_VALID_FS) {
+			ext2fs_close(m_e2fs);
+			throw Ext2Error("Filesystem's state is dirty. Perhaps it's mounted or needs to be fscked", 0);
+		}
 	}
 	
+	printf("A\n");
 	m_inodes = std::vector<Inode>(m_e2fs->super->s_inodes_count+1); // There is no inode 0, so the first real inode is at index 1.
+	printf("B\n");
 	m_blkRefs = std::vector<BlkRef>(m_e2fs->super->s_blocks_count); // FIXME: Vector might be the wrong data structure for this
+	printf("C\n");
 	m_indirectBlkEntries = std::vector< std::vector<unsigned int> >(m_e2fs->super->s_blocks_count); // FIXME: Vector is the wrong data structure for this
+	printf("D\n");
 	m_scanned = false;
 	
 	e = ext2fs_read_bitmaps(m_e2fs);
@@ -258,7 +272,8 @@ void Fs::swapInodes(unsigned long a, unsigned long b) throw(Ext2Error) {
 	assertValidInode(a);
 	assertValidInode(b);
 	assertScanned();
-
+	assertWritable();
+	
 	// TODO: Implement
 }
 
@@ -266,7 +281,8 @@ void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
 	assertSwappableBlock(a);
 	assertSwappableBlock(b);
 	assertScanned();
-
+	assertWritable();
+	
 	if (a == b) {
 		// Well, looks like my work here is done. No, no need for thanks, good citizen. Just doing my job.
 		return;
@@ -363,6 +379,8 @@ unsigned long Fs::inodesCount() {
 
 Fs::~Fs() {	
 	ext2fs_close_inode_scan(m_e2scan);
-	io_channel_flush(m_e2fs->io);
+	if (!m_readonly) {
+		io_channel_flush(m_e2fs->io);
+	}
 	ext2fs_close(m_e2fs);
 }

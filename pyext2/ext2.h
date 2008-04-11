@@ -87,6 +87,7 @@ class Fs {
 		std::vector<BlkRef> m_blkRefs;
 		std::vector< std::vector<unsigned int> > m_indirectBlkEntries; //Mapping of indirect reference blocks to a vector of their entries
 		bool m_scanned;
+		bool m_readonly;
 		
 		Fs(const Fs& other) throw(Ext2Error) { throw Ext2Error("Cannot copy Fs object", 0); }
 		void assertSwappableBlock(unsigned long blk);
@@ -94,9 +95,10 @@ class Fs {
 		void assertValidInode(unsigned long ino);
 		void assertScanned();
 		void assertConsistency();
+		void assertWritable();
 		void alterBlockRef(const BlkRef& blkRef, unsigned long blk);
 	public:
-		Fs(const std::string& path) throw(Ext2Error);
+		Fs(const std::string& path, bool readonly = false) throw(Ext2Error);
 		bool scanning() throw(Ext2Error); // Scans some of the filesystem. Returns true if more scanning needed, false when finished.
 		void swapInodes(unsigned long a, unsigned long b) throw(Ext2Error); // Swaps two inode entries, updates all references from directory tables
 		void swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error); // Swaps two data blocks, updates all references from inodes, bitmaps, etc.
