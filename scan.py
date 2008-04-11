@@ -10,8 +10,7 @@ try:
 	fs = ext2.Fs(sys.argv[1], True)
 	while (fs.scanning()):
 		pass
-	for e, i in enumerate(fs.inodes()):
-		if e == 0: continue
+	for e, i in fs.inodes().iteritems():
 		if fs.isInodeUsed(e):
 			print "#%03u: Links:%u Blocks:%u File:%u Dir:%u" % (e, len(i.links()), len(i.blocks()), i.is_reg(), i.is_dir())
 			if len(i.blocks()) > 0:
@@ -19,7 +18,7 @@ try:
 			if i.is_dir():
 				print "   ^ DEntrs:" + ",".join(v.name() for v in i.dirEntries())
 	print
-	print "REFERENCED BLOCKS: " + ",".join(str(i) for i, v in enumerate(fs.blockRefs()) if v.inode != 0)
+	print "REFERENCED BLOCKS: " + ",".join(str(i) for i in fs.blockRefs().iterkeys())
 	print "USED BLOCKS: " + ",".join(str(i) for i in range(1, fs.blocksCount()) if fs.isBlockUsed(i))
 	print "TOTAL BLOCKS: %u" % fs.blocksCount()
 	print "TOTAL INODES: %u" % fs.inodesCount()

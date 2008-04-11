@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <sstream>
 #include <algorithm>
+#include <utility>
 
 #include "ext2.h"
 
@@ -48,7 +49,9 @@ int Inode::dirIteration(ext2_dir_entry* dirent, int offset, int blocksize, char*
 	
 	ext2_dir_entry_2* dirent2 = (ext2_dir_entry_2*)dirent;
 	env->inode->m_dirEntries.push_back(DirEntry(std::string(dirent2->name, dirent2->name_len), dirent2->inode)); 
-	env->fs->m_inodes[dirent2->inode].m_links.push_back(DirRef(env->inum, env->inode->m_dirEntries.size()-1)); // Add backlink to target inode
+	
+	// Add backlink to target inode; this automatically creates target Inode if necessary (if so, tgt Inode will be filled out by Fs::scanning later)
+	env->fs->m_inodes[dirent2->inode].m_links.push_back(DirRef(env->inum, env->inode->m_dirEntries.size()-1));
 	
 	return 0;
 }
@@ -119,49 +122,54 @@ void Fs::assertScanned() {
 
 void Fs::assertConsistency() {
 	std::vector<unsigned long> seenBlocks = std::vector<unsigned long>(blocksCount(), 0);
-	for (unsigned long i = 0; i < m_inodes.size(); ++i) {
-		for (unsigned long b = 0; b < m_inodes[i].m_blocks.size(); ++b) {
-			if (seenBlocks[m_inodes[i].m_blocks[b]] > 0) {
+	for (std::map<unsigned long, Inode>::iterator i = m_inodes.begin(); i != m_inodes.end(); ++i) {
+		for (unsigned long b = 0; b < i->second.m_blocks.size(); ++b) {
+			if (seenBlocks[i->second.m_blocks[b]] > 0) {
 				printf("Inconsistency: Block %u is referenced from both inodes %u and %u!\n",
-					m_inodes[i].m_blocks[b], seenBlocks[m_inodes[i].m_blocks[b]], i);
+					i->second.m_blocks[b], seenBlocks[i->second.m_blocks[b]], i->first);
 				throw Ext2Error("Inconsistency detected", 0);
 			} else {
-				seenBlocks[m_inodes[i].m_blocks[b]] = i;
+				seenBlocks[i->second.m_blocks[b]] = i->first;
 			}
 			
-			if (m_blkRefs[m_inodes[i].m_blocks[b]].inode != i) {
-				printf("Inconsistency: Block %u is supposed to be owned by inode %u, but BlkRef disagrees!\n", m_inodes[i].m_blocks[b], i);
+			if (m_blkRefs[i->second.m_blocks[b]].inode != i->first) {
+				printf("Inconsistency: Block %u is supposed to be owned by inode %u, but BlkRef disagrees!\n", i->second.m_blocks[b], i->first);
 				throw Ext2Error("Inconsistency detected", 1);
 			}
 		}
 	}
 	
-	for (unsigned long i = 0; i < m_blkRefs.size(); ++i) {
-		if (m_blkRefs[i].inode != 0) {
-			if (m_inodes[m_blkRefs[i].inode].m_blocks[m_blkRefs[i].index] != i) {
-				printf("Inconsistency: Block %u was supposed to be at inode %u index %u, but wasn't!\n", i, m_blkRefs[i].inode, m_blkRefs[i].index);
+	for (std::map<unsigned long, BlkRef>::iterator b = m_blkRefs.begin(); b != m_blkRefs.end(); ++b) {
+		if (b->second.inode != 0) {
+			std::map<unsigned long, Inode>::iterator ino = m_inodes.find(b->second.inode);
+			if (ino == m_inodes.end()) {
+				printf("Inconsistency: Unable to find inode %u which is supposed to be referencing block %u", b->second.inode, b->first);
 				throw Ext2Error("Inconsistency detected", 2);
 			}
 			
-			if (m_blkRefs[i].rblk != 0) {
-				if (m_indirectBlkEntries[m_blkRefs[i].rblk][m_blkRefs[i].offset] != i) {
-					printf("Inconsistency: Block %u was supposed to be at indirectBlkEntries[%u][%u], but wasn't!\n", i, m_blkRefs[i].rblk, m_blkRefs[i].offset);
+			if (ino->second.m_blocks[b->second.index] != b->first) {
+				printf("Inconsistency: Block %u was supposed to be at inode %u index %u, but wasn't!\n", b->first, b->second.inode, b->second.index);
+				throw Ext2Error("Inconsistency detected", 2);
+			}
+			
+			if (b->second.rblk != 0) {
+				if (m_indirectBlkEntries[b->second.rblk][b->second.offset] != b->first) {
+					printf("Inconsistency: Block %u was supposed to be at indirectBlkEntries[%u][%u], but wasn't!\n",
+						b->first, b->second.rblk, b->second.offset);
 					throw Ext2Error("Inconsistency detected", 3);
 				}
 			}
 		} else {
-			if (m_blkRefs[i].index != 0 || m_blkRefs[i].rblk != 0 || m_blkRefs[i].offset != 0) {
-				printf("Inconsistency: Block %u has a BlkRef with an inode of 0 but other non-zero information!\n", i);
-				throw Ext2Error("Inconsistency detected", 4);
-			}
+			printf("Inconsistency: Block %u has a BlkRef with an inode of 0!\n", b->first);
+			throw Ext2Error("Inconsistency detected", 4);
 		}
 	}
 	
-	for (unsigned long i = 0; i < m_indirectBlkEntries.size(); ++i) {
-		for (unsigned long b = 0; b < m_indirectBlkEntries[i].size(); ++b) {
-			if (m_blkRefs[m_indirectBlkEntries[i][b]].rblk != i) {
+	for (std::map<unsigned long, std::vector<unsigned long> >::iterator i = m_indirectBlkEntries.begin(); i != m_indirectBlkEntries.end(); ++i) {
+		for (std::vector<unsigned long>::iterator b = i->second.begin(); b != i->second.end(); ++b) {
+			if (m_blkRefs[*b].rblk != i->first) {
 				printf("Inconsistency: Block %u was supposed to have rblk of %u, but instead it was %u!\n",
-					m_indirectBlkEntries[i][b], i, m_blkRefs[m_indirectBlkEntries[i][b]].rblk);
+					*b, i->first, m_blkRefs[*b].rblk);
 				throw Ext2Error("Inconsistency detected", 5);
 			}
 		}
@@ -223,13 +231,9 @@ Fs::Fs(const std::string& path, bool readonly) throw(Ext2Error) {
 		}
 	}
 	
-	printf("A\n");
-	m_inodes = std::vector<Inode>(m_e2fs->super->s_inodes_count+1); // There is no inode 0, so the first real inode is at index 1.
-	printf("B\n");
-	m_blkRefs = std::vector<BlkRef>(m_e2fs->super->s_blocks_count); // FIXME: Vector might be the wrong data structure for this
-	printf("C\n");
-	m_indirectBlkEntries = std::vector< std::vector<unsigned int> >(m_e2fs->super->s_blocks_count); // FIXME: Vector is the wrong data structure for this
-	printf("D\n");
+	m_inodes = std::map<unsigned long, Inode>();
+	m_blkRefs = std::map<unsigned long, BlkRef>();
+	m_indirectBlkEntries = std::map<unsigned long, std::vector<unsigned long> >();
 	m_scanned = false;
 	
 	e = ext2fs_read_bitmaps(m_e2fs);
@@ -258,9 +262,11 @@ bool Fs::scanning() throw(Ext2Error) {
 		if (inum == 0) {
 			// ext2fs_get_next_inode has reached the end of the table
 			m_scanned = true;
+			assertConsistency(); //FIXME: Remove this check once it's clear that it is no longer required
 			return false;
 		}
 		if (isInodeUsed(inum)) {
+			// This automatically creates the Inode if necessary
 			m_inodes[inum].scanInode(*this, inum, inode);
 		}
 		++n;
@@ -315,14 +321,17 @@ void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
 	e = io_channel_write_blk(m_e2fs->io, b, 1, buf_a);
 	if (e) { throw Ext2Error("Failed writing to block b. FS is probably inconsistent now!", e); }
 	
+	int aCount = m_blkRefs.count(a);
+	int bCount = m_blkRefs.count(b);
+
 	// Update references among inodes (and possibly indirect reference blocks) that own these blocks
-	if (m_blkRefs[a].inode != 0) {
+	if (aCount > 0 && m_blkRefs[a].inode != 0) {
 		m_inodes[m_blkRefs[a].inode].m_blocks[m_blkRefs[a].index] = b;
 		if (m_blkRefs[a].rblk != 0) {
 			m_indirectBlkEntries[m_blkRefs[a].rblk][m_blkRefs[a].offset] = b;
 		}
 	}
-	if (m_blkRefs[b].inode != 0) {
+	if (bCount > 0 && m_blkRefs[b].inode != 0) {
 		m_inodes[m_blkRefs[b].inode].m_blocks[m_blkRefs[b].index] = a;
 		if (m_blkRefs[b].rblk != 0) {
 			m_indirectBlkEntries[m_blkRefs[b].rblk][m_blkRefs[b].offset] = a;
@@ -330,25 +339,49 @@ void Fs::swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error) {
 	}
 	
 	// Swap m_blkRef entries
-	BlkRef a_ref = m_blkRefs[a];
-	BlkRef b_ref = m_blkRefs[b];
-	m_blkRefs[a] = b_ref;
-	m_blkRefs[b] = a_ref;
+	if (aCount > 0 && bCount > 0) {
+		BlkRef a_ref = m_blkRefs[a];
+		BlkRef b_ref = m_blkRefs[b];
+		m_blkRefs[a] = b_ref;
+		m_blkRefs[b] = a_ref;
+	} else if (aCount > 0) {
+		aCount = 0;
+		bCount = 1;
+		m_blkRefs[b] = m_blkRefs[a];
+		m_blkRefs.erase(a);
+	} else if (bCount > 0) {
+		aCount = 1;
+		bCount = 0;
+		m_blkRefs[a] = m_blkRefs[b];
+		m_blkRefs.erase(b);
+	}
+
+	int aICount = m_indirectBlkEntries.count(a);
+	int bICount = m_indirectBlkEntries.count(b);
 	
 	// Also need to alter any m_blkRefs that mention being referenced by these blocks, if these blocks are themselves indirect reference blocks
-	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
-		m_blkRefs[*i].rblk = b;
+	if (aICount > 0) {
+		for (std::vector<unsigned long>::iterator i = m_indirectBlkEntries[a].begin(); i != m_indirectBlkEntries[a].end(); ++i) {
+			m_blkRefs[*i].rblk = b;
+		}
 	}
-	for (std::vector<unsigned int>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
-		m_blkRefs[*i].rblk = a;
+	if (bICount > 0) {
+		for (std::vector<unsigned long>::iterator i = m_indirectBlkEntries[b].begin(); i != m_indirectBlkEntries[b].end(); ++i) {
+			m_blkRefs[*i].rblk = a;
+		}
 	}
-	m_indirectBlkEntries[a].swap(m_indirectBlkEntries[b]);
+	if (aICount > 0 || bICount > 0) {
+		m_indirectBlkEntries[a].swap(m_indirectBlkEntries[b]);
+		if (aICount > 0 && bICount == 0) {
+			m_indirectBlkEntries.erase(a);
+		} else if (aICount > 0 && bICount == 0) {
+			m_indirectBlkEntries.erase(b);
+		}
+	}
 	
 	// Finally, update the actual filesystem to match the new pyext2 state
-	if (m_blkRefs[a].inode != 0) { alterBlockRef(m_blkRefs[a], a); }
-	if (m_blkRefs[b].inode != 0) { alterBlockRef(m_blkRefs[b], b); }
-	
-	//assertConsistency();
+	if (aCount > 0) { alterBlockRef(m_blkRefs[a], a); }
+	if (bCount > 0) { alterBlockRef(m_blkRefs[b], b); }
 }
 
 bool Fs::isSwappableBlock(unsigned long blk) throw(Ext2Error) {
@@ -356,7 +389,7 @@ bool Fs::isSwappableBlock(unsigned long blk) throw(Ext2Error) {
 	// It's a swappable block if it's unused, or if it is referenced by any inode, except for inode 7.
 	// Inode 7 is the "reserved group descriptors" inode, which I'm unclear on the purpose of...
 	// However, attempting to alter it often results in inconsistencies in the filesystem (undocumented libext2fs activity, maybe?)
-	return (!ext2fs_test_block_bitmap(m_e2fs->block_map, blk)) || (m_blkRefs[blk].inode != 0 && m_blkRefs[blk].inode != 7);
+	return (!ext2fs_test_block_bitmap(m_e2fs->block_map, blk)) || (m_blkRefs.count(blk) > 0 && m_blkRefs[blk].inode != 7);
 }
 
 bool Fs::isBlockUsed(unsigned long blk) throw(Ext2Error) {

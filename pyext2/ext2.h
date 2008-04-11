@@ -4,6 +4,7 @@
 #include <ext2fs/ext2fs.h>
 #include <string>
 #include <vector>
+#include <map>
 
 class Ext2Error;
 class DirEntry;
@@ -63,7 +64,9 @@ class Inode {
 		static int dirIteration(ext2_dir_entry* dirent, int offset, int blocksize, char* buf, void* prv);
 		void scanInode(Fs& fs, ext2_ino_t inum, ext2_inode& inode); // Used during scanning process when in-use inodes encountered
 	public:
+		// Please do not use this constructor in client code, it is public so that STL code may work
 		Inode() {}
+		
 		const std::vector<unsigned long>& blocks() { return m_blocks; }
 		const std::vector<DirEntry>& dirEntries() { return m_dirEntries; }
 		const std::vector<DirRef>& links() { return m_links; }
@@ -83,9 +86,9 @@ class Fs {
 	private:
 		ext2_filsys m_e2fs;
 		ext2_inode_scan m_e2scan;
-		std::vector<Inode> m_inodes;
-		std::vector<BlkRef> m_blkRefs;
-		std::vector< std::vector<unsigned int> > m_indirectBlkEntries; //Mapping of indirect reference blocks to a vector of their entries
+		std::map<unsigned long, Inode> m_inodes;
+		std::map<unsigned long, BlkRef> m_blkRefs;
+		std::map<unsigned long, std::vector<unsigned long> > m_indirectBlkEntries; //Mapping of indirect reference blocks to their entries
 		bool m_scanned;
 		bool m_readonly;
 		
@@ -102,8 +105,8 @@ class Fs {
 		bool scanning() throw(Ext2Error); // Scans some of the filesystem. Returns true if more scanning needed, false when finished.
 		void swapInodes(unsigned long a, unsigned long b) throw(Ext2Error); // Swaps two inode entries, updates all references from directory tables
 		void swapBlocks(unsigned long a, unsigned long b) throw(Ext2Error); // Swaps two data blocks, updates all references from inodes, bitmaps, etc.
-		const std::vector<Inode>& inodes() { return m_inodes; } // Allows you to scan through the inode table
-		const std::vector<BlkRef>& blockRefs() { return m_blkRefs; } // Allows you to scan through the block reference table
+		const std::map<unsigned long, Inode>& inodes() { return m_inodes; } // Allows you to scan through the inode table
+		const std::map<unsigned long, BlkRef>& blockRefs() { return m_blkRefs; } // Allows you to scan through the block reference table
 		bool isSwappableBlock(unsigned long blk) throw(Ext2Error); // Returns true if the given block can be swapped
 		bool isBlockUsed(unsigned long blk) throw(Ext2Error); // Returns true if the given block is in use, false otherwise
 		bool isInodeUsed(unsigned long ino) throw(Ext2Error); // Returns true if the given inode is in use, false otherwise
