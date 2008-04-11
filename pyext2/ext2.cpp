@@ -251,7 +251,7 @@ Fs::Fs(const std::string& path, bool readonly) throw(Ext2Error) {
 
 bool Fs::scanning() throw(Ext2Error) {
 	unsigned long n = 0;
-	while (n <= 100) {
+	while (n <= 10000) {
 		ext2_ino_t inum;
 		ext2_inode inode;
 		errcode_t e = ext2fs_get_next_inode(m_e2scan, &inum, &inode);
@@ -399,6 +399,16 @@ bool Fs::isBlockUsed(unsigned long blk) throw(Ext2Error) {
 bool Fs::isInodeUsed(unsigned long ino) throw(Ext2Error) {
 	assertValidInode(ino);
 	return ext2fs_test_inode_bitmap(m_e2fs->inode_map, ino);
+}
+
+unsigned long Fs::groupOfBlock(unsigned long blk) throw(Ext2Error) {
+	assertValidBlock(blk);
+	return (blk-1)/m_e2fs->super->s_blocks_per_group;
+}
+
+unsigned long Fs::groupOfInode(unsigned long ino) throw(Ext2Error) {
+	assertValidInode(ino);
+	return (ino-1)/m_e2fs->super->s_inodes_per_group;
 }
 
 unsigned long Fs::blocksCount() {
