@@ -262,7 +262,6 @@ bool Fs::scanning() throw(Ext2Error) {
 		if (inum == 0) {
 			// ext2fs_get_next_inode has reached the end of the table
 			m_scanned = true;
-			assertConsistency(); //FIXME: Remove this check once it's clear that it is no longer required
 			return false;
 		}
 		if (isInodeUsed(inum)) {

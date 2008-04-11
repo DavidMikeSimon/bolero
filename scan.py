@@ -18,7 +18,7 @@ try:
 			if i.is_dir():
 				print "   ^ DEntrs:" + ",".join(v.name() for v in i.dirEntries())
 	print
-	print "REFERENCED BLOCKS: " + ",".join(str(i) for i in fs.blockRefs().iterkeys())
+	print "REFERENCED BLOCKS: " + ",".join(str(i) for i in fs.blockRefs())
 	print "USED BLOCKS: " + ",".join(str(i) for i in range(1, fs.blocksCount()) if fs.isBlockUsed(i))
 	print "TOTAL BLOCKS: %u" % fs.blocksCount()
 	print "TOTAL INODES: %u" % fs.inodesCount()

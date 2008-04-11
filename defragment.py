@@ -19,7 +19,7 @@ try:
 			dblocks.append(b)
 	
 	iblocks = []
-	for i in fs.inodes():
+	for i in fs.inodes().values():
 		for b in i.blocks():
 			if fs.isSwappableBlock(b):
 				iblocks.append(b)
