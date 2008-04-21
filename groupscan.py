@@ -18,13 +18,17 @@ try:
 		sys.stdout.flush()
 	sys.stdout.write("\n")
 	
+	print "BLOCKCOUNT: %u" % fs.blocksCount()
+	
 	groups = {}
 	for e, i in fs.inodes().iteritems():
+		print "E: %u" % e
 		gnum = fs.groupOfInode(e)
 		if gnum not in groups:
 			groups[gnum] = { 'inodes':0, 'unmatchBlocks':0, 'matchBlocks':0 }
 		groups[gnum]['inodes'] += 1
 		for b in i.blocks():
+			print "  B: %u" % b
 			if fs.groupOfBlock(b) == gnum:
 				groups[gnum]['matchBlocks'] += 1
 			else:
@@ -33,7 +37,7 @@ try:
 	tMatch = 0
 	tUnmatch = 0
 	for gnum, g in groups.iteritems():
-		print "GROUP %04u: %06u inodes with %8u/%8u in-group/out-group owned blocks" % (gnum, g['inodes'], g['matchBlocks'], g['unmatchBlocks']);
+		print "GROUP %04u: %06u inodes with %8u/%8u in-group/out-group blocks" % (gnum, g['inodes'], g['matchBlocks'], g['unmatchBlocks']);
 		tMatch += g['matchBlocks']
 		tUnmatch += g['unmatchBlocks']
 	

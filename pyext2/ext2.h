@@ -17,7 +17,7 @@ class Ext2Error {
 		unsigned long m_code;
 	public:
 		const std::string& msg() const { return m_msg; }
-		const int code() const { return m_code; }
+		unsigned long code() const { return m_code; }
 		std::string str();
 		Ext2Error(const std::string& in_msg, errcode_t in_code) { m_msg = in_msg; m_code = in_code; }
 };
@@ -46,9 +46,9 @@ struct BlkRef {
 	unsigned long inode; // Index in the Fs's m_inodes vector (aka, the inum)
 	unsigned long index; // Index in the Inode's m_blocks vector
 	unsigned long rblk; // Index of referencing block. If 0, then target block is directly referenced from Inode.
-	unsigned int offset; // Offset into whatever is referred to by rblk, in units of address length
+	unsigned long offset; // Offset into whatever is referred to by rblk, in units of address length
 	BlkRef() { inode = 0; index = 0; rblk = 0; offset = 0; }
-	BlkRef(unsigned long in_inode, unsigned long in_index, unsigned long in_rblk, unsigned int in_offset) {
+	BlkRef(unsigned long in_inode, unsigned long in_index, unsigned long in_rblk, unsigned long in_offset) {
 		inode = in_inode; index = in_index; rblk = in_rblk; offset = in_offset;
 	}
 };
