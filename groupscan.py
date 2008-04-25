@@ -18,21 +18,24 @@ try:
 		sys.stdout.flush()
 	sys.stdout.write("\n")
 	
-	print "BLOCKCOUNT: %u" % fs.blocksCount()
-	
 	groups = {}
 	for e, i in fs.inodes().iteritems():
-		print "E: %u" % e
 		gnum = fs.groupOfInode(e)
 		if gnum not in groups:
 			groups[gnum] = { 'inodes':0, 'unmatchBlocks':0, 'matchBlocks':0 }
 		groups[gnum]['inodes'] += 1
-		for b in i.blocks():
-			print "  B: %u" % b
-			if fs.groupOfBlock(b) == gnum:
-				groups[gnum]['matchBlocks'] += 1
-			else:
-				groups[gnum]['unmatchBlocks'] += 1
+		try:
+			for b in i.blocks():
+				if fs.groupOfBlock(b) == gnum:
+					groups[gnum]['matchBlocks'] += 1
+				else:
+					groups[gnum]['unmatchBlocks'] += 1
+		except:
+			print "#%03u: Links:%u Blocks:%u File:%u Dir:%u" % (e, len(i.links()), len(i.blocks()), i.is_reg(), i.is_dir())
+			if len(i.links()) > 0:
+				print "   ^  Links:" + ",".join(fs.inodes()[v.inode].dirEntries()[v.entry].name() for v in i.links())
+			print "FAIL ON BLOCK: %u" % b
+			print "--"
 	
 	tMatch = 0
 	tUnmatch = 0

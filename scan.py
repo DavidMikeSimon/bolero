@@ -16,11 +16,13 @@ try:
 		sys.stdout.flush()
 	sys.stdout.write("\n")
 	for e, i in fs.inodes().iteritems():
-		print "#%03u: Links:%u Blocks:%u File:%u Dir:%u" % (e, len(i.links()), len(i.blocks()), i.is_reg(), i.is_dir())
+		print "#%03u: Links:%u Blocks:%u File:%u Dir:%u Sym:%u" % (e, len(i.links()), len(i.blocks()), i.is_reg(), i.is_dir(), i.is_lnk())
 		if len(i.blocks()) > 0:
 			print "   ^ Blocks:" + ",".join(str(v) for v in i.blocks())
 		if i.is_dir():
 			print "   ^ DEntrs:" + ",".join(v.name() for v in i.dirEntries())
+		if len(i.links()) > 0:
+			print "   ^  Links:" + ",".join(fs.inodes()[v.inode].dirEntries()[v.entry].name() for v in i.links())
 	print
 	print "REFERENCED BLOCKS: " + ",".join(str(i) for i in fs.blockRefs())
 	print "USED BLOCKS: " + ",".join(str(i) for i in range(1, fs.blocksCount()) if fs.isBlockUsed(i))

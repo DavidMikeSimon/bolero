@@ -64,8 +64,12 @@ void Inode::scanInode(Fs& fs, ext2_ino_t inum, ext2_inode& inode) {
 	ienv.inode = this;
 	ienv.inum = inum;
 	
-	ext2fs_block_iterate2(fs.m_e2fs, inum, 0, NULL, &blockIteration, &ienv);
-	if (is_dir()) { ext2fs_dir_iterate(fs.m_e2fs, inum, 0, NULL, &dirIteration, &ienv); }
+	if (inode.i_blocks > 0) {
+		ext2fs_block_iterate2(fs.m_e2fs, inum, 0, NULL, &blockIteration, &ienv);
+	}
+	if (is_dir()) {
+		ext2fs_dir_iterate(fs.m_e2fs, inum, 0, NULL, &dirIteration, &ienv);
+	}
 }
 
 bool Inode::is_sock() {

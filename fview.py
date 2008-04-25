@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import pickle, sys
-from frecord import ProcState
+from frecord import Observations, FileHistory
 
 if len(sys.argv) != 2:
 	print "Please supply the input filename"
@@ -14,12 +14,23 @@ except:
 	print "Couldn't open %s" % sys.argv[1]
 	sys.exit()
 
-rec = pickle.load(fh)
+obs = pickle.load(fh)
 
-for (ts, states) in rec.iteritems():
-	print "-" * 50
-	print "TS: %u" % ts
-	for (pid, state) in states.iteritems():
-		print " Process: %6u %s" % (pid, state.cmdline)
-		for f in state.fds:
-			print "  %s" % f
+print "------ Observed processes:"
+pids = obs.cmdlines.keys()
+pids.sort()
+for pid in pids:
+	print "PID:%6u - %s" % (pid, obs.cmdlines[pid])
+
+print
+print
+
+print "------ File usage:"
+fns = obs.files.keys()
+fns.sort()
+for fn in fns:
+	print "%s" % fn
+	pids = obs.files[fn].usages.keys()
+	pids.sort()
+	for pid in pids:
+		print "    PID:%6u (%8u samples) - %s" % (pid, len(obs.files[fn].usages[pid]), obs.cmdlines[pid])

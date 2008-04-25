@@ -2,49 +2,72 @@
 
 import sys, os, time, pickle
 
-class ProcState:
-	def __init__(self, pid):
-		cmdf = open("/proc/%s/cmdline" % pid)
-		self.cmdline = cmdf.readline().rstrip()
-		cmdf.close()
+def msectime():
+	return int(time.time()*1000)
+
+
+class Observations:
+	def __init__(self):
+		self.files = {} # Key is file path, value is instance of FileHistory
+		self.cmdlines = {} # Key is PID, value is cmdline (assume that a given PID will only be used once during recording)
+	
+	def update(self, pid):
+		if pid not in self.cmdlines:
+			try:
+				cmdf = open("/proc/%u/cmdline" % pid)
+				cmdline = cmdf.readline().rstrip()
+				cmdf.close()
+				self.cmdlines[pid] = cmdline
+			except IOError:
+				pass
+
+		rpaths = set()
 		
-		self.fds = set()
-		tgtpath = "/proc/%s/fd/" % pid
+		# Find out which regular files this process has open at the moment
+		tgtpath = "/proc/%u/fd/" % pid
 		fns = os.listdir(tgtpath)
 		for fn in fns:
-			# If the fd proc entry goes away while we tried to read it, just continue on
-			# Maybe the file was closed, maybe the process went away. Doesn't matter, just take the data we can get.
 			try:
 				rpath = os.readlink(tgtpath + fn)
 				# Ignore non-absolute sybmolic links (these are how pipes, sockets, etc, are represented)
 				# Also, ignore devices
 				if rpath[0] == "/" and rpath[0:4] != "/dev":
-					self.fds.add(rpath)
+					rpaths.add(rpath)
 			except IOError:
 				pass
+		
+		# Find out which files have sections mapped to this process's memory (i.e. libraries)
+		try:
+			for line in file("/proc/%u/maps" % pid):
+				rpath = line[49:].rstrip()
+				# Ignore non-file entries in maps (i.e. "[heap]")
+				if len(rpath) > 0 and rpath[0] == "/":
+					rpaths.add(rpath)
+		except IOError:
+			pass
+		
+		for path in rpaths:
+			if path not in self.files:
+				self.files[path] = FileHistory()
+			self.files[path].update(pid)
 
-def msectime():
-	return int(time.time()*1000)
 
-def rec():
-	if len(sys.argv) != 2:
-		print "Please supply the output filename"
-		sys.exit()
-
-	outf = None
-	try:
-		outf = open(sys.argv[1], "w")
-	except:
-		print "Couldn't open output file %s" % sys.argv[1]
-		sys.exit()
+class FileHistory:
+	def __init__(self):
+		self.usages = {} # Key is pid, value is list of millitimestamps of samples of usage of file by that PID
 	
-	mypid = str(os.getpid())
-	
-	rec = {} # Key is millisecond timestamp, value is a dict of interesting pids to ProcStates
-	initialpids = set() # Pids which were running when observation started. We only care about pids not in this list
+	def update(self, pid):
+		if pid not in self.usages:
+			self.usages[pid] = []
+		self.usages[pid].append(msectime())
 
+
+def rec(outf):
 	tstart = msectime()
 	samples = 0
+	obs = Observations()
+	initialpids = set() # Pids which were running when observation started. We only care about pids not in this list.
+	
 	firstloop = True
 	while True:
 		try:
@@ -52,22 +75,19 @@ def rec():
 			states = {}
 			
 			for fn in os.listdir("/proc"):
-				if fn[0] >= '0' and fn[0] <= '9' and fn != mypid:
+				try:
+					pid = int(fn)
 					if firstloop:
-						initialpids.add(fn)
-					# We are only interested in processes that started after the recording process started
-					elif fn not in initialpids:
-						# Handle the case of a process's cmdline file going away before we get a chance to read it
-						# If it goes away during the reading of fds, we are still interested in the ones that we got a chance to look at
-						try:
-							states[int(fn)] = ProcState(fn)
-						except IOError:
-							pass
+						initialpids.add(pid)
+					elif pid not in initialpids:
+						# Only interested in processes that started after the recording began
+						obs.update(pid)
+				except ValueError:
+					pass
 			
 			if firstloop:
+				print "ENDED FIRSTLOOP"
 				firstloop = False
-			elif len(states) > 0:
-				rec[tstamp] = states
 			
 			samples += 1
 			time.sleep(0.003)
@@ -78,9 +98,19 @@ def rec():
 	print "Samples: %u" % samples
 	print "Time Elapsed: %.3f seconds" % (float(tdiff)/1000)
 	print "Sample Rate: %.3f per second" % ((float(samples)/tdiff)*1000)
+	
+	pickle.dump(obs, outf)
 
-	pickle.dump(rec, outf)
-	outf.close()
 
 if __name__ == "__main__":
-	rec()
+	if len(sys.argv) != 2:
+		print "Please supply the output filename"
+		sys.exit()
+	outf = None
+	try:
+		outf = open(sys.argv[1], "w")
+	except:
+		print "Couldn't open output file %s" % sys.argv[1]
+		sys.exit()
+	rec(outf)
+	outf.close()
