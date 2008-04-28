@@ -86,7 +86,6 @@ def rec(outf):
 					pass
 			
 			if firstloop:
-				print "ENDED FIRSTLOOP"
 				firstloop = False
 			
 			samples += 1
@@ -95,9 +94,9 @@ def rec(outf):
 			break
 	
 	tdiff = (msectime() - tstart)
-	print "Samples: %u" % samples
-	print "Time Elapsed: %.3f seconds" % (float(tdiff)/1000)
-	print "Sample Rate: %.3f per second" % ((float(samples)/tdiff)*1000)
+	print "FRECORD: Samples: %u" % samples
+	print "FRECORD: Time Elapsed: %.3f seconds" % (float(tdiff)/1000)
+	print "FRECORD: Sample Rate: %.3f per second" % ((float(samples)/tdiff)*1000)
 	
 	pickle.dump(obs, outf)
 
