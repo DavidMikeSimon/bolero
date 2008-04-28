@@ -52,6 +52,8 @@ print " -- Finished timing"
 
 initp.wait()
 
+time.sleep(2)
+
 deinitp = subprocess.Popen(("/etc/init.d/mysql", "stop"))
 deinitp.wait()
 
