@@ -26,6 +26,7 @@ print " -- Starting timing"
 mtstart = int(time.time()*1000)
 
 initp = subprocess.Popen(("/etc/init.d/mysql", "start"))
+initp.wait()
 
 dbh = None
 while True:
@@ -49,8 +50,6 @@ for row in cursor.fetchall():
 
 mdiff = int(time.time()*1000) - mtstart
 print " -- Finished timing"
-
-initp.wait()
 
 time.sleep(2)
 

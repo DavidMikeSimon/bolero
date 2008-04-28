@@ -25,16 +25,19 @@ class Observations:
 		
 		# Find out which regular files this process has open at the moment
 		tgtpath = "/proc/%u/fd/" % pid
-		fns = os.listdir(tgtpath)
-		for fn in fns:
-			try:
-				rpath = os.readlink(tgtpath + fn)
-				# Ignore non-absolute sybmolic links (these are how pipes, sockets, etc, are represented)
-				# Also, ignore devices
-				if rpath[0] == "/" and rpath[0:4] != "/dev":
-					rpaths.add(rpath)
-			except IOError:
-				pass
+		try:
+			fns = os.listdir(tgtpath)
+			for fn in fns:
+				try:
+					rpath = os.readlink(tgtpath + fn)
+					# Ignore non-absolute sybmolic links (these are how pipes, sockets, etc, are represented)
+					# Also, ignore devices
+					if rpath[0] == "/" and rpath[0:4] != "/dev":
+						rpaths.add(rpath)
+				except IOError:
+					pass
+		except OSError:
+			pass
 		
 		# Find out which files have sections mapped to this process's memory (i.e. libraries)
 		try:
