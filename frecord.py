@@ -111,5 +111,6 @@ if __name__ == "__main__":
 	except:
 		print "Couldn't open output file %s" % sys.argv[1]
 		sys.exit()
+	print "FRECORD: Opened file %s" % sys.argv[1]
 	rec(outf)
 	outf.close()
