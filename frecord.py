@@ -11,16 +11,35 @@ class Observations:
 		self.files = {} # Key is file path, value is instance of FileHistory
 		self.cmdlines = {} # Key is PID, value is cmdline (assume that a given PID will only be used once during recording)
 	
+	# Returns a list of all files accessed, ordered by first access time
+	def files_ordered(self):
+		# Key is filename, value is timestamp of first access by any process
+		fmap = {}
+		for f in self.files:
+			first = -1
+			for pid in self.files[f].usages:
+				cfirst = self.files[f].usages[pid][0]
+				if first == -1 or cfirst < first:
+					first = cfirst
+			fmap[f] = first
+		return sorted(fmap.keys(), key = lambda x: fmap[x])
+	
+	# Checks for files currently in use by the given PID
 	def update(self, pid):
 		if pid not in self.cmdlines:
 			try:
 				cmdf = open("/proc/%u/cmdline" % pid)
 				cmdline = cmdf.readline().rstrip()
 				cmdf.close()
+				
+				# Ignore instances of python started up by any timing process (which will just, in turn, start up the MySQL daemon)
+				if 'timing.py' in cmdline:
+					return
+				
 				self.cmdlines[pid] = cmdline
 			except IOError:
 				pass
-
+		
 		rpaths = set()
 		
 		# Find out which regular files this process has open at the moment
