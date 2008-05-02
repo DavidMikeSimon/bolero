@@ -90,6 +90,7 @@ def rec(outf):
 			
 			if firstloop:
 				firstloop = False
+				print "FRECORD: Recording begins"
 			
 			samples += 1
 			time.sleep(0.003)
