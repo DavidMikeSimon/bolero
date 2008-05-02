@@ -48,10 +48,10 @@ int Inode::dirIteration(ext2_dir_entry* dirent, int offset, int blocksize, char*
 	iteration_env* env = reinterpret_cast<iteration_env*>(prv);
 	
 	ext2_dir_entry_2* dirent2 = (ext2_dir_entry_2*)dirent;
-	env->inode->m_dirEntries.push_back(DirEntry(std::string(dirent2->name, dirent2->name_len), dirent2->inode)); 
+	env->inode->m_dirEntries[std::string(dirent2->name, dirent2->name_len)] = dirent2->inode;
 	
 	// Add backlink to target inode; this automatically creates target Inode if necessary (if so, tgt Inode will be filled out by Fs::scanning later)
-	env->fs->m_inodes[dirent2->inode].m_links.push_back(DirRef(env->inum, env->inode->m_dirEntries.size()-1));
+	env->fs->m_inodes[dirent2->inode].m_links.push_back(DirRef(env->inum, std::string(dirent2->name, dirent2->name_len)));
 	
 	return 0;
 }
@@ -421,6 +421,31 @@ unsigned long Fs::blocksCount() {
 
 unsigned long Fs::inodesCount() {
 	return m_e2fs->super->s_inodes_count;
+}
+
+unsigned long Fs::pathToInum(const std::string& path) {
+	// Inode 2 is the root directory
+	unsigned long cur = 2;
+	
+	std::string token = std::string();
+	for (std::string::const_iterator c = path.begin() ; ; ++c) {
+		if (c == path.end() || *c == '/') {
+			if (token.size() > 0) {
+				if (m_inodes.count(cur) == 0) return 0;
+				
+				if (m_inodes[cur].dirEntries().count(token) > 0) {
+					cur = m_inodes[cur].dirEntries().find(token)->second;
+					token = std::string();
+				} else {
+					return 0;
+				}
+			}
+		} else {
+			token += *c;
+		}
+		
+		if (c == path.end()) return cur;
+	}
 }
 
 Fs::~Fs() {	

@@ -12,7 +12,7 @@ namespace std {
    %template(inodemap) map<unsigned long, Inode>;
    %template(dirrefvector) vector<DirRef>;
    %template(blkrefvector) map<unsigned long, BlkRef>;
-   %template(direntryvector) vector<DirEntry>;
+   %template(direntryvector) map<std::string, unsigned long>;
    %template(uint32vector) vector<unsigned long>;
 };
 

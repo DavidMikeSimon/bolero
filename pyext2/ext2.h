@@ -7,7 +7,6 @@
 #include <map>
 
 class Ext2Error;
-class DirEntry;
 class Inode;
 class Fs;
 
@@ -22,23 +21,12 @@ class Ext2Error {
 		Ext2Error(const std::string& in_msg, errcode_t in_code) { m_msg = in_msg; m_code = in_code; }
 };
 
-class DirEntry {
-	private:
-		std::string m_name;
-		unsigned long m_inode;
-	public:
-		DirEntry() {}
-		DirEntry(const std::string& in_name, unsigned long in_inode) { m_name = in_name; m_inode = in_inode; }
-		const std::string& name() { return m_name; }
-		unsigned long inode() { return m_inode; }
-};
-
-// Represents some DirEntry in some directory Inode
+// Represents some dir entry in some directory Inode
 struct DirRef {
 	unsigned long inode;
-	unsigned long entry;
-	DirRef() { inode = 0; entry = 0; }
-	DirRef(unsigned long in_inode, unsigned long in_entry) { inode = in_inode; entry = in_entry; }
+	std::string entry;
+	DirRef() { inode = 0; entry = std::string(); }
+	DirRef(unsigned long in_inode, const std::string& in_entry) { inode = in_inode; entry = in_entry; }
 };
 
 // Represents where some data or indirection block is referenced from
@@ -57,7 +45,7 @@ class Inode {
 	private:
 		struct ext2_inode m_e2inode;
 		std::vector<unsigned long> m_blocks;
-		std::vector<DirEntry> m_dirEntries;
+		std::map<std::string, unsigned long> m_dirEntries; //Filenames to inode numbers
 		std::vector<DirRef> m_links; //Which directory inodes link to this inode
 		
 		static int blockIteration(ext2_filsys e2fs, blk_t* blocknr, e2_blkcnt_t blockcnt, blk_t rblk, int roffset, void* prv);
@@ -68,7 +56,7 @@ class Inode {
 		Inode() {}
 		
 		const std::vector<unsigned long>& blocks() { return m_blocks; }
-		const std::vector<DirEntry>& dirEntries() { return m_dirEntries; }
+		const std::map<std::string, unsigned long>& dirEntries() { return m_dirEntries; }
 		const std::vector<DirRef>& links() { return m_links; }
 		bool is_sock(); //Is it a socket?
 		bool is_lnk(); //Is it a symlink?
@@ -114,6 +102,7 @@ class Fs {
 		unsigned long groupOfInode(unsigned long ino) throw(Ext2Error); // Returns which group contains the given inode, starting with group 0
 		unsigned long blocksCount(); // Returns the total number of blocks, free or used. Valid block indexes are 1 .. blocksCount-1
 		unsigned long inodesCount(); // Returns the total number of inodes, free or used. Valid inode indexes are 1 .. inodesCount
+		unsigned long pathToInum(const std::string& path); // Resolves an absolute path into an inode number, returns 0 on failed lookup
 		~Fs();
 		
 		friend class Inode;

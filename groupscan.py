@@ -33,7 +33,7 @@ try:
 		except:
 			print "#%03u: Links:%u Blocks:%u File:%u Dir:%u" % (e, len(i.links()), len(i.blocks()), i.is_reg(), i.is_dir())
 			if len(i.links()) > 0:
-				print "   ^  Links:" + ",".join(fs.inodes()[v.inode].dirEntries()[v.entry].name() for v in i.links())
+				print "   ^  Links:" + ",".join(v.entry for v in i.links())
 			print "FAIL ON BLOCK: %u" % b
 			print "--"
 	
