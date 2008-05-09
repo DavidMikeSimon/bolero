@@ -23,8 +23,10 @@ for f in sys.argv[1:]:
 	obs = pickle.load(fh)
 	flist = obs.files_ordered()
 	for f in flist:
-		all.add(f)
+		if not "deleted" in f and not "bolero" in f and not "/tmp" in f and not "/proc" in f:
+			all.add(f)
 	flists.append(flist)
+	fh.close()
 
 
 def summcmp(a, b):
