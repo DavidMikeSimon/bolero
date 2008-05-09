@@ -18,21 +18,31 @@ try:
 		sys.stdout.flush()
 	sys.stdout.write("\n")
 	
+	totigroups = set()
+	totbgroups = set()
+
 	inodes = fs.inodes()
 	for line in listfh:
 		path = line.strip()
 		inum = fs.pathToInum(path)
 		if inum != 0:
-			i = inodes[int(n)]
+			i = inodes[inum]
+			totigroups.add(fs.groupOfInode(inum))
 			print "%s:" % path
-			print "#%u: Group:%u Links:%04u Blocks:%u File:%u Dir:%u" % (fs.groupOfInode(inum), int(n), len(i.links()), len(i.blocks()), i.is_reg(), i.is_dir())
+			print "#%u: Group:%u Links:%04u Blocks:%u File:%u Dir:%u" % (inum, fs.groupOfInode(inum), len(i.links()), len(i.blocks()), i.is_reg(), i.is_dir())
 			if len(i.blocks()) > 0:
 				groups = set()
 				for v in i.blocks():
-					groups.add(fs.groupOfBlock(v))
+					g = fs.groupOfBlock(v)
+					totbgroups.add(g)
+					groups.add(g)
 				print "   ^ Blocks In Groups: " + ",".join(("%04u" % g) for g in sorted(groups))
 		else:
 			print "ERROR: Couldn't resolve path %s" % path
+	
+	print
+	print "INODE GROUPS: " + ",".join(("%04u" % g) for g in sorted(totigroups))
+	print "BLOCK GROUPS: " + ",".join(("%04u" % g) for g in sorted(totbgroups))
 except ext2.Ext2Error, e:
 	print e.str()
 except IndexError:

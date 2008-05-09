@@ -1,0 +1,422 @@
+Initializing...
+Scanning............................................................................
+/bin/bash:
+#367205: Group:45 Links:0001 Blocks:173 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/ld.so.cache:
+#442041: Group:54 Links:0001 Blocks:16 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/ld-2.7.so:
+#179539: Group:22 Links:0001 Blocks:28 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/libncurses.so.5.6:
+#179598: Group:22 Links:0001 Blocks:48 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_TELEPHONE:
+#481844: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_ADDRESS:
+#481835: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_IDENTIFICATION:
+#481838: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_TIME:
+#481845: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/tls/i686/cmov/libc-2.7.so:
+#197178: Group:24 Links:0001 Blocks:335 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_CTYPE:
+#481837: Group:59 Links:0001 Blocks:64 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_MEASUREMENT:
+#481839: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_NAME:
+#481841: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_MONETARY:
+#481840: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/tls/i686/cmov/libdl-2.7.so:
+#197184: Group:24 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/gconv/gconv-modules.cache:
+#147119: Group:18 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/init.d/mysql:
+#442498: Group:54 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_COLLATE:
+#481836: Group:59 Links:0001 Blocks:226 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_MESSAGES/SYS_LC_MESSAGES:
+#539733: Group:66 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_NUMERIC:
+#481842: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_PAPER:
+#481843: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/lsb/init-functions:
+#180068: Group:22 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/lsb-base-logging.sh:
+#440790: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/dirname:
+#449009: Group:55 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/basename:
+#448883: Group:55 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/tr:
+#449737: Group:55 Links:0001 Blocks:10 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/tail:
+#449720: Group:55 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/sbin/mysqld:
+#451162: Group:55 Links:0001 Blocks:1809 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/cut:
+#448962: Group:55 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/tls/i686/cmov/librt-2.7.so:
+#197208: Group:24 Links:0001 Blocks:8 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/libz.so.1.2.3.3:
+#450873: Group:55 Links:0001 Blocks:21 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/bin/grep:
+#367241: Group:45 Links:0001 Blocks:26 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/libwrap.so.0.7.6:
+#179669: Group:22 Links:0001 Blocks:8 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/tls/i686/cmov/libcrypt-2.7.so:
+#197182: Group:24 Links:0001 Blocks:10 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/tls/i686/cmov/libpthread-2.7.so:
+#197204: Group:24 Links:0001 Blocks:29 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/tls/i686/cmov/libnsl-2.7.so:
+#197189: Group:24 Links:0001 Blocks:22 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/libstdc++.so.6.0.9:
+#450783: Group:55 Links:0001 Blocks:238 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/libgcc_s.so.1:
+#179582: Group:22 Links:0001 Blocks:11 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/tls/i686/cmov/libm-2.7.so:
+#197186: Group:24 Links:0001 Blocks:38 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/mysql/my.cnf:
+#441828: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/mysql/conf.d/old_passwords.cnf:
+#442505: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/bin/df:
+#367228: Group:45 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/mawk:
+#449397: Group:55 Links:0001 Blocks:25 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/mtab:
+#441981: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/tput:
+#449736: Group:55 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/mysqladmin:
+#451016: Group:55 Links:0001 Blocks:8 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/libmysqlclient.so.15.0.0:
+#450624: Group:55 Links:0001 Blocks:479 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/nsswitch.conf:
+#440809: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/tls/i686/cmov/libnss_files-2.7.so:
+#197195: Group:24 Links:0001 Blocks:10 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/services:
+#440823: Group:54 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/terminfo/l/linux:
+#197141: Group:24 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/mysql/debian.cnf:
+#442506: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/mysqld_safe:
+#451133: Group:55 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/expr:
+#449047: Group:55 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/bin/dash:
+#367224: Group:45 Links:0001 Blocks:21 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/my_print_defaults:
+#451129: Group:55 Links:0001 Blocks:315 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/bin/sleep:
+#367302: Group:45 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/bin/sed:
+#367295: Group:45 Links:0001 Blocks:10 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/nohup:
+#449439: Group:55 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/nice:
+#449434: Group:55 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/bin/rm:
+#367290: Group:45 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/logger:
+#449357: Group:55 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/share/mysql/english/errmsg.sys:
+#490938: Group:60 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/tls/i686/cmov/libnss_compat-2.7.so:
+#197191: Group:24 Links:0001 Blocks:8 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/tls/i686/cmov/libnss_nis-2.7.so:
+#197199: Group:24 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/passwd:
+#442495: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/group:
+#442100: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/libselinux.so.1:
+#179643: Group:22 Links:0001 Blocks:25 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/sbin/udevd:
+#189479: Group:23 Links:0001 Blocks:18 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/ibdata1:
+#424542: Group:52 Links:0001 Blocks:2564 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/locale.alias:
+#440786: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/db.frm:
+#424545: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/db.MYD:
+#424642: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone_leap_second.MYD:
+#424580: Group:52 Links:0001 Blocks:0 File:1 Dir:0
+/var/lib/mysql/mysql/time_zone_leap_second.MYI:
+#424579: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone_name.MYI:
+#424567: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/tables_priv.MYI:
+#424549: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone_name.MYD:
+#424568: Group:52 Links:0001 Blocks:0 File:1 Dir:0
+/etc/mysql/debian-start:
+#442501: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/bin/egrep:
+#367234: Group:45 Links:0001 Blocks:25 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/testing/db.opt:
+#424552: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/testing/table1.MYI:
+#424593: Group:52 Links:0001 Blocks:134 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/testing/table2.frm:
+#424595: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/testing/table1.MYD:
+#424594: Group:52 Links:0001 Blocks:675 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/testing/table2.MYD:
+#424597: Group:52 Links:0001 Blocks:158 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/perl:
+#449495: Group:55 Links:0001 Blocks:265 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_topic.frm:
+#424554: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_keyword.frm:
+#424563: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/:
+#2: Group:0 Links:0021 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0000
+/usr/share/mysql/charsets/Index.xml:
+#490979: Group:60 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/ib_logfile0:
+#424543: Group:52 Links:0001 Blocks:1283 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/ib_logfile1:
+#424544: Group:52 Links:0001 Blocks:1283 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/host.frm:
+#424537: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/host.MYI:
+#424538: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/host.MYD:
+#424640: Group:52 Links:0001 Blocks:0 File:1 Dir:0
+/var/lib/mysql/mysql/user.frm:
+#424536: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/user.MYD:
+#424541: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/lib/locale/en_US.utf8/LC_MESSAGES:
+#539732: Group:66 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/user.MYI:
+#424540: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone_leap_second.frm:
+#424578: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/db.MYI:
+#424641: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/bin/readlink:
+#367288: Group:45 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone_name.frm:
+#424566: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone_transition.frm:
+#424572: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/func.frm:
+#424546: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/tables_priv.frm:
+#424548: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/localtime:
+#440787: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone_transition_type.frm:
+#424575: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/tables_priv.MYD:
+#424550: Group:52 Links:0001 Blocks:0 File:1 Dir:0
+/var/lib/mysql/mysql/columns_priv.frm:
+#424587: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/columns_priv.MYD:
+#424589: Group:52 Links:0001 Blocks:0 File:1 Dir:0
+/var/lib/mysql/mysql/time_zone_transition_type.MYI:
+#424576: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone.MYI:
+#424570: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/columns_priv.MYI:
+#424588: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone.MYD:
+#424571: Group:52 Links:0001 Blocks:0 File:1 Dir:0
+/bin/ps:
+#367285: Group:45 Links:0001 Blocks:17 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone_transition_type.MYD:
+#424577: Group:52 Links:0001 Blocks:0 File:1 Dir:0
+/bin/cat:
+#367218: Group:45 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/libproc-3.2.7.so:
+#179634: Group:22 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/etc/mysql/conf.d:
+#441827: Group:54 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0000
+/sbin/usplash_write:
+#189488: Group:23 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/share/mysql/debian-start.inc.sh:
+#452415: Group:55 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/mysql_upgrade:
+#451141: Group:55 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/mysql:
+#451014: Group:55 Links:0001 Blocks:20 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/lib/libreadline.so.5.2:
+#179638: Group:22 Links:0001 Blocks:49 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/testing/table1.frm:
+#424553: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/testing/table2.MYI:
+#424596: Group:52 Links:0001 Blocks:27 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql_upgrade_info:
+#424581: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/usr/bin/mysqlcheck:
+#451104: Group:55 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_category.frm:
+#424557: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_relation.frm:
+#424560: Group:52 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/func.MYI:
+#424547: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/func.MYD:
+#424590: Group:52 Links:0001 Blocks:0 File:1 Dir:0
+/var/lib/mysql/mysql/help_relation.MYI:
+#424561: Group:52 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_keyword.MYD:
+#424565: Group:52 Links:0001 Blocks:21 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_keyword.MYI:
+#424564: Group:52 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_category.MYI:
+#424558: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_category.MYD:
+#424559: Group:52 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_relation.MYD:
+#424562: Group:52 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_topic.MYD:
+#424556: Group:52 Links:0001 Blocks:86 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/help_topic.MYI:
+#424555: Group:52 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone_transition.MYI:
+#424573: Group:52 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0000
+/var/lib/mysql/mysql/time_zone_transition.MYD:
+#424574: Group:52 Links:0001 Blocks:0 File:1 Dir:0
+
+INODE GROUPS: 0000,0018,0022,0023,0024,0045,0052,0054,0055,0059,0060,0066
+BLOCK GROUPS: 0000

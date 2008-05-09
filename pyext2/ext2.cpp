@@ -415,6 +415,12 @@ unsigned long Fs::groupOfInode(unsigned long ino) throw(Ext2Error) {
 	return (ino-1)/m_e2fs->super->s_inodes_per_group;
 }
 
+unsigned long Fs::blockOfGroup(unsigned long grp) throw(Ext2Error) {
+	unsigned long blk = (grp * m_e2fs->super->s_blocks_per_group)+1;
+	assertValidBlock(blk);
+	return blk;
+}
+
 unsigned long Fs::blocksCount() {
 	return m_e2fs->super->s_blocks_count;
 }

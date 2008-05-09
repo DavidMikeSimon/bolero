@@ -100,6 +100,7 @@ class Fs {
 		bool isInodeUsed(unsigned long ino) throw(Ext2Error); // Returns true if the given inode is in use, false otherwise
 		unsigned long groupOfBlock(unsigned long blk) throw(Ext2Error); // Returns which group contains the given block, starting with group 0
 		unsigned long groupOfInode(unsigned long ino) throw(Ext2Error); // Returns which group contains the given inode, starting with group 0
+		unsigned long blockOfGroup(unsigned long grp) throw(Ext2Error); // Returns the first block of a given group
 		unsigned long blocksCount(); // Returns the total number of blocks, free or used. Valid block indexes are 1 .. blocksCount-1
 		unsigned long inodesCount(); // Returns the total number of inodes, free or used. Valid inode indexes are 1 .. inodesCount
 		unsigned long pathToInum(const std::string& path); // Resolves an absolute path into an inode number, returns 0 on failed lookup
