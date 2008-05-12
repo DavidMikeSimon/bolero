@@ -35,7 +35,9 @@ except:
 	sys.exit()
 
 nowstr = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-outf = file("mysql-times-%s" % nowstr, "w")
+outf = file("%s-times-%s" % (sys.argv[2], nowstr), "w")	
+
+t = Timing()
 
 for n in range(1, runs+1):
 	iprint("   ---   Run %u of %u" % (n, runs))
@@ -50,12 +52,12 @@ for n in range(1, runs+1):
 	os.system("dd if=%s of=/dev/null bs=1024 count=32000" % tgtdev)
 	iprint("Drive cache deceived")
 	
-	t = Timing()
+	t.pretiming()
 	
 	frecordp = None
 	if "-rec" in sys.argv:
 		iprint("Starting file usage recording process...")
-		fn = "mysql-frecord-%s---%u" % (nowstr, n)
+		fn = "%s-frecord-%s---%u" % (sys.argv[2], nowstr, n)
 		frecordp = subprocess.Popen(("../frecord.py", fn), stdout = subprocess.PIPE)
 		time.sleep(2)
 	
@@ -76,8 +78,8 @@ for n in range(1, runs+1):
 		os.kill(frecordp.pid, signal.SIGINT)
 		frecordp.wait()
 	
-	time.sleep(2)
-
+	time.sleep(5)
+	
 	try:
 		t.posttiming()
 	except Exception, e:

@@ -4,6 +4,9 @@ import subprocess, MySQLdb, os, sys, time
 
 class Timing:
 	def __init__(self):
+		pass
+	
+	def pretiming(self):
 		self.rows = 0
 
 	def timing(self):
