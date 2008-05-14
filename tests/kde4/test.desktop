@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=konqueror http://localhost:8080/
+Exec=konqueror http://localhost:8181/
 Name=Test
 Type=Application
 X-KDE-StartupNotify=false
