@@ -1,0 +1,300 @@
+\documentclass[10pt]{article}
+
+\usepackage{fullpage}
+
+\author{David Simon}
+\title{Proposal for BOLERO\\\large{Block Organizer that Localizes
+Empirically-Related Objects}}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Hard disks are by a wide margin the slowest internal storage devices commonly
+used in modern computing. For a typical read or write, the disk head must first
+\emph{seek} to the target block\cite{seektime}. On even the fastest hard disks\cite{deskstar}, one seek
+can take entire milliseconds, an enormous amount of time for a computer. Furthermore, even if the disk head is already at the correct radius, there can be a long delay waiting for the
+desired block to spin back around to the head again\cite{latency}. For complicated tasks that involve
+many disk operations, much potentially productive time can end up being wasted while
+the computer waits around for all of these mechanical operations to finish.
+
+One way to reduce the quantity of seeks and delays is to arrange data on
+the disk so that the next block that will be requested is physically near to
+and after the current block\cite{autolocality}. Then, the disk head and platter will already be in place,
+and delays should be minimized. When this cannot be accomplished, and a seek or
+spin wait is necessary, then the travel time required can at least be lessened by reducing the
+physical distance between the current block and the next.
+
+Bolero will be a collection of software designed to perform this type of
+placement optimization on filesystems.
+
+\section{Motivation for Bolero}\label{sec:motive}
+
+In most filesystems, each file is typically divided up
+into one or more fixed-size chunks, called \texttt{blocks}. When the various blocks
+of a given file are not contiguous on disk, then the file is \texttt{fragmented}
+and operations that require more than one block from the file are very slow due to
+seek and spin delays. The best proactive way to prevent fragmentation is to find large contiguous
+chunks when allocating space for files in the first place. Some older filesystems, such as FAT, were
+very ineffective at doing this\cite{fathistory}.
+FAT filesystems frequently had to be \texttt{defragmented} to maintain performance.
+Modern filesystems, such as NTFS and ext3, keep better track of free space,
+and do not tend to fragment until the filesystem becomes nearly full. Advanced filesystems sometimes
+use even more sophisticated strategies to prevent fragmentation, such as preallocating extra room to allow 
+contiguous appending, or delaying physical allocation as long as possible so that better guesses
+can be made about the characteristics of newly created files\cite{xfs}.
+
+As important as these advancements have been, however, they do not address another, more subtle form of fragmentation: fragmentation resulting from the non-continuity of multiple files.
+Just as when the various \emph{blocks} of a file are distant from each other, when \emph{files} that are typically accessed in sequence are not located together on the disk, significant delays result. For example, a large application such as an office suite or desktop environment might require numerous programs, shared libraries, icons, fonts, and other resources before it can start up completely. If these files are distant from each other,
+the application's start-up time can increase significantly.
+
+The objective of Bolero will be to reduce this type of fragmentation by moving files that
+are typically accessed at about the same time closer together, and by re-sequencing files
+into the order that they are expected to be accessed in.
+
+\section{Initial Development}
+
+Because of the relative ease of extending and manipulating Linux filesystems and
+kernel code, Bolero will be developed targetting Linux environments with ext3
+filesystems. Ext3 is the standard filesystem used in Linux
+environments, and is largely backwards compatible with ext2\cite{ext2journal}.
+If results are favorable for ext3, then the approach used by Bolero should be
+applicable to other operating systems and filesystems. However, that is outside
+the scope of what is being proposed here.
+
+At first, the goal of the project will be to build a simplistic reorganizer
+that moves arbitrary blocks to arbitrary positions within an unmounted ext3
+filesystem. This is an important first step because of my unfamiliarity with
+filesystems in general and with ext3 in particular. In the process of writing this basic
+tool, I will gain some direct experience and form a code base that will be 
+helpful later on as the project becomes more complex.
+
+Although there are some tentative mechanisms to allow the online rearrangement
+of ext3 blocks\cite{ext3online}, the Bolero reorganizer will be
+designed to run only on unmounted filesystems. Certainly, it would be
+convenient for the user to be able to manipulate a mounted filesystem, but doing so
+would add unnecessary complexity, making debugging and
+development more difficult than it has to be. Working with unmounted filesystems,
+the reorganizer code can stay entirely in user-space, and does not have
+to deal with the possibility of the file system's state being changed
+midway through the process by other mechanisms outside its control.
+
+The reorganizer will likely be based upon code from the \texttt{ext3resize} program,
+which already has the ability to move blocks around within unmounted filesystems. Ext3resize, and other
+programs in the \texttt{e2fstools} package, all make use of a shared library called
+\texttt{libext2fs}\cite{libext2fs}. It provides useful and relatively high-level user-space routines for
+manipulating nearly every aspect of ext2 filesystems, including block
+structure, directory tables, and bad block maps. Easy, direct access to these structures
+through this library should make the development of Bolero more straightforward.
+
+Once the Bolero reorganizer is capable of moving blocks around, it should be
+possible to build that mechanism up into a simplistic defragmenter for ext3, that
+simply reduces fragmentation within individual files. Because ext3 files do
+not usually tend to fragment, the benefit of this kind of reorganization alone will
+probably not be significant. However, individual file defragmentation will be an important
+basis for later, more sophisticated operations.
+
+There one potential complication involved in attempting to make the blocks for
+a given file contiguous. In ext2, files involving large numbers of blocks
+reference those blocks using a tree structure\cite{ext2intro}, rather than (as I had
+initially expected) a linear structure. That is, a given data block might either
+contain some file data itself, or it might contain a list of references to deeper
+data blocks. The placement of these mid-level, referential blocks depends upon how the
+Linux kernel traverses this block tree. I would assume that the kernel is
+doing a simple depth-first search, but further research into this area is needed
+in order to be sure.
+
+After the reorganizer can defragment individual files, the next step will be
+defragmentation across multiple files, as explained in section \ref{sec:motive}.
+Both types of defragmentation are necessary because the overall goal is to reduce the quantity
+of seeks and spin waits. That is ideally achieved when the disk can travel through
+a sequence of files without interruption, from the first block of the first file to the last
+block of the last file\cite{autolocality}.
+
+One simple way to try and achieve this, for certain operations, would be to organize files by directory.
+The reorganizer could move the data blocks for files within a given directory near to each other,
+on the prediction that it is common to examine several files in a given
+directory at about the same time. For example, this would reduce the overall seek distance
+involved in generating thumbnails for a directory filled with images, or in
+getting other information (ID3 tags, checksums, etc) from all the files in a
+given directory. However, because this kind of meta-information is often
+cached after it is calculated, performance gains from this kind of
+optimization are unlikely to be very impressive. Implementation of this
+feature would be more about developing my skill level in filesystem manipulation
+than about achieving a directly useful result.
+Depending upon time constraints and my level of confidence at that point in
+working with ext3 filesystems, I may or may not implement this feature.
+
+\section{Observing User Activity}
+
+Once the Bolero reorganizer is functional enough, and I feel fairly confident in
+my understanding of the ext3 filesystem, I will move on to the second part of
+the project, the Bolero observer. This will be a kernel-level modification
+to the Linux ext3 filesystem code. When an ext3 filesystem is mounted using
+my modified code, various information about filesystem usage will be recorded:
+\begin{itemize}
+\item When block and file accesses take place, and details about those operations
+\item How much delay occurs between a request going to the disk and the disk
+beginning to send back information (that is, the seek time and spin latency)
+\item Whether or not each disk block requested is cached or must be retrieved
+\item Details about the process responsible for each filesystem operation
+\end{itemize}
+The filesystem module will then keep this information in memory and write it out
+(to another filesystem on another disk) regularly.
+
+There will probably also be a need for a debugging interface into this system,
+which I could possibly implement through \texttt{/proc}. Alternately, perhaps the
+majority of the observer should run in user space, and
+communicate with minimal hooks inside the kernel, again possibly through \texttt{/proc}.
+I need to do some more research into the Linux kernel to determine which of
+these two approaches is a better idea.
+
+To make development easier, Bolero will assume that it is observing (and
+later reorganizing) the only filesystem on the disk. Future implementations of the
+Bolero observer might attempt to correlate observations
+made on several filesystems all simultaneously in use on the same disk, but
+such a feature is outside the scope of this proposal. For now, Bolero will assume that
+the information it records will reflect, as accurately as the OS can know,
+all activity on the disk.
+
+The observations made will be useful not only in learning the disk-related costs of tasks
+that the user performs, but also in learning about the disk itself. Bolero's basic goal revolves
+around certain assumptions about the behavior of hard disks, such as that accessing
+a block that is farther away will take longer than accessing a block that is close, and
+that within a certain range accessing a block that is before the current position will take longer than
+accessing a block after the current position. On simple disks, these conditions are
+\emph{always} true, but modern hard disks are more sophisticated, and the observations
+may have to address that.
+
+For example, many hard disks, upon discovering that a particular block has gone bad, will silently
+remap that block to some other place on disk\cite{remapping}. This is a good thing for ensuring
+data integrity, but it makes Bolero's optimization strategy more difficult, because
+its idea of the ``physical'' disk location is actually still a level of abstraction away from
+the actual disk. To overcome this, the observer can compare its recorded response
+times with expected times, based on an understanding of how disks typically work.
+If the delay in going from one seemingly ``contiguous'' block to the next
+is unexpectedly long, then we may be able to assume that one of the blocks involved
+has been silently remapped to some distant part of the disk. Such blocks can then be
+assumed by the reorganizer to have poor contiguity regardless of proximity to other
+blocks.
+
+\section{Observation-Based Reorganization}
+
+Once the observer is capable of producing useful information, that data then can be used
+by the Bolero reorganizer to make informed decisions about file placement, justifying the
+"Localizes Empirically-Related Objects" part of the acronym. There are two
+strategies for using this data: general optimization and task-specific optimization.
+
+With general optimization, the reorganizer would use the recorded observations
+to determine which files tend to be accessed within a short time from each
+other, and in what order. It would assign a weight to these relationships, and then
+attempt to figure out a placement strategy that keeps files close together to
+the degree that they are often accessed together, and in the sequence that is
+most often requested. This is likely to be a difficult problem, computationally.
+However, previous attempts at implementing this type of optimization at a
+sub-filesystem level have resulted in significant performance benefits\cite{autolocality}.
+
+The other approach, task-specific optimization, will probably be easier to
+implement and may also, for its purpose, result in better performance. With this
+approach, the user will limit the observations taken into account to those having to
+do with some specific task they are interested in optimizing. For example,
+I might mark the time at which I began starting X/KDE and the time at
+which it has finished loading. Within a short period like this, even
+though there is likely to be a lot of disk activity, any single file will
+probably have been read from disk only once. The reorganizer can therefore simply
+rearrange the relevant files on the disk to be contiguous and in the same order as that
+recorded during the observational period, to reduce the amount of time taken for
+that particular task. Previous efforts along this particular line have been
+successful in reducing large application startup times by over 60\%\cite{ala}.
+
+Because the task-specific approach will be easier to implement and more readily
+suggests a metric useful in measuring progress, I will implement that
+approach first. I anticipate that there will be time to try implementing
+the general optimization approach afterwords, though I am unsure at this point as to
+how difficult it will be to make that approach useful.
+
+\section{Measuring Results}
+
+In order to gauge how successful any optimization is, it is important to have
+repeatable, objective measurements. A single benchmark would be insufficient to demonstrate
+that Bolero is actually helpful in practical use. Although block reorganization has
+potential benefits in many tasks, the most obvious one is the example presented above:
+starting a large application. Therefore, during the process of developing Bolero, I will
+also need to write a simple mechanism that can repeatedly start various large applications
+and determine how beneficial Bolero's optimization strategies really are.
+
+I intend to test most or all of the following applications:
+\begin{itemize}
+\item X Windows + KDE
+\item X Windows + GNOME
+\item OpenOffice
+\item Mozilla Firefox
+\item MySQL
+\item Apache
+\end{itemize}
+This list is not necessarily complete. Please note the applications listed
+listed use a wide range of shared libraries, subsystems, and user interface types.
+This helps to eliminate the influence of these factors on the final results;
+ideally, the only factor being tested should be disk usage.
+
+There are a number of difficulties that must be addressed to make these measurements useful.
+The most important of these is the problem of determing when, exactly, the program has
+``started up'' entirely. For some programs, this is fairly straightforward to define. For example,
+Apache has started up entirely when it is able to respond to HTTP requests. Therefore,
+to determine the start-up point for Apache, the measurement program merely has to act
+as (or use) an HTTP client.
+
+For GUI programs, however, the start-up point is more nebulously defined as when the user is
+able to interact with the program. OpenOffice, for example, has started up completely when it is possible to open up and edit a document in it. Firefox has started up completely when it is capable of retrieving a web page. Testing these scenarios without actual human involvement will require application-specific solutions, such as
+specially designed document macros or dynamic webpages that record the time at which they are loaded.
+
+The situation for desktop environments, such KDE and GNOME, is even more complicated, since those are designed
+to perform a wide range of disparate tasks. Such systems have not really started up \emph{entirely} until they are capable of performing every one of their varied functions. For example, it would not be enough to say that KDE has fully loaded when it is, say, possible to use its main menu to launch applications, because at that time KDE might still be busy loading other unrelated components, such as the background image manager, or the taskbar, or
+the file management layer. It would be impractical to test each of these tasks individually,
+so another method for finding the start-up point must be used.
+
+One possible alternate way to find start-up times would be to monitor resource usage. All of the listed applications
+above can be characterized by a busy loading period which, when finished, is followed by an idle period, where
+the application waits for requests or user input to handle. The measurement program could monitor CPU usage and disk
+activity to determine when this idle period begins. However, there are various factors which might prevent an application from "loading" entirely without user interaction; for example, if a shared library is required, it may only be partially loaded, with important but non-initialized code only being brought into memory when they are needed. For such situations, looking only at resource usage might result in misleadingly short times.
+
+Concurrency presents another possible measurement hurdle. As mentioned above, the applications for
+which start-up time would benefit the most from Bolero are those applications which involve a
+large number of pieces, all potentially scattered around the filesystem. However, there is no guarantee
+that these pieces will always be loaded in the same order by the application. KDE, for example, might reasonably start its window manager and its taskbar at the same time. Because of a certain amount of random
+variation in the computer's state before and during the loading process, this might result in
+slightly different disk access patterns for the same application. During one run, the taskbar might finish loading just before the window manager, while in another run, the opposite might be true. Multiple
+measurements will be necessary to see how much the optimization helps despite this unpredictability.
+
+One final issue that must be addressed for accurate measurement is the effect of caching. Both
+the operating system and the drive itself will be, in light of the inherent slowness of hard drives,
+doing a lot of caching. The operating system's cache can probably be manipulated directly; more
+investigation into the Linux kernel will be required, but I suspect that clearing the software
+cache may be as simple as unmounting and remounting the partition. The hard drive's internal cache
+may be tricker to deal with, but one possible strategy might be to simply load several large chunks of
+unused data from the drive, thereby filling the drive cache entirely or mostly (depending upon the mapping
+and replacement schemes used) with garbage information that has nothing to do with the activities being tested.
+The purpose of all of this cache-busting is to involve the actual hard drive as much as possible
+in the tests, because Bolero's optimizations have to do with the physical limitations of hard drives. Although caching certainly helps programs to start up faster, it also interferes with my ability to test Bolero's actual effectiveness.
+
+\section{Conclusion}
+
+Assuming that Bolero does end up being significantly useful, there are a number of directions that
+the project could go in. A few of them are mentioned above: Bolero might be portable to other
+operating systems or filesystems, or it might be possible to use it on more complicated multi-partition
+or multi-disk setups. Additionally, there are probably other, more complex observation-based reorganization schemes
+besides the two suggested above.
+
+Before any of this is worth considering, though, the basic premise must first be tested. Can disk
+blocks be reorganized based on observations of usage patterns to significantly improve performance?
+There might be tremendous performance gains. Or, the unpredictability and complexity of modern
+computers and applications may mean that careful organization of blocks in a seemingly helpful
+sequence may really result in little to no perceivable benefit. The development of Bolero should conclusively
+show which of these is the case.
+
+\bibliography{proposal}{}
+\bibliographystyle{plain}
+
+\end{document}
