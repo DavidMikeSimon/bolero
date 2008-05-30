@@ -3,8 +3,7 @@
 \usepackage{fullpage}
 
 \author{David Simon}
-\title{Proposal for BOLERO\\\large{Block Organizer that Localizes
-Empirically-Related Objects}}
+\title{Task-Specific Filesystem Block Reorganization in Ext3}
 
 \begin{document}
 
@@ -279,6 +278,12 @@ and replacement schemes used) with garbage information that has nothing to do wi
 The purpose of all of this cache-busting is to involve the actual hard drive as much as possible
 in the tests, because Bolero's optimizations have to do with the physical limitations of hard drives. Although caching certainly helps programs to start up faster, it also interferes with my ability to test Bolero's actual effectiveness.
 
+\section{Data Collected}
+
+\section{Analysis of Results}
+
+\section{Possible Future Work}
+
 \section{Conclusion}
 
 Assuming that Bolero does end up being significantly useful, there are a number of directions that
@@ -294,7 +299,7 @@ computers and applications may mean that careful organization of blocks in a see
 sequence may really result in little to no perceivable benefit. The development of Bolero should conclusively
 show which of these is the case.
 
-\bibliography{proposal}{}
+\bibliography{report}{}
 \bibliographystyle{plain}
 
 \end{document}
