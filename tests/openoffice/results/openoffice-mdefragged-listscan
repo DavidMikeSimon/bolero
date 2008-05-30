@@ -1,0 +1,1487 @@
+Initializing...
+Scanning............................................................................
+/bin/dash:
+#367224: Group:45 Links:0001 Blocks:21 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/bin/ooffice:
+#449461: Group:55 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libc-2.7.so:
+#197178: Group:24 Links:0001 Blocks:335 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/ld-2.7.so:
+#179539: Group:22 Links:0001 Blocks:28 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/soffice:
+#540335: Group:66 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/openoffice/soffice.sh:
+#441850: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/ld.so.cache:
+#440795: Group:54 Links:0001 Blocks:16 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/bin/stat:
+#449704: Group:55 Links:0001 Blocks:11 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/libselinux.so.1:
+#179643: Group:22 Links:0001 Blocks:25 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libdl-2.7.so:
+#197184: Group:24 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/bin/uname:
+#367315: Group:45 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/bin/basename:
+#448883: Group:55 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/javaldx:
+#540087: Group:66 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libuno_sal.so.3:
+#540257: Group:66 Links:0001 Blocks:449 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libuno_cppuhelpergcc3.so.3:
+#540255: Group:66 Links:0001 Blocks:196 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libpthread-2.7.so:
+#197204: Group:24 Links:0001 Blocks:29 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/gconv/gconv-modules.cache:
+#147119: Group:18 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/bin/dirname:
+#449009: Group:55 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libuno_cppu.so.3:
+#540254: Group:66 Links:0001 Blocks:47 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libjvmfwk.so.3:
+#540179: Group:66 Links:0001 Blocks:31 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libstdc++.so.6.0.9:
+#450783: Group:55 Links:0001 Blocks:238 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/libgcc_s.so.1:
+#179582: Group:22 Links:0001 Blocks:11 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libm-2.7.so:
+#197186: Group:24 Links:0001 Blocks:38 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/libpam.so.0.81.6:
+#179624: Group:22 Links:0001 Blocks:10 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libcrypt-2.7.so:
+#197182: Group:24 Links:0001 Blocks:10 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libuno_salhelpergcc3.so.3:
+#540258: Group:66 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libstlport_gcc.so:
+#540228: Group:66 Links:0001 Blocks:210 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libxml2.so.2.6.31:
+#450867: Group:55 Links:0001 Blocks:287 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_CTYPE:
+#481837: Group:59 Links:0001 Blocks:64 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libz.so.1.2.3.3:
+#450873: Group:55 Links:0001 Blocks:21 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/jvmfwk3rc:
+#540090: Group:66 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/bootstraprc:
+#540058: Group:66 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/nsswitch.conf:
+#440809: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libnss_compat-2.7.so:
+#197191: Group:24 Links:0001 Blocks:8 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libnss_nis-2.7.so:
+#197199: Group:24 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libnsl-2.7.so:
+#197189: Group:24 Links:0001 Blocks:22 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/passwd:
+#442495: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libnss_files-2.7.so:
+#197195: Group:24 Links:0001 Blocks:10 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/config/javavendors.xml:
+#555098: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/unorc:
+#540357: Group:66 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/sunjavaplugin.so:
+#540343: Group:66 Links:0001 Blocks:20 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/bin/java:
+#481930: Group:59 Links:0001 Blocks:17 File:1 Dir:0
+   ^ Blocks In Groups: 0059
+/etc/java-1.5.0-sun/jvm.cfg:
+#442543: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/i386/client/libjvm.so:
+#491113: Group:60 Links:0001 Blocks:1143 File:1 Dir:0
+   ^ Blocks In Groups: 0060
+/etc/locale.alias:
+#440786: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/i386/native_threads/libhpi.so:
+#491108: Group:60 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0060
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/i386/libverify.so:
+#491118: Group:60 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0060
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/i386/libjava.so:
+#491119: Group:60 Links:0001 Blocks:36 File:1 Dir:0
+   ^ Blocks In Groups: 0060
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/i386/libzip.so:
+#491120: Group:60 Links:0001 Blocks:18 File:1 Dir:0
+   ^ Blocks In Groups: 0060
+/home/carbon/.openoffice.org2/user/config/javasettings_Linux_x86.xml:
+#310086: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/rt.jar:
+#491186: Group:60 Links:0001 Blocks:9779 File:1 Dir:0
+   ^ Blocks In Groups: 0060,0061
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/jsse.jar:
+#491789: Group:60 Links:0001 Blocks:134 File:1 Dir:0
+   ^ Blocks In Groups: 0061
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/jce.jar:
+#491793: Group:60 Links:0001 Blocks:22 File:1 Dir:0
+   ^ Blocks In Groups: 0061
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/charsets.jar:
+#491798: Group:60 Links:0001 Blocks:2163 File:1 Dir:0
+   ^ Blocks In Groups: 0061
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/i386/client/classes.jsa:
+#491799: Group:60 Links:0001 Blocks:3119 File:1 Dir:0
+   ^ Blocks In Groups: 0060
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/ext:
+#491156: Group:60 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0060
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/ext/sunjce_provider.jar:
+#491790: Group:60 Links:0001 Blocks:40 File:1 Dir:0
+   ^ Blocks In Groups: 0061
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/ext/dnsns.jar:
+#491791: Group:60 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0061
+/etc/localtime:
+#440787: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/ext/sunpkcs11.jar:
+#491157: Group:60 Links:0001 Blocks:44 File:1 Dir:0
+   ^ Blocks In Groups: 0060
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.15/jre/lib/ext/localedata.jar:
+#491792: Group:60 Links:0001 Blocks:199 File:1 Dir:0
+   ^ Blocks In Groups: 0061
+/usr/lib/jvm:
+#481889: Group:59 Links:0003 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0059
+/usr/lib/openoffice/program/pagein:
+#540302: Group:66 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/pagein-common:
+#540304: Group:66 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program:
+#539773: Group:66 Links:0006 Blocks:3 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/bootstrap.uno.so:
+#540057: Group:66 Links:0001 Blocks:183 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/configmgr2.uno.so:
+#540066: Group:66 Links:0001 Blocks:548 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/deployment680li.uno.so:
+#540069: Group:66 Links:0001 Blocks:150 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/fsstorage.uno.so:
+#540077: Group:66 Links:0001 Blocks:34 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/i18npool.uno.so:
+#540081: Group:66 Links:0001 Blocks:357 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libavmedia680li.so:
+#540099: Group:66 Links:0001 Blocks:43 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libbasegfx680li.so:
+#540102: Group:66 Links:0001 Blocks:107 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libcomphelp4gcc3.so:
+#540112: Group:66 Links:0001 Blocks:297 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libdeploymentmisc680li.so:
+#540121: Group:66 Links:0001 Blocks:23 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libdtransX11680li.so:
+#540124: Group:66 Links:0001 Blocks:54 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libfilterconfig1.so:
+#540143: Group:66 Links:0001 Blocks:78 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libfwe680li.so:
+#540146: Group:66 Links:0001 Blocks:163 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libfwi680li.so:
+#540147: Group:66 Links:0001 Blocks:60 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libfwk680li.so:
+#540148: Group:66 Links:0001 Blocks:772 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libfwl680li.so:
+#540149: Group:66 Links:0001 Blocks:37 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libgo680li.so:
+#540152: Group:66 Links:0001 Blocks:111 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_TELEPHONE:
+#481844: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libhelplinker680li.so:
+#540154: Group:66 Links:0001 Blocks:79 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_MEASUREMENT:
+#481839: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/liblng680li.so:
+#540182: Group:66 Links:0001 Blocks:138 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libpackage2.so:
+#540195: Group:66 Links:0001 Blocks:98 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libpsp680li.so:
+#540202: Group:66 Links:0001 Blocks:230 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_IDENTIFICATION:
+#481838: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libsb680li.so:
+#540211: Group:66 Links:0001 Blocks:370 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libsfx680li.so:
+#540221: Group:66 Links:0001 Blocks:992 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libsot680li.so:
+#540222: Group:66 Links:0001 Blocks:93 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libspl680li.so:
+#540225: Group:66 Links:0001 Blocks:54 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libsvl680li.so:
+#540232: Group:66 Links:0001 Blocks:288 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_NAME:
+#481841: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libsvt680li.so:
+#540233: Group:66 Links:0001 Blocks:984 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libtk680li.so:
+#540243: Group:66 Links:0001 Blocks:660 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libtl680li.so:
+#540244: Group:66 Links:0001 Blocks:160 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_ADDRESS:
+#481835: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libucb1.so:
+#540246: Group:66 Links:0001 Blocks:67 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libucbhelper4gcc3.so:
+#540247: Group:66 Links:0001 Blocks:122 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libucpfile1.so:
+#540250: Group:66 Links:0001 Blocks:95 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libutl680li.so:
+#540263: Group:66 Links:0001 Blocks:145 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libuui680li.so:
+#540264: Group:66 Links:0001 Blocks:61 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_PAPER:
+#481843: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libvcl680li.so:
+#540266: Group:66 Links:0001 Blocks:915 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libvclplug_gen680li.so:
+#540267: Group:66 Links:0001 Blocks:130 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libxcr680li.so:
+#540273: Group:66 Links:0001 Blocks:166 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libxo680li.so:
+#540282: Group:66 Links:0001 Blocks:1122 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libxstor.so:
+#540288: Group:66 Links:0001 Blocks:128 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/oovbaapi.rdb:
+#540298: Group:66 Links:0001 Blocks:289 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/reflection.uno.so:
+#540318: Group:66 Links:0001 Blocks:32 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_MESSAGES/SYS_LC_MESSAGES:
+#539733: Group:66 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/sax.uno.so:
+#540323: Group:66 Links:0001 Blocks:31 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/services.rdb:
+#540328: Group:66 Links:0001 Blocks:601 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/soffice.bin:
+#540336: Group:66 Links:0001 Blocks:128 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/stocservices.uno.so:
+#540340: Group:66 Links:0001 Blocks:29 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/types.rdb:
+#540350: Group:66 Links:0001 Blocks:937 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/oosplash.bin:
+#540297: Group:66 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libX11.so.6.2.0:
+#449985: Group:55 Links:0001 Blocks:232 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXdmcp.so.6.0.0:
+#450000: Group:55 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libxcb.so.1.0.0:
+#450859: Group:55 Links:0001 Blocks:24 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXau.so.6.0.0:
+#449989: Group:55 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libxcb-xlib.so.0.0.0:
+#450855: Group:55 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_MONETARY:
+#481840: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libi18nisolang1gcc3.so:
+#540157: Group:66 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/openintro_ubuntu_sun.bmp:
+#540301: Group:66 Links:0001 Blocks:94 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libvos3gcc3.so:
+#540269: Group:66 Links:0001 Blocks:38 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXext.so.6.4.0:
+#450002: Group:55 Links:0001 Blocks:15 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libSM.so.6.0.0:
+#449981: Group:55 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libICE.so.6.3.0:
+#449927: Group:55 Links:0001 Blocks:23 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libicuuc.so.38.0:
+#450368: Group:55 Links:0001 Blocks:295 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libicule.so.38.0:
+#450362: Group:55 Links:0001 Blocks:54 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libjvmaccessgcc3.so.3:
+#540178: Group:66 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libfreetype.so.6.3.16:
+#450226: Group:55 Links:0001 Blocks:112 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/openoffice/sofficerc:
+#441851: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libjpeg.so.62.0.0:
+#450383: Group:55 Links:0001 Blocks:32 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.Xauthority:
+#294525: Group:36 Links:0001 Blocks:0 File:1 Dir:0
+/usr/lib/openoffice/program/libj680li_g.so:
+#540173: Group:66 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libgdk-x11-2.0.so.0.1200.9:
+#450242: Group:55 Links:0001 Blocks:133 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libgdk_pixbuf-2.0.so.0.1200.9:
+#450244: Group:55 Links:0001 Blocks:25 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libpangocairo-1.0.so.0.2000.1:
+#450666: Group:55 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libpango-1.0.so.0.2000.1:
+#450664: Group:55 Links:0001 Blocks:61 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libcairo.so.2.17.3:
+#450111: Group:55 Links:0001 Blocks:98 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libgobject-2.0.so.0.1600.3:
+#450268: Group:55 Links:0001 Blocks:61 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libgmodule-2.0.so.0.1600.3:
+#450258: Group:55 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libglib-2.0.so.0.1600.3:
+#450252: Group:55 Links:0001 Blocks:178 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libicudata.so.38.0:
+#450356: Group:55 Links:0001 Blocks:2733 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libfontconfig.so.1.3.0:
+#450218: Group:55 Links:0001 Blocks:44 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXrender.so.1.3.0:
+#450024: Group:55 Links:0001 Blocks:8 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXcursor.so.1.0.2:
+#449996: Group:55 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXi.so.6.0.0:
+#450010: Group:55 Links:0001 Blocks:8 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_COLLATE:
+#481836: Group:59 Links:0001 Blocks:226 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXrandr.so.2.1.0:
+#450022: Group:55 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXinerama.so.1.0.0:
+#450012: Group:55 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXdamage.so.1.1.0:
+#449998: Group:55 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libpangoft2-1.0.so.0.2000.1:
+#450668: Group:55 Links:0001 Blocks:40 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXfixes.so.3.1.0:
+#450004: Group:55 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXcomposite.so.1.0.0:
+#449994: Group:55 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libpng12.so.0.15.0:
+#450690: Group:55 Links:0001 Blocks:36 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libpixman-1.so.0.10.0:
+#450686: Group:55 Links:0001 Blocks:42 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libpcre.so.3.12.1:
+#450680: Group:55 Links:0001 Blocks:40 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libexpat.so.1.5.2:
+#450200: Group:55 Links:0001 Blocks:34 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_TIME:
+#481845: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/sofficerc:
+#540337: Group:66 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/locale/en_US.utf8/LC_NUMERIC:
+#481842: Group:59 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libvclplug_kde680li.so:
+#540268: Group:66 Links:0001 Blocks:17 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libkdeui.so.4.2.0:
+#450476: Group:55 Links:0001 Blocks:727 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libkdecore.so.4.2.0:
+#450437: Group:55 Links:0001 Blocks:563 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libqt-mt.so.3.3.8:
+#450722: Group:55 Links:0001 Blocks:2079 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libDCOP.so.4.2.0:
+#449912: Group:55 Links:0001 Blocks:50 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libresolv-2.7.so:
+#197206: Group:24 Links:0001 Blocks:18 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/tls/i686/cmov/libutil-2.7.so:
+#197212: Group:24 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libart_lgpl_2.so.2.3.20:
+#450059: Group:55 Links:0001 Blocks:22 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libidn.so.11.5.30:
+#450371: Group:55 Links:0001 Blocks:50 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libkdefx.so.4.2.0:
+#450441: Group:55 Links:0001 Blocks:42 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libaudio.so.2.4:
+#450090: Group:55 Links:0001 Blocks:23 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXt.so.6.0.0:
+#450028: Group:55 Links:0001 Blocks:81 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXtst.so.6.1.0:
+#450030: Group:55 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libXft.so.2.1.2:
+#450008: Group:55 Links:0001 Blocks:18 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/X11/locale/locale.alias:
+#580566: Group:71 Links:0001 Blocks:21 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/X11/locale/en_US.UTF-8/XLC_LOCALE:
+#580579: Group:71 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/fonts.conf:
+#441526: Group:54 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/20-fix-globaladvance.conf:
+#441540: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/50-user.conf:
+#441559: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/69-unifont.conf:
+#441576: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/X11/locale/locale.dir:
+#580567: Group:71 Links:0001 Blocks:10 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/53-monospace-lcd-filter.conf:
+#441562: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/75-ttf-arphic-ukai-select.conf:
+#441579: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/d82eb4fd963d448e2fcb7d7b793b5df3-x86.cache-2:
+#408069: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/90-synthetic.conf:
+#441581: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/51-local.conf:
+#441560: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/c855463f699352c367813e37f3f70ea7-x86.cache-2:
+#408066: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/eeebfc908bd29a90773fd860017aada4-x86.cache-2:
+#408075: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/fe547fea3a41b43a38975d292a2b19c7-x86.cache-2:
+#408076: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/10-no-sub-pixel.conf:
+#441534: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/20-unhint-small-vera.conf:
+#441541: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/30-metric-aliases.conf:
+#441550: Group:54 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/41-ttf-arphic-uming.conf:
+#441556: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/40-nonlatin.conf:
+#441554: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/41-ttf-arphic-ukai.conf:
+#441555: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/65-fonts-persian.conf:
+#441565: Group:54 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/3830d5c3ddfd5cd38a049b759396e72e-x86.cache-2:
+#408055: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/e13b20fdb08344e0e664864cc2ede53d-x86.cache-2:
+#408072: Group:50 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/cabbd14511b9e8a55e92af97fb3a0461-x86.cache-2:
+#408067: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/30-cjk-aliases.conf:
+#441549: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/10-hinting-medium.conf:
+#441531: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.d:
+#441525: Group:54 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/52-languageselector.conf:
+#441561: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/21a99156bb11811cef641abeda519a45-x86.cache-2:
+#408054: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/4c599c202bc5c08e2d34565a40eac3b2-x86.cache-2:
+#408057: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/35-ttf-arphic-uming-aliases.conf:
+#441553: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/49-sansserif.conf:
+#441558: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/25-ttf-arphic-ukai-render.conf:
+#441542: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/80-delicious.conf:
+#441580: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/65-ttf-thai-tlwg.conf:
+#441567: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/65-nonlatin.conf:
+#441566: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/64-ttf-arphic-uming.conf:
+#441564: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/e383d7ea5fbe662a33d9b44caf393297-x86.cache-2:
+#408073: Group:50 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/c69f04ab05004e31a6d5e715764f16d8-x86.cache-2:
+#408065: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/4c73fe0c47614734b17d736dbde7580a-x86.cache-2:
+#408058: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/0f34bcd4b6ee430af32735b75db7f02b-x86.cache-2:
+#408053: Group:50 Links:0001 Blocks:8 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/qt3/qtrc:
+#441912: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.kde/share/config/kdeglobals:
+#294400: Group:36 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0037
+/usr/share/kubuntu-default-settings/kde-profile/default/share/config/kdeglobals:
+#663247: Group:81 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/kde3/plugins/styles:
+#474069: Group:58 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/usr/lib/kde3/plugins/styles/highcontrast.so:
+#474079: Group:58 Links:0001 Blocks:15 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/kde3/plugins/styles/plastik.so:
+#474087: Group:58 Links:0001 Blocks:32 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/kde3/plugins/styles/kthemestyle.so:
+#474083: Group:58 Links:0001 Blocks:41 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/kde3/kthemestylerc:
+#441764: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/kde3/.kthemestylerc.lock:
+#441982: Group:54 Links:0001 Blocks:0 File:1 Dir:0
+/usr/share/X11/locale/compose.dir:
+#580565: Group:71 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/X11/locale/en_US.UTF-8/Compose:
+#580577: Group:71 Links:0001 Blocks:138 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libgcc3_uno.so:
+#540151: Group:66 Links:0001 Blocks:15 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libreg.so.3:
+#540205: Group:66 Links:0001 Blocks:34 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libstore.so.3:
+#540229: Group:66 Links:0001 Blocks:30 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libunsafe_uno_uno.so:
+#540260: Group:66 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libuno_purpenvhelpergcc3.so.3:
+#540256: Group:66 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/configmgrrc:
+#540067: Group:66 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/versionrc:
+#540363: Group:66 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/desktopbe1.uno.so:
+#540071: Group:66 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/kdebe1.uno.so:
+#540092: Group:66 Links:0001 Blocks:20 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libkio.so.4.2.0:
+#450492: Group:55 Links:0001 Blocks:822 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libkwalletclient.so.1.0.1:
+#450583: Group:55 Links:0001 Blocks:17 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/libacl.so.1.1.0:
+#179545: Group:22 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/libattr.so.1.1.0:
+#179551: Group:22 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Setup.dat:
+#310089: Group:38 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/data/org/openoffice/Setup.xcu:
+#310392: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0038
+/usr/lib/openoffice/program/behelper.uno.so:
+#540056: Group:66 Links:0001 Blocks:10 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.Paths.dat:
+#310160: Group:38 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.kde/share/config/emaildefaults:
+#294501: Group:36 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0036
+/etc/hosts:
+#440769: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.VCL.dat:
+#310165: Group:38 Links:0001 Blocks:45 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/resource:
+#546787: Group:67 Links:0002 Blocks:3 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/data/org/openoffice/Office/Views.xcu:
+#310401: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0038
+/usr/lib/openoffice/program/resource/stt680en-US.res:
+#122578: Group:15 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/resource/sfx680en-US.res:
+#122569: Group:15 Links:0001 Blocks:16 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.Events.dat:
+#310171: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/resource/vcl680en-US.res:
+#122614: Group:15 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/config/imagecache:
+#310173: Group:38 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf:
+#637911: Group:78 Links:0001 Blocks:146 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/icons/oxy-white/cursors/split_h:
+#663111: Group:81 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/registry/modules/org/openoffice/TypeDetection/Misc:
+#564308: Group:69 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.TypeDetection.Misc.dat:
+#310178: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libswd680li.so:
+#540236: Group:66 Links:0001 Blocks:15 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/registry/modules/org/openoffice/TypeDetection/Filter:
+#564306: Group:69 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.TypeDetection.Filter.dat:
+#310179: Group:38 Links:0001 Blocks:21 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.TabBrowse.dat:
+#310180: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.UI.dat:
+#310181: Group:38 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/X11/cursors/oxy-white.theme:
+#440902: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libsvx680li.so:
+#540234: Group:66 Links:0001 Blocks:3290 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/resource/svx680en-US.res:
+#122587: Group:15 Links:0001 Blocks:91 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/registry/modules/org/openoffice/Office/Writer:
+#564284: Group:69 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.DataAccess.dat:
+#310237: Group:38 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/fonts/type1/gsfonts/n021003l.pfb:
+#644709: Group:79 Links:0001 Blocks:26 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/vbaevents680li.uno.so:
+#540361: Group:66 Links:0001 Blocks:25 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/uno_packages/cache/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/common_.rdb:
+#310249: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0038
+/home/carbon/.recently-used:
+#294447: Group:36 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0037
+/usr/lib/openoffice/program/libevtatt.so:
+#540138: Group:66 Links:0001 Blocks:14 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/romansh.lm:
+#555232: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/finnish.lm:
+#555201: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/config/soffice.cfg/modules/swriter/toolbar:
+#563557: Group:69 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.UI.WriterCommands.dat:
+#310197: Group:38 Links:0001 Blocks:17 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/qt3/plugins/inputmethods/libqimsw-multi.so:
+#579818: Group:71 Links:0001 Blocks:10 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/qt3/plugins/inputmethods/libqscim.so:
+#579821: Group:71 Links:0001 Blocks:34 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libscim-1.0.so.8.2.3:
+#450744: Group:55 Links:0001 Blocks:225 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/qt3/plugins/inputmethods/libqimsw-none.so:
+#579819: Group:71 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/qt3/plugins/inputmethods/libqsimple.so:
+#579822: Group:71 Links:0001 Blocks:38 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/afrikaans.lm:
+#555181: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/tagalog.lm:
+#555243: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/marathi.lm:
+#555222: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/welsh.lm:
+#555249: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/hungarian.lm:
+#555210: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/icelandic.lm:
+#555211: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/7ef2298fde41cc6eeb7af42e48b7d293-x86.cache-2:
+#408062: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/lib/defoma/fontconfig.d/fonts.conf:
+#416168: Group:51 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/945677eb7aeaf62f1d50efc3fb3ec7d8-x86.cache-2:
+#408063: Group:50 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/4794a0821666d79190d59a36cb4f44b5-x86.cache-2:
+#408056: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/qt3/qt_plugins_3.3rc:
+#441911: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.qt/.qt_plugins_3.3rc.lock:
+#294328: Group:36 Links:0001 Blocks:0 File:1 Dir:0
+/usr/lib/kde3/plugins/styles/keramik.so:
+#474081: Group:58 Links:0001 Blocks:53 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libkdesu.so.4.2.0:
+#450474: Group:55 Links:0001 Blocks:23 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.Recovery.dat:
+#310166: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/90-ttf-arphic-uming-embolden.conf:
+#441583: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/qt3/.qtrc.lock:
+#441301: Group:54 Links:0001 Blocks:0 File:1 Dir:0
+/etc/qt3/kstylerc:
+#441908: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.Linguistic.dat:
+#310091: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libspl_unx680li.so:
+#540226: Group:66 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.Common.dat:
+#310162: Group:38 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/data/org/openoffice/Office/Common.xcu:
+#310405: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0038
+/etc/resolv.conf:
+#441981: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/resource/ooo680en-US.res:
+#122524: Group:15 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/resource/sb680en-US.res:
+#122548: Group:15 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/resource/ofa680en-US.res:
+#122521: Group:15 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/config/images_crystal.zip:
+#555095: Group:68 Links:0001 Blocks:1387 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/psprint/pspfontcache:
+#310175: Group:38 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/icons/crystalsvg/index.theme:
+#655272: Group:80 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libi18nutilgcc3.so:
+#540159: Group:66 Links:0001 Blocks:17 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/resource/sw680en-US.res:
+#122590: Group:15 Links:0001 Blocks:71 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/liblocaledata_en.so:
+#540184: Group:66 Links:0001 Blocks:37 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.Compatibility.dat:
+#310184: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/uno_packages/cache/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/common.rdb:
+#310214: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0038
+/usr/lib/openoffice/program/libxmlsecurity.so:
+#540280: Group:66 Links:0001 Blocks:83 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/uno_packages/cache/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/Linux_x86_.rdb:
+#310276: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0038
+/usr/lib/openoffice/program/librecentfile.so:
+#540204: Group:66 Links:0001 Blocks:15 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libdbtools680li.so:
+#540120: Group:66 Links:0001 Blocks:376 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/config/soffice.cfg/modules/swriter/menubar:
+#563555: Group:69 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/config/soffice.cfg/modules/swriter/menubar:
+#310188: Group:38 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/config/soffice.cfg/modules/swriter/menubar/menubar.xml:
+#563566: Group:69 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/config/soffice.cfg/modules/swriter/toolbar/standardbar.xml:
+#563597: Group:69 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/icons/oxy-white/cursors/ibeam:
+#663087: Group:81 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/qt3/plugins/inputmethods:
+#579815: Group:71 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/usr/lib/qt3/plugins/inputmethods/libqxim.so:
+#579823: Group:71 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/qt3/plugins/inputmethods/im-scim-bridge.so:
+#579817: Group:71 Links:0001 Blocks:25 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libtextcat.so:
+#540239: Group:66 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/fpdb.conf:
+#555202: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/belarus.lm:
+#555187: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/persian.lm:
+#555227: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/english.lm:
+#555198: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/uno_packages/cache/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/Linux_x86.rdb:
+#310215: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0038
+/usr/lib/openoffice/share/fingerprint/swahili.lm:
+#555241: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/slovak_ascii.lm:
+#555238: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/turkish.lm:
+#555246: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/yiddish_utf.lm:
+#555250: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/danish.lm:
+#555195: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.Commands.dat:
+#310168: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/esperanto.lm:
+#555199: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/indonesian.lm:
+#555212: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/ukrainian.lm:
+#555247: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.UserProfile.dat:
+#310219: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/90-ttf-thai-tlwg-synthetic.conf:
+#441584: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/thai.lm:
+#555245: Group:68 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/irish_gaelic.lm:
+#555213: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/fingerprint/amharic_utf.lm:
+#555183: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/resource/fwe680en-US.res:
+#122512: Group:15 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libsasl2.so.2.0.22:
+#450742: Group:55 Links:0001 Blocks:23 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libgnutls.so.13.9.1:
+#450266: Group:55 Links:0001 Blocks:119 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libtasn1.so.3.0.12:
+#450793: Group:55 Links:0001 Blocks:17 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libcups.so.2:
+#450145: Group:55 Links:0001 Blocks:52 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libgssapi_krb5.so.2.2:
+#450296: Group:55 Links:0001 Blocks:42 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libk5crypto.so.3.1:
+#450385: Group:55 Links:0001 Blocks:36 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/lib/libkeyutils-1.2.so:
+#179592: Group:22 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/bin/paperconf:
+#449474: Group:55 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/papersize:
+#442436: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/ucpexpand1.uno.so:
+#540351: Group:66 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/psprint/driver:
+#564166: Group:69 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/etc/services:
+#440823: Group:54 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/openoffice/psprint.conf:
+#441849: Group:54 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.SFX.dat:
+#310200: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libdb-4.6.so:
+#450159: Group:55 Links:0001 Blocks:296 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libxslt.so.1.1.22:
+#450871: Group:55 Links:0001 Blocks:53 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/uno_packages/cache/log.txt:
+#310202: Group:38 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/uno_packages/cache/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registered_packages.db:
+#310206: Group:38 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/basic/script.xlc:
+#310112: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/basic/FormWizard/script.xlb:
+#555026: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/basic/Template/script.xlb:
+#555069: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/basic/Euro/script.xlb:
+#555018: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/uno_packages/cache/uno_packages:
+#310216: Group:38 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/25-ttf-arphic-uming-render.conf:
+#441544: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/e3de0de479f42330eadf588a55fb5bf4-x86.cache-2:
+#408074: Group:50 Links:0001 Blocks:8 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/data/org/openoffice/Office/Linguistic.xcu:
+#310096: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/60-latin.conf:
+#441563: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/fonts/conf.avail/45-latin.conf:
+#441557: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/de156ccd2eddbdc19d37a45b8b2aac9c-x86.cache-2:
+#408070: Group:50 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/de9486f0b47a4d768a594cb4198cb1c6-x86.cache-2:
+#408071: Group:50 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/089dead882dea3570ffc31a9898cfb69-x86.cache-2:
+#408052: Group:50 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/6d41288fd70b0be22e8c3a91e032eec0-x86.cache-2:
+#408060: Group:50 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/d52a8644073d54c13679302ca1180695-x86.cache-2:
+#408068: Group:50 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/a755afe4a08bf5b97852ceb7400b47bc-x86.cache-2:
+#408064: Group:50 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/kderc:
+#440781: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.qt/qt_plugins_3.3rc:
+#294359: Group:36 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/kde3/plugins/styles/highcolor.so:
+#474077: Group:58 Links:0001 Blocks:19 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/qt3/.kstylerc.lock:
+#441983: Group:54 Links:0001 Blocks:0 File:1 Dir:0
+/usr/lib/kde3/plugins/styles/light.so:
+#474085: Group:58 Links:0001 Blocks:23 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/icons/oxy-white/cursors/left_ptr:
+#663088: Group:81 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/X11/XKeysymDB:
+#580504: Group:71 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/localebe1.uno.so:
+#540289: Group:66 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/kde-user-profile:
+#440779: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/qt3/.qt_plugins_3.3rc.lock:
+#441974: Group:54 Links:0001 Blocks:0 File:1 Dir:0
+/usr/lib/openoffice/program/sysmgr1.uno.so:
+#540346: Group:66 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.System.dat:
+#310090: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.ucb.Configuration.dat:
+#310159: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.config/user-dirs.dirs:
+#294121: Group:36 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/registry/modules/org/openoffice/Office/Common:
+#564281: Group:69 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.ucb.Store.dat:
+#310170: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/.lock:
+#310390: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0038
+/etc/host.conf:
+#440772: Group:54 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.Views.dat:
+#310167: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/var/cache/fontconfig/707971e003b4ae6c8121c3a920e507f5-x86.cache-2:
+#408061: Group:50 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libfileacc.so:
+#540142: Group:66 Links:0001 Blocks:19 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/icons/hicolor/index.theme:
+#655934: Group:80 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/icons/crystalsvg/48x48/mimetypes/unknown.png:
+#662098: Group:81 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/qt3/plugins/imageformats:
+#579814: Group:71 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/usr/lib/qt3/plugins/imageformats/libqmng.so:
+#579816: Group:71 Links:0001 Blocks:6 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/libmng.so.1.1.0.9:
+#450614: Group:55 Links:0001 Blocks:111 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/liblcms.so.1.0.16:
+#450587: Group:55 Links:0001 Blocks:47 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/icons/crystalsvg/16x16/mimetypes/unknown.png:
+#655925: Group:80 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/etc/kde3/ui/ui_standards.rc:
+#441773: Group:54 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.TypeDetection.dat:
+#310176: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/share/registry/modules/org/openoffice/TypeDetection/Types:
+#564309: Group:69 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0053
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.TypeDetection.Types.dat:
+#310177: Group:38 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libxmlfd680li.so:
+#540275: Group:66 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/share/icons/oxy-white/index.theme:
+#655935: Group:80 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0053
+/usr/lib/openoffice/program/libsw680li.so:
+#540235: Group:66 Links:0001 Blocks:2826 File:1 Dir:0
+   ^ Blocks In Groups: 0053,0054
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.Writer.dat:
+#310182: Group:38 Links:0001 Blocks:5 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/registry/data/org/openoffice/Office/Writer.xcu:
+#310201: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/libicui18n.so.38.0:
+#450358: Group:55 Links:0001 Blocks:350 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/resource/svt680en-US.res:
+#122584: Group:15 Links:0001 Blocks:15 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/libxmlsec1.so.1.2.6:
+#540279: Group:66 Links:0001 Blocks:92 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/libfrm680li.so:
+#540145: Group:66 Links:0001 Blocks:682 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/introspection.uno.so:
+#540083: Group:66 Links:0001 Blocks:35 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.UI.GenericCommands.dat:
+#310198: Group:38 Links:0001 Blocks:33 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/libscim-x11utils-1.0.so.8.2.3:
+#450748: Group:55 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/config/soffice.cfg/modules/swriter/statusbar/statusbar.xml:
+#563567: Group:69 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/libguesslang680li.so:
+#540153: Group:66 Links:0001 Blocks:16 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/dutch.lm:
+#555197: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/bosnian.lm:
+#555188: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/quechua.lm:
+#555230: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/basque.lm:
+#555186: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/swedish.lm:
+#555242: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/config/soffice.cfg/modules/swriter/toolbar:
+#310189: Group:38 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.Addons.dat:
+#310191: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.UI.WriterWindowState.dat:
+#310192: Group:38 Links:0001 Blocks:4 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.Office.UI.Controller.dat:
+#310199: Group:38 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/estonian.lm:
+#555200: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/tamil.lm:
+#555244: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/portuguese.lm:
+#555229: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/sanskrit.lm:
+#555234: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/spanish.lm:
+#555240: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/nepali.lm:
+#555225: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/norwegian.lm:
+#555226: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/slovenian.lm:
+#555239: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/romanian.lm:
+#555231: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/serbian_ascii.lm:
+#555237: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/albanian.lm:
+#555182: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/vietnamese.lm:
+#555248: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/fingerprint/polish.lm:
+#555228: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/config/soffice.cfg/modules/swriter/toolbar/textobjectbar.xml:
+#563601: Group:69 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/ldapbe2.uno.so:
+#540094: Group:66 Links:0001 Blocks:29 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/libldap_r-2.4.so.2.0.3:
+#450590: Group:55 Links:0001 Blocks:63 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/liblber-2.4.so.2.0.3:
+#450585: Group:55 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/lib/libgcrypt.so.11.2.3:
+#179584: Group:22 Links:0001 Blocks:77 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/lib/libgpg-error.so.0.3.0:
+#179586: Group:22 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/registry/cache/org.openoffice.LDAP.dat:
+#310218: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/libkrb5.so.3.3:
+#450553: Group:55 Links:0001 Blocks:141 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/lib/libcom_err.so.2.1:
+#179566: Group:22 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/libkrb5support.so.0.1:
+#450555: Group:55 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/libpaper.so.1.1.2:
+#450674: Group:55 Links:0001 Blocks:3 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/psprint/driver:
+#310158: Group:38 Links:0002 Blocks:1 File:0 Dir:1
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/psprint/driver/SGENPRT.PS:
+#564168: Group:69 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/share/icons/oxy-white/cursors/xterm:
+#663120: Group:81 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/resource/deployment680en-US.res:
+#122473: Group:15 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/Launcher/script.xlb:
+#555047: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/Tools/script.xlb:
+#555079: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/Schedule/script.xlb:
+#555058: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/Gimmicks/script.xlb:
+#555036: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/Template/dialog.xlb:
+#555068: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/ScriptBindingLibrary/dialog.xlb:
+#555060: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/ImportWizard/script.xlb:
+#555044: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/Depot/script.xlb:
+#555005: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/ScriptBindingLibrary/script.xlb:
+#555061: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/basic/dialog.xlc:
+#310111: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/Gimmicks/dialog.xlb:
+#555035: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/Euro/dialog.xlb:
+#555017: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/FormWizard/dialog.xlb:
+#555025: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/Tools/dialog.xlb:
+#555078: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/share/basic/Depot/dialog.xlb:
+#555004: Group:68 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/basic/Standard/Module1.xba:
+#310110: Group:38 Links:0001 Blocks:1 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/home/carbon/.openoffice.org2/user/uno_packages/cache/uno_packages.db:
+#310217: Group:38 Links:0001 Blocks:2 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/libmcnttype.so:
+#540191: Group:66 Links:0001 Blocks:9 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/libprotocolhandler680li.so:
+#540201: Group:66 Links:0001 Blocks:12 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/libscriptframe.so:
+#540215: Group:66 Links:0001 Blocks:58 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/ucptdoc1.uno.so:
+#540352: Group:66 Links:0001 Blocks:73 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/basprov680li.uno.so:
+#540055: Group:66 Links:0001 Blocks:27 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/proxyfac.uno.so:
+#540313: Group:66 Links:0001 Blocks:7 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/libucppkg1.so:
+#540253: Group:66 Links:0001 Blocks:45 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+/usr/lib/openoffice/program/connector.uno.so:
+#540068: Group:66 Links:0001 Blocks:15 File:1 Dir:0
+   ^ Blocks In Groups: 0054
+
+INODE GROUPS: 0015,0018,0022,0024,0036,0038,0045,0050,0051,0054,0055,0058,0059,0060,0066,0067,0068,0069,0071,0078,0079,0080,0081
+BLOCK GROUPS: 0036,0037,0038,0053,0054,0059,0060,0061
