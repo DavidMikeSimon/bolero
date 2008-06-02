@@ -1,4 +1,4 @@
-\documentclass[10pt]{article}
+\documentclass[10pt,twocolumn]{article}
 
 \usepackage{fullpage}
 
@@ -9,25 +9,41 @@
 
 \maketitle
 
+\begin{abstract}
+Hard disk access times are the most significant performance bottleneck when
+starting typical applications on contemporary personal computers and servers.
+Most modern programs must load numerous libraries, resource files, modules, and
+other pieces of information off disk before performing any useful work. Optimization
+in this area should prove fruitful.
+
+We attempted to reduce the amount of time consumed by hard disk activity during
+the initialization of various programs. To do this, we observed which data blocks were
+used during the initialization of various programs. Then, those blocks were moved
+closer together, in the hope that the quantity and length of drive head seeks
+would be reduced. The results were mixed; some applications received no particular
+benefit from this optimiziation, while others were made to start significantly faster.
+\end{abstract}
+
 \section{Introduction}
 
-Hard disks are by a wide margin the slowest internal storage devices commonly
+Hard disk drives are, by a wide margin, the slowest internal storage devices commonly
 used in modern computing. For a typical read or write, the disk head must first
 \emph{seek} to the target block\cite{seektime}. On even the fastest hard disks\cite{deskstar}, one seek
-can take entire milliseconds, an enormous amount of time for a computer. Furthermore, even if the disk head is already at the correct radius, there can be a long delay waiting for the
-desired block to spin back around to the head again\cite{latency}. For complicated tasks that involve
-many disk operations, much potentially productive time can end up being wasted while
-the computer waits around for all of these mechanical operations to finish.
+can take several milliseconds, often orders of magnitude longer than the operation which will actually
+use that data. Even if seeking is unnecessary because the disk head is already at the correct track, there is
+often still a long delay waiting for the desired block to spin around to the head again\cite{latency}. For
+tasks that involve many disk operations, particulary the process of loading large applications and their various
+resources into memory, much otherwise productive time is wasted by these mechanical delays.
 
-One way to reduce the quantity of seeks and delays is to arrange data on
-the disk so that the next block that will be requested is physically near to
-and after the current block\cite{autolocality}. Then, the disk head and platter will already be in place,
-and delays should be minimized. When this cannot be accomplished, and a seek or
-spin wait is necessary, then the travel time required can at least be lessened by reducing the
-physical distance between the current block and the next.
+Ideally, the next block to be requested should be physically near to
+and after the current block\cite{autolocality}. When a seek or
+spin wait is unavoidable, then it is better if the travel time required can at least be lessened by reducing the
+physical distance between the current block and the next. The best scenario is when
+as much disk time as possible is spent actually retreiving data, and as little as possible
+wasted travelling from one request location to another.
 
-Bolero will be a collection of software designed to perform this type of
-placement optimization on filesystems.
+It should be possible, with intelligent organization of data on the disk, to make the hard drive behave
+more closely to this ideal.\texttt{Bolero}, the Block Optimizer that Localizes Empirically Related Objects, was developed as a proof-of-concept for this idea.
 
 \section{Motivation for Bolero}\label{sec:motive}
 
@@ -45,13 +61,11 @@ use even more sophisticated strategies to prevent fragmentation, such as preallo
 contiguous appending, or delaying physical allocation as long as possible so that better guesses
 can be made about the characteristics of newly created files\cite{xfs}.
 
-As important as these advancements have been, however, they do not address another, more subtle form of fragmentation: fragmentation resulting from the non-continuity of multiple files.
-Just as when the various \emph{blocks} of a file are distant from each other, when \emph{files} that are typically accessed in sequence are not located together on the disk, significant delays result. For example, a large application such as an office suite or desktop environment might require numerous programs, shared libraries, icons, fonts, and other resources before it can start up completely. If these files are distant from each other,
-the application's start-up time can increase significantly.
+As important as these advancements have been, however, they do not address another, more subtle form of fragmentation: fragmentation resulting from the non-continuity of \emph{multiple} files.
+Just as slowdowns result when the various blocks of a file are distant from each other, when \emph{files} accessed in sequence are far from each other on the disk, significant unnecessary delays result. For example, a large application such as an office suite or desktop environment requires numerous programs, shared libraries, icons, fonts, and other resources before it can start up completely. If these files must be read from disk but are spread apart from each other, the application's start-up time will increase.
 
-The objective of Bolero will be to reduce this type of fragmentation by moving files that
-are typically accessed at about the same time closer together, and by re-sequencing files
-into the order that they are expected to be accessed in.
+The objective of Bolero is to reduce this type of fragmentation for that specific case, that of applications
+starting up. It accomplishes this by moving data blocks that are typically accessed at about the same time closer together, and re-sequencing them in the order they are expected to be accessed in.
 
 \section{Initial Development}
 
