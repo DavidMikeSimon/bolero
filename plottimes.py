@@ -4,9 +4,36 @@ import sys, numpy, pylab, matplotlib, re
 
 pat = re.compile(r"[^-]+-[^-]+-(\S+)")
 
+# First pass: Figure out the minimum and maximum values
+vmin, vmax = -1, -1
+for name in sys.argv[1:]:
+	match = pat.match(name)
+	if match:
+		fh = open(name)
+		vals = []
+		for line in fh:
+			vals.append(int(line.strip())/1000.0)
+		
+		if vmin == -1:
+			vmin = numpy.min(vals)
+		else:
+			vmin = min(numpy.min(vals), vmin)
+		
+		if vmax == -1:
+			vmax = numpy.max(vals)
+		else:
+			vmax = max(numpy.max(vals), vmax)
+		
+		fh.close()
+binwidth = (vmax-vmin)/200.0
+
+# Second pass: Generate the plots
+fig = pylab.figure(facecolor = "white")
+a1rect = (0.09, 0.08, 0.67, 0.85)
+a2rect = (0.82, 0.08, 0.16, 0.85)
 lines = []
 ptitles = []
-for name in sys.argv[2:]:
+for name in sys.argv[1:]:
 	match = pat.match(name)
 	if match:
 		fh = open(name)
@@ -15,36 +42,32 @@ for name in sys.argv[2:]:
 			vals.append(int(line.strip())/1000.0)
 		
 		# Time graph
-		pylab.subplot(121)
-		lines.append(pylab.plot(vals)) # Same line colors will show up in same order for frequency graph too
-		pylab.plot(vals)
+		a = fig.add_axes(a1rect)
+		lines.append(a.plot(vals))
 		
-		# Frequency graph
-		vmin, vmax = numpy.min(vals), numpy.max(vals)
-		step = (vmax-vmin)/20.0
+		# Histogram
 		flabels = []
 		fvals = []
 		x = vmin
 		while x < vmax:
-			flabels.append(x + step/2)
-			fvals.append(len([v for v in vals if v >= x and v < (x+step)]))
-			x += step
-		pylab.subplot(122)
-		pylab.plot(flabels, fvals)
+			flabels.append(x + binwidth/2)
+			fvals.append(len([v for v in vals if v >= x and v < (x+binwidth)]))
+			x += binwidth
+		a = fig.add_axes(a2rect)
+		a.plot(fvals, flabels, ls = "steps")
 		
-		ptitles.append("%s - (Mean:%.3f StdDev:%.3f)" % (match.group(1), numpy.mean(vals), numpy.std(vals)))
+		ptitles.append(match.group(1))
+		fh.close()
 
 # Time graph
-pylab.title("In Sequence")
-pylab.subplot(121)
-pylab.xlabel('Test #')
-pylab.ylabel('Elapsed (sec)')
+a = fig.add_axes(a1rect)
+a.set_xlabel('Test #')
+a.set_ylabel('Elapsed (sec)')
 
 # Frequency graph
-pylab.title("By Frequency")
-pylab.subplot(122)
-pylab.xlabel('Elapsed (sec)')
-pylab.ylabel('Frequency')
+a = fig.add_axes(a2rect)
+a.set_title("Distribution")
+a.set_xticks([])
 
-pylab.figlegend(lines, ptitles, 'upper right', prop = matplotlib.font_manager.FontProperties(size='smaller'))
+fig.legend(lines, ptitles, 'upper center', prop = matplotlib.font_manager.FontProperties(size='smaller'))
 pylab.show()
