@@ -43,7 +43,7 @@ for name in sys.argv[1:]:
 		
 		# Time graph
 		a = fig.add_axes(a1rect)
-		lines.append(a.plot(vals))
+		lines.append(a.plot(vals, '.'))
 		
 		# Histogram
 		flabels = []
@@ -54,7 +54,7 @@ for name in sys.argv[1:]:
 			fvals.append(len([v for v in vals if v >= x and v < (x+binwidth)]))
 			x += binwidth
 		a = fig.add_axes(a2rect)
-		a.plot(fvals, flabels, ls = "steps")
+		a.plot(fvals, flabels, '-')
 		
 		ptitles.append(match.group(1))
 		fh.close()

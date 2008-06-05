@@ -43,7 +43,7 @@ as much disk time as possible is spent actually retreiving data, and as little a
 wasted travelling from one request location to another.
 
 It should be possible, with intelligent organization of data on the disk, to make the hard drive behave
-more closely to this ideal.\texttt{Bolero}, the Block Organizer that Localizes Empirically-Related Objects, was developed as a proof-of-concept for this idea.
+more closely to this ideal. Bolero, the Block Organizer that Localizes Empirically-Related Objects, was developed as a proof-of-concept for this idea.
 
 \section{Motivation for Bolero}\label{sec:motive}
 
@@ -62,10 +62,52 @@ contiguous appending, or delaying physical allocation as long as possible so tha
 can be made about the characteristics of newly created files\cite{xfs}.
 
 As important as these advancements have been, however, they do not address another, more subtle form of fragmentation: fragmentation between related files.
-Just as slowdowns result when the various blocks of a file are distant from each other, when \emph{files} accessed in sequence are far from each other on the disk, significant unnecessary delays may result. For example, a large application such as an office suite or desktop environment requires numerous programs, shared libraries, icons, fonts, and other resources before it can start up completely. If these files must be read from disk but are spread apart from each other, the application's start-up time will increase.
+Just as slowdowns result when the various blocks of a file are distant from each other, when \emph{files} accessed in sequence are far from each other on the disk, significant unnecessary delays may result. For example, a large application such as an office suite or desktop environment requires numerous programs, shared libraries, icons, fonts, and other resources before it can start up completely. If these files must be read from disk but are spread apart from each other, the application's startup time will increase.
 
 The objective of Bolero is to reduce this type of fragmentation for that specific case, that of applications
-starting up and loading a variety of resources from disk. It accomplishes this by moving data blocks that are typically accessed at about the same time closer together, and re-sequencing them into the order they are expected to be accessed.
+starting up and loading a variety of resources from disk. It accomplishes this by moving data blocks that are typically accessed at about the same time closer together, and re-sequencing them into the order they are expected to be accessed. There are two possible strategies to accomplish this : general optimization and task-specific optimization.
+
+With general optimization, the reorganizer would use the recorded observations
+to determine which files tend to be accessed within a short time from each
+other, and in what order. It would then place files on disk in such a way as
+to reduce average seek time and spin latency throughout the computer's operation.
+Previous attempts at implementing this type of optimization at a
+sub-filesystem level have resulted in significant performance benefits\cite{autolocality}.
+
+The other approach, task-specific optimization, is simpler to
+implement and may also (for its specific purpose) result in better performance. With this
+approach, observations are limited to a particular, short-term task. For example,
+the objective may simply be to get the computer's desktop environment to load
+quicker after a cold boot. Within a short but disk-intensive period like this, even
+though there will have been a lot of disk activity, any single file will
+probably have been read from disk only once. The reorganizer can therefore simply
+rearrange the relevant files on the disk to be contiguous and in the same order as that
+recorded during the observational period, to reduce the amount of time taken for
+that particular task. Previous efforts using this approach have been
+successful in reducing large application startup times by over 60\%\cite{ala}.
+
+Because task-specific optimiziation is easier to implement and readily suggests
+a metric, we chose it as the approach used by Bolero. However, since that approach is a
+specialization of the general optimiziation approach, its success may be seen
+as a motivation to explore the more complex, but potentially more rewarding, area
+of general optimiziation.
+
+For this project, we attempted to improve the startup time of the following applications with this approach:
+\begin{itemize}
+\item X Windows + KDE
+\item OpenOffice
+\item MySQL
+\end{itemize}
+Among these three applications, a wide range of shared libraries, subsystems, and user interface types
+are involved. This helps to eliminate the influence of these factors on the final results;
+ideally, the only factor being tested should be disk usage.
+
+The test environment was a default installation of Kubuntu 8.04 on a 12GB partition located
+at the end of the 61.4GB test hard disk, a PATA Maxtor 6Y060L0. The test system had
+1GB of RAM, and a 2.4Ghz processor. This combination of a somewhat powerful system and
+a somewhat meidocre hard drive was chosen purposefully: this scenario exacerbates the
+problem of the hard drive as the bottleneck of the application loading process, and therefore
+any improvement due to the optimization process should be especially noticable.
 
 \section{Filesystem Manipulation}
 
@@ -96,11 +138,12 @@ midway through the process by other mechanisms outside its control.
 
 With only the basic tool of swapping data blocks, a wide range of possible
 defragmentation techniques are possible. Bolero includes \texttt{defragment.py}
-a very simplistic proof-of-concept traditional defragmenter for ext3, which
-simply reduces fragmentation within individual files. Because ext3 files do
+a very simplistic, traditional defragmenter for ext3, which
+does nothing but reduce fragmentation within individual files. Because ext3 files do
 not usually tend to fragment, the case for this kind of reorganization alone
 is not very strong. However, individual file defragmentation is an important
-basis for later, more sophisticated operations.
+basis for later, more sophisticated operations, and also serves as a useful test
+of the system's ability to safely and correctly alter filesystems.
 
 Once the reorganizer can reduce file discontiguity, it is possible to
 use that same mechanism to reduce inter-file discontiguity, as explaiend
@@ -108,33 +151,170 @@ in section \ref{sec:motive}. Both types of defragmentation are necessary because
 a sequence of files without interruption\cite{autolocality}, from the first block of the first file to the last
 block of the last file with no delays or seeks.
 
-FIXME MOVE PARAGRAPH BELOW ELSEWHERE.
-
-There is one complication involved in attempting to make the blocks for
-a given file contiguous. In ext3, data blocks are organized into larger
+This ideal is difficult to acheive completely, due to the realities of hard disk
+and filesystem layout. For example, in ext3, data blocks are organized into larger
 collections on disk called \texttt{block groups}\cite{ext2intro}. Each
-block group contains both actual data blocks as well as \texttt{inodes},
-which describe meta-data for each file. The headers and inode tables
-for these groups create ``gaps'' of disk area which the defragmenter cannot
-use to reduce discontiguity. The current implementation of Bolero ignores
-this problem and simply skips over these gaps.
+block group contains actual data blocks as well as other information, such
+as bitmaps describing available space, and tables of \texttt{inodes},
+which describe meta-data for each file. These areas of meta-information within
+groups create ``gaps'' of disk area which the defragmenter cannot
+use to reduce discontiguity, because there can never be file data there.
+The current implementation of Bolero ignores this problem and simply
+skips over these gaps. A more subtle defragmenter might attempt to arrange
+files around these gaps in anticipation of access patterns.
 
-\section{Observing Disk Activity}
+There are many other issues which present similar complications to a defragmentation
+system, such as track boundaries, unusual varities of file data (i.e. directories, which
+are almost never scanned through linearly), and files which are expected to change
+size or be deleted during normal operations. The Bolero defragmenter makes no attempt to
+solve even these relatively common complications.
 
-In order for the block reorganizer to decide what order is best for files
-on disk, additional information is required.
+However, even an unsubtle implementation such as Bolero can serve as a proof-of-concept
+to demonstrate the validity of the basic idea. If a repeatable, signifiacnt improvement
+is observed after making simplistic improvements to the filesystem layout, it follows
+that more sophisticated improvements should yield even better results.
 
-FIXME ADD STUFF HERE ABOUT HOW OBSERVATION WORKS, WAS DEVELOPED, ETC.
+\section{Observing Disk Activity}\label{sec:observing}
 
-To make development easier, Bolero will assume that it is observing (and
-later reorganizing) the only filesystem on the disk. Future implementations of the
-Bolero observer might attempt to correlate observations
-made on several filesystems all simultaneously in use on the same disk, but
-such a feature is outside the scope of this proposal. For now, Bolero will assume that
-the information it records will reflect, as accurately as the OS can know,
-all activity on the disk.
+The major difference between the Bolero defragmenter and a traditional defragmenter
+is that information about the relationships between files (specifically, the order
+in which tend to be are accessed during specific tasks) is used. We developed a few
+simple observation tools to record such information. These same tools were also used to record
+timing information for each of the target tasks, in order to determine how much improvement
+the optimization process was yielding, as described in section \ref{sec:results}.
 
-FIXME MOVE PARAGRAPH BELOW ELSEWHERE.
+For each task in each state (either the untouched control state or an optimized state), the
+following procedure was used to collect observational data:
+\begin{enumerate}
+\item A \texttt{proc}-based mechanism is used to clear the Linux system's software-based disk cache. CITETHIS
+\item Thirty MB is read from the beginning of the target drive, far from the target filesystem, in order to deceive the drive's internal cache. Without this step, test results tended to change as subsequent tests were performed, as the drive restored information from its cache rather than seeking to and reading the physical data itself.
+\item If applicable, a tool called \texttt{frecord} is started, which would monitor for new processes starting up and record which
+files they opened.
+\item A timestamp is taken, and the target program is started.
+\item When the program is finished loading (the definition of which is dependent upon the particular program being observed), the elapsed time is recorded, and \texttt{frecord} is stopped if it had been started earlier. It is at this
+point that \texttt{frecord} writes its collected information to disk.
+\item The target program is killed.
+\end{enumerate}
+
+For each target program, this procedure was repeated 100 times. For each run of the procedure, the \texttt{frecord}
+process noted which processes started up after its initialization. Every 3 milliseconds, the open files of each
+of these processes were recorded to memory. Afterwords, the information in these 100 recordings of file usage
+was collected by the \texttt{fsummarize} tool, which uses it to produce a best-guess list of all the files
+that might be opened the next time the target application starts up, in the order they are most likely to be
+opened in. All files which were opened in even one of the recorded sessions are included in the list. n theory,
+it is better to include an unnecessary file and have the disk head skip over it with relatively little expense than to omit it and force the disk to (even occassionally) perform an expensive seek to some other part of the disk
+and then back.
+
+\section{Defragmentation}
+
+There are two defragmenters included with Bolero that can make use of the results from \texttt{fsummarize}:
+\texttt{defragment.py} and \texttt{mdefragment.py}. The former locates every data block for every file mentioned
+in the summary, and puts them in sequential order on disk, starting at the first block of the group containing
+the first inode. The latter, \texttt{mdefragment.py}, acts in a similar way, but instead starts at the group containing the mean from all inodes involved. This was done as an attempt to reduce the average seek distance for
+those remaining seeks which must be performed, particularly seeks to inode table entries (see section \ref{sec:future}).
+
+After defragmentation, the blocks that were originally in the area that the task-related blocks were sorted to
+are strewn arbitrarily around the disk. This is acceptable for the purposes of this project, since those (now
+discontiguous) files are unlikely to be accessed during the target task at all; if the target application being observed loads the same functionality every time it is started, and a file hasn't been noticed
+in even one of the 100 \texttt{frecord} observational runs on that application, then it's a safe assumption that that file is not related to the application's loading process. However, the file may still be need for some other application or task. For that reason, a Bolero-like approach applied to a production system would have to be more considerate of those data blocks it must move out of the way.
+
+\section{Measuring Results}\label{sec:results}
+
+In order to gauge how successful any optimization is, it is important to have
+repeatable, objective measurements. For the specific task that Bolero was written
+to address, optimizing the startup time of various applications, this means that it
+is necessary to have a way to accurately measure the amount of time it takes for
+a program to startup, and then to perform that measurement a statistically significant
+number of times on both a control filesystem and a filesystem optimized for that program.
+
+However, this measurement is more ambiguous than we initially expected, and a few
+somewhat arbitrary choices had to be made. The most important of these is the problem of determing when, exactly,
+a program has ``started up'' entirely. For some programs, this is fairly straightforward to define. For example,
+MySQL has started up entirely when it is able to successfully respond to SQL requests. Therefore,
+to determine the startup point for MySQL, the measurement program merely has to act
+as a MySQL client, perform a query, and mark the time at which MySQL is able to
+respond with the correct results.
+
+For GUI programs, however, the startup point is more nebulously defined ``as when the user is
+able to interact with the program''. OpenOffice, for example, is considered by Bolero to have started up completely when it has opened up and ran a macro within a document supplied to it as a command line argument. This is an arbitrary decision, but as long as it includes a good amount of the application's disk-related initialization activity, and as long as the same standards are applied to both the control and the optimized filesystems,
+it suffices.
+
+For each target program, once this issue of finding a measurable ``ready'' point was solved,
+the same experimental procedure could be applied to each:
+
+\begin{enumerate}
+\item The target filesystem being tested is restored from backup to an unoptimized control state.
+\item A control measurement of 100 samples is taken as described in section \ref{sec:observing}, with \texttt{frecord} disabled. This data is the baseline for how long the application takes to start up
+on the filesystem before optimiziation.
+\item This measurement is then repeated 100 more times, but with \texttt{frecord} enabled.
+\item The results from \texttt{frecord} are supplied to \texttt{defragment.py}, and the filesystem is now optimized with task-related data blocks contiguous and sequential near the first related inode.
+\item Another 100 timing samples are taken with \texttt{frecord} disabled.
+\item The target filesystem is restored to control state from backup again.
+\item The filesystem is optimized again, using the same \texttt{frecord} results, but using \texttt{mdefragment.py} instead.
+\item Another 100 timing samples are taken, again with \texttt{frecord} disabled.
+\end{enumerate}
+
+This provides a clear picture of how well the two defragmentation strategies affect the application's startup time. The results for each application are described in more detail in the following sections.
+
+\begin{figure*}[!htb]
+\includegraphics[scale=0.75]{mysql-chart.eps}
+\caption{Startup times for MySQL}
+\label{mysqlchart}
+\end{figure*}
+
+\section{Data Collected for MySQL Startup}
+
+As noted in section \ref{sec:results}, server applications such as MySQL are easy to measure because it is easy to define the point at which they have ``started up'': when they are able to serve client requests.
+
+For measurement purposes, a sample database containing two related MyISAM tables with various column types and indexes was defined. These tables were filled with 20,000 and 10,000 lines of pseudo-random data respectively. Although this data was randomly generated, it was only generated once; that is, although the data was arbitrary, both the control and experimental tests were operating on the \emph{same} arbitrary data.
+
+The timing process, for each sample, took a beginning timestamp, called the init.d script for MySQL, and waited for it to return. Then, it connected to the server using the Python \texttt{MySQLdb} client module, and supplied it with a complex query involving data within and indexes on both tables. The query was limited to 10 rows, and once the
+server supplied those rows to the client, the ending timestamp was taken. The results from 100 such timing runs are shown in Figure \ref{mysqlchart}.
+
+The mean time elapsed between beginning and ending timestamps for the control was 6558.43 ms, with a standard deviation of 99.82 ms. After defragmentation with \texttt{defragment.py}, the mean time elapsed decreased by nearly a second to 5873.32 ms, with a standard deviation of 147.24 ms. The results after defragmentation with \texttt{mdefragment.py} were very similar, with a mean of 5884.01 ms and a standard deviation of 152.76 ms, after the removal of one outlier (8237 ms) from the result set.
+
+Thus, both types of defragmentation resulted in a statistically significant change in the mean startup time of MySQL, a reduction of about a full second. The optimiziation, however, also increased the variance between samples significantly.
+
+\begin{figure*}[!htb]
+\includegraphics[scale=0.75]{kde4-chart.eps}
+\caption{Startup times for X and KDE4}
+\label{kde4chart}
+\end{figure*}
+
+\section{Data Collected for X \& KDE Startup}
+
+The situation for testing KDE is even more complicated, since desktop environments like KDE are designed
+to perform a wide range of disparate tasks. Such systems have not really started up \emph{entirely} until they are capable of performing every one of their varied functions. For example, it would not be enough to say that KDE has fully loaded when it is, say, possible to use its main menu to launch applications, because at that time KDE might still be busy loading other components, such as the background image manager, or the taskbar, or
+the file management layer. It would be impractical to test each of these tasks individually in some way,
+as we did with OpenOffice, so another method for finding the startup point must be used.
+
+tests/kde4/results/kde4-times-control (100 lines):  Mean=29022.81  StdDev=972.04
+tests/kde4/results/kde4-times-control-frecord (100 lines):  Mean=29833.02  StdDev=836.68
+tests/kde4/results/kde4-times-defragged (100 lines):  Mean=29000.14  StdDev=2011.59
+tests/kde4/results/kde4-times-defragged-sansoutlier (99 lines):  Mean=28827.84  StdDev=1057.64
+tests/kde4/results/kde4-times-mdefragged (100 lines):  Mean=31543.05  StdDev=300.57
+Outlier in defragged: 46058
+
+\begin{figure*}[!htb]
+\includegraphics[scale=0.75]{openoffice-chart.eps}
+\caption{Startup times for OpenOffice}
+\label{oochart}
+\end{figure*}
+
+\section{Data Collected for OpenOffice Startup}
+
+tests/openoffice/results/openoffice-times-control (100 lines):  Mean=14551.48  StdDev=232.81
+tests/openoffice/results/openoffice-times-control-frecord (100 lines):  Mean=14797.68  StdDev=148.20
+tests/openoffice/results/openoffice-times-defragged (100 lines):  Mean=12780.42  StdDev=1954.91
+tests/openoffice/results/openoffice-times-defragged-sansoutlier (99 lines):  Mean=12587.40  StdDev=367.09
+tests/openoffice/results/openoffice-times-mdefragged (100 lines):  Mean=14157.44  StdDev=128.04
+Outlier in defragged: 31889
+
+\section{Analysis of Results}
+
+\section{Possible Future Work}\label{sec:future}
+
+FIXME PARAGRAPH DUMP
 
 For example, many hard disks, upon discovering that a particular block has gone bad, will silently
 remap that block to some other place on disk\cite{remapping}. This is a good thing for ensuring
@@ -148,85 +328,11 @@ has been silently remapped to some distant part of the disk. Such blocks can the
 assumed by the reorganizer to have poor contiguity regardless of proximity to other
 blocks.
 
-\section{Observation-Based Reorganization}
-
-Once the observer is capable of producing useful information, that data then can be used
-by the Bolero reorganizer to make informed decisions about file placement, justifying the
-``Localizes Empirically-Related Objects'' part of the acronym. There are two
-strategies for using this data: general optimization and task-specific optimization.
-
-With general optimization, the reorganizer would use the recorded observations
-to determine which files tend to be accessed within a short time from each
-other, and in what order. It would then place files on disk in such a way as
-to reduce average seek time and spin latency throughout the computer's operation.
-Previous attempts at implementing this type of optimization at a
-sub-filesystem level have resulted in significant performance benefits\cite{autolocality}.
-
-The other approach, task-specific optimization, is simpler to
-implement and may also (for its specific purpose) result in better performance. With this
-approach, observations are limited to a particular, short-term task. For example,
-the observer might start X and KDE, and record disk activity during its loading period,
-up to the point at which it is ready for the user to begin working.
-Within a short but disk-intensive period like this, even
-though there will have been a lot of disk activity, any single file will
-probably have been read from disk only once. The reorganizer can therefore simply
-rearrange the relevant files on the disk to be contiguous and in the same order as that
-recorded during the observational period, to reduce the amount of time taken for
-that particular task. Previous efforts using this approach have been
-successful in reducing large application startup times by over 60\%\cite{ala}.
-
-FIXME REWRITE PARAGRPAH BELOW.
-
-Because task-specific optimiziation is easier to implement and readily suggests
-a metric, we chose it as the approach used by Bolero. However, since it is a
-specialization of the general optimiziation approach, Bolero's success as
-a proof-of-concept applies to both possible techniques.
-
-\section{Measuring Results}
-
-FIXME THIS ENTIRE SECTION SHOULD BE LARGELY REWRITTEN INTO THE ``OBSERVING DISK ACTIVITY'' SECTION.
-
-In order to gauge how successful any optimization is, it is important to have
-repeatable, objective measurements. A single benchmark would be insufficient to demonstrate
-that Bolero is actually helpful in practical use. Although block reorganization has
-potential benefits in many tasks, the most obvious one is the example presented above:
-starting a large application. Therefore, during the process of developing Bolero, I will
-also need to write a simple mechanism that can repeatedly start various large applications
-and determine how beneficial Bolero's optimization strategies really are.
-
-We tested the following applications:
-\begin{itemize}
-\item X Windows + KDE
-\item OpenOffice
-\item MySQL
-\end{itemize}
-Among these three applications, a wide range of shared libraries, subsystems, and user interface types
-are involved. This helps to eliminate the influence of these factors on the final results;
-ideally, the only factor being tested should be disk usage.
-
-There are a number of difficulties that must be addressed to make these measurements useful.
-The most important of these is the problem of determing when, exactly, the program has
-``started up'' entirely. For some programs, this is fairly straightforward to define. For example,
-Apache has started up entirely when it is able to respond to HTTP requests. Therefore,
-to determine the start-up point for Apache, the measurement program merely has to act
-as (or use) an HTTP client.
-
-For GUI programs, however, the start-up point is more nebulously defined as when the user is
-able to interact with the program. OpenOffice, for example, has started up completely when it is possible to open up and edit a document in it. Firefox has started up completely when it is capable of retrieving a web page. Testing these scenarios without actual human involvement will require application-specific solutions, such as
-specially designed document macros or dynamic webpages that record the time at which they are loaded.
-
-The situation for desktop environments, such KDE and GNOME, is even more complicated, since those are designed
-to perform a wide range of disparate tasks. Such systems have not really started up \emph{entirely} until they are capable of performing every one of their varied functions. For example, it would not be enough to say that KDE has fully loaded when it is, say, possible to use its main menu to launch applications, because at that time KDE might still be busy loading other unrelated components, such as the background image manager, or the taskbar, or
-the file management layer. It would be impractical to test each of these tasks individually,
-so another method for finding the start-up point must be used.
-
-One possible alternate way to find start-up times would be to monitor resource usage. All of the listed applications
-above can be characterized by a busy loading period which, when finished, is followed by an idle period, where
-the application waits for requests or user input to handle. The measurement program could monitor CPU usage and disk
-activity to determine when this idle period begins. However, there are various factors which might prevent an application from ``loading'' entirely without user interaction; for example, if a shared library is required, it may only be partially loaded, with important but non-initialized code only being brought into memory when they are needed. For such situations, looking only at resource usage might result in misleadingly short times.
+A significant property of both Bolero reorganizers is that \emph{only data blocks} are moved; inodes are
+unaltered by the process. This is because the \texttt{pyext2} library included with Bolero is not capable of moving inodes. This is the most significant remaining theoretical problem with the project. A given file's inode entry must be read first to locate its data blocks. Therefore, depending upon how scattered the inodes are on disk and in what order they must be read, they are almost certainly a significant remaining source of optimizable disk delays and seeks.
 
 Concurrency presents another possible measurement hurdle. As mentioned above, the applications for
-which start-up time would benefit the most from Bolero are those applications which involve a
+which startup time would benefit the most from Bolero are those applications which involve a
 large number of pieces, all potentially scattered around the filesystem. However, there is no guarantee
 that these pieces will always be loaded in the same order by the application. KDE, for example, might reasonably start its window manager and its taskbar at the same time. Because of a certain amount of random
 variation in the computer's state before and during the loading process, this might result in
@@ -244,55 +350,7 @@ and replacement schemes used) with garbage information that has nothing to do wi
 The purpose of all of this cache-busting is to involve the actual hard drive as much as possible
 in the tests, because Bolero's optimizations have to do with the physical limitations of hard drives. Although caching certainly helps programs to start up faster, it also interferes with my ability to test Bolero's actual effectiveness.
 
-\section{Data Collected --- MySQL}
-
-\begin{figure*}[!hbtp]
-\includegraphics[scale=0.75]{mysql-chart.eps}
-\caption{Start-up times for MySQL}
-\label{mysqlchart}
-\end{figure*}
-
-tests/mysql/results/mysql-times-control (100 lines):  Mean=6558.43  StdDev=99.82
-tests/mysql/results/mysql-times-control-frecord (100 lines):  Mean=6822.65  StdDev=98.09
-tests/mysql/results/mysql-times-defragged (100 lines):  Mean=5873.32  StdDev=147.24
-tests/mysql/results/mysql-times-mdefragged (100 lines):  Mean=5907.54  StdDev=279.13
-tests/mysql/results/mysql-times-mdefragged-sansoutlier (99 lines):  Mean=5884.01  StdDev=152.76
-Outlier in mdefragged: 8237
-
-\section{Data Collected --- X \& KDE}
-
-\begin{figure*}[!hbtp]
-\includegraphics[scale=0.75]{kde4-chart.eps}
-\caption{Start-up times for X and KDE4}
-\label{kde4chart}
-\end{figure*}
-
-tests/kde4/results/kde4-times-control (100 lines):  Mean=29022.81  StdDev=972.04
-tests/kde4/results/kde4-times-control-frecord (100 lines):  Mean=29833.02  StdDev=836.68
-tests/kde4/results/kde4-times-defragged (100 lines):  Mean=29000.14  StdDev=2011.59
-tests/kde4/results/kde4-times-defragged-sansoutlier (99 lines):  Mean=28827.84  StdDev=1057.64
-tests/kde4/results/kde4-times-mdefragged (100 lines):  Mean=31543.05  StdDev=300.57
-Outlier in defragged: 46058
-
-\section{Data Collected --- OpenOffice}
-
-
-\begin{figure*}[!hbtp]
-\includegraphics[scale=0.75]{openoffice-chart.eps}
-\caption{Start-up times for OpenOffice}
-\label{oochart}
-\end{figure*}
-
-tests/openoffice/results/openoffice-times-control (100 lines):  Mean=14551.48  StdDev=232.81
-tests/openoffice/results/openoffice-times-control-frecord (100 lines):  Mean=14797.68  StdDev=148.20
-tests/openoffice/results/openoffice-times-defragged (100 lines):  Mean=12780.42  StdDev=1954.91
-tests/openoffice/results/openoffice-times-defragged-sansoutlier (99 lines):  Mean=12587.40  StdDev=367.09
-tests/openoffice/results/openoffice-times-mdefragged (100 lines):  Mean=14157.44  StdDev=128.04
-Outlier in defragged: 31889
-
-\section{Analysis of Results}
-
-\section{Possible Future Work}
+Bolero can't deal well with large filesystems.
 
 \section{Conclusion}
 
