@@ -262,18 +262,37 @@ This provides a clear picture of how well the two defragmentation strategies aff
 \label{mysqlchart}
 \end{figure*}
 
-\section{Data Collected for MySQL Startup}
+\section{Data Collected for MySQL}
 
 As noted in section \ref{sec:results}, server applications such as MySQL are easy to measure because it is easy to define the point at which they have ``started up'': when they are able to serve client requests.
 
 For measurement purposes, a sample database containing two related MyISAM tables with various column types and indexes was defined. These tables were filled with 20,000 and 10,000 lines of pseudo-random data respectively. Although this data was randomly generated, it was only generated once; that is, although the data was arbitrary, both the control and experimental tests were operating on the \emph{same} arbitrary data.
 
-The timing process, for each sample, took a beginning timestamp, called the init.d script for MySQL, and waited for it to return. Then, it connected to the server using the Python \texttt{MySQLdb} client module, and supplied it with a complex query involving data within and indexes on both tables. The query was limited to 10 rows, and once the
-server supplied those rows to the client, the ending timestamp was taken. The results from 100 such timing runs are shown in Figure \ref{mysqlchart}.
+The timing process, for each sample, takes a beginning timestamp, calls the init.d script for MySQL, and waits for it to return control. Then, it connects to the server using the Python \texttt{MySQLdb} client module, and supplies it with a complex query involving data and indexes for both tables. The query is limited to return 10 rows, and once the
+server supplies those rows to the client, the ending timestamp is taken. The results of these timings are shown in Figure \ref{mysqlchart}.
 
-The mean time elapsed between beginning and ending timestamps for the control was 6558.43 ms, with a standard deviation of 99.82 ms. After defragmentation with \texttt{defragment.py}, the mean time elapsed decreased by nearly a second to 5873.32 ms, with a standard deviation of 147.24 ms. The results after defragmentation with \texttt{mdefragment.py} were very similar, with a mean of 5884.01 ms and a standard deviation of 152.76 ms, after the removal of one outlier (8237 ms) from the result set.
+The mean time elapsed between beginning and ending timestamps for the control was 6558.43 ms, with a standard deviation of 99.82 ms. The \texttt{frecord} observations for MySQL yielded a sequence of 142 files, including the database files themselves, the various programs and libraries used by MySQL, and those resources used by the init.d script. After those files were defragmentated with \texttt{defragment.py}, the mean time elapsed decreased by nearly a second to 5873.32 ms, with a standard deviation of 147.24 ms. The results after defragmentation with \texttt{mdefragment.py} were very similar, with a mean of 5884.01 ms and a standard deviation of 152.76 ms, after the removal of one outlier (8237 ms) from the result set.
 
 Thus, both types of defragmentation resulted in a statistically significant change in the mean startup time of MySQL, a reduction of about a full second. The optimiziation, however, also increased the variance between samples significantly.
+
+\begin{figure*}[!htb]
+\includegraphics[scale=0.75]{openoffice-chart.eps}
+\caption{Startup times for OpenOffice}
+\label{oochart}
+\end{figure*}
+
+\section{Data Collected for OpenOffice}
+
+FIXME STOP THE WORD OPENOFFICE BREAKING
+
+As explained in section \ref{sec:results}, using an automated process to measure the startup time of a graphical application is more complicated than it is for a server. The difficulty is in finding a particular task to give to the program that can be easily tested by the script, that requires a substantial portion of the program to be loaded, and that represents a reasonable point at which the user can stop waiting and begin actually working with the program.
+
+For OpenOffice, we defined the ready point to be the time at which an existing document is opened in the word processor and the user may begin editing it. For this purpose, we created an OpenOffice Writer document which contains a macro. This macro attempts to connect to a socket on the local machine as soon as the document is opened. For each timing sample, the timing process opens this socket, marks a beginning timestamp, and then runs OpenOffice on the test document. As soon as the test document is loaded and makes an attempt to connect to the socket, the ending timestamp is marked. The results are shown in Figure \ref{oochart}. Throughout the process, a X/KDE environment was kept running; only OpenOffice itself was started and stopped.
+
+The mean elapsed time on the control filesystem was 14551.48 ms, with a standard deviation of 232.81 ms. Observations on the control system gave a list of 496 files used by OpenOffice. After
+defragmentation of those files with \texttt{defragment.py}, and the removal of a high outlier (31889 ms) from the result set, this mean decreased by about two seconds to 12587.40 ms, and the standard deviation increased to 367.09 ms. After defragmentation by \texttt{mdefragment.py}, the mean only decreased from the control by about 0.4 seconds to 14157.44 ms, with a standard deviation among samples of 128.04 ms.
+
+For OpenOffice, in this particular situation, both defragmenters created an observable improvement in OpenOffice's startup time, but the effect of optimization by \texttt{defragment.py} was much greater than that by \texttt{mdefragment.py}. The standard deviation was also noticably affected by the optimization process.
 
 \begin{figure*}[!htb]
 \includegraphics[scale=0.75]{kde4-chart.eps}
@@ -281,12 +300,12 @@ Thus, both types of defragmentation resulted in a statistically significant chan
 \label{kde4chart}
 \end{figure*}
 
-\section{Data Collected for X \& KDE Startup}
+\section{Data Collected for X \& KDE}
 
-The situation for testing KDE is even more complicated, since desktop environments like KDE are designed
-to perform a wide range of disparate tasks. Such systems have not really started up \emph{entirely} until they are capable of performing every one of their varied functions. For example, it would not be enough to say that KDE has fully loaded when it is, say, possible to use its main menu to launch applications, because at that time KDE might still be busy loading other components, such as the background image manager, or the taskbar, or
-the file management layer. It would be impractical to test each of these tasks individually in some way,
-as we did with OpenOffice, so another method for finding the startup point must be used.
+As with OpenOffice, the point at which an X/KDE environment can be said to have started up is difficult to define. This is especially true  since desktop environments like KDE are designed
+to perform a wide range of disparate tasks. In one sense, such systems have not really started up \emph{entirely} until they are capable of performing every one of their varied functions. Under this reasoning, t would not be enough to say that KDE has fully loaded when it is, say, possible to use its main menu to launch applications, because at that time KDE might still be busy loading other components, such as the background image manager, or the taskbar, or
+the file management layer. It would be impractical to test a task for each of these distinct features individually,
+as we did for the specific goal of ``loading a document'' within OpenOffice, so another method for finding the startup point was needed.
 
 tests/kde4/results/kde4-times-control (100 lines):  Mean=29022.81  StdDev=972.04
 tests/kde4/results/kde4-times-control-frecord (100 lines):  Mean=29833.02  StdDev=836.68
@@ -295,26 +314,11 @@ tests/kde4/results/kde4-times-defragged-sansoutlier (99 lines):  Mean=28827.84  
 tests/kde4/results/kde4-times-mdefragged (100 lines):  Mean=31543.05  StdDev=300.57
 Outlier in defragged: 46058
 
-\begin{figure*}[!htb]
-\includegraphics[scale=0.75]{openoffice-chart.eps}
-\caption{Startup times for OpenOffice}
-\label{oochart}
-\end{figure*}
-
-\section{Data Collected for OpenOffice Startup}
-
-tests/openoffice/results/openoffice-times-control (100 lines):  Mean=14551.48  StdDev=232.81
-tests/openoffice/results/openoffice-times-control-frecord (100 lines):  Mean=14797.68  StdDev=148.20
-tests/openoffice/results/openoffice-times-defragged (100 lines):  Mean=12780.42  StdDev=1954.91
-tests/openoffice/results/openoffice-times-defragged-sansoutlier (99 lines):  Mean=12587.40  StdDev=367.09
-tests/openoffice/results/openoffice-times-mdefragged (100 lines):  Mean=14157.44  StdDev=128.04
-Outlier in defragged: 31889
-
 \section{Analysis of Results}
 
-\section{Possible Future Work}\label{sec:future}
+\section{Future Work}\label{sec:future}
 
-FIXME PARAGRAPH DUMP
+FIXME THIS IS JUST A PARAGRAPH DUMP, AND MORE CONTENT IS NEEDED
 
 For example, many hard disks, upon discovering that a particular block has gone bad, will silently
 remap that block to some other place on disk\cite{remapping}. This is a good thing for ensuring
@@ -367,7 +371,9 @@ computers and applications may mean that careful organization of blocks in a see
 sequence may really result in little to no perceivable benefit. The development of Bolero should conclusively
 show which of these is the case.
 
-FIXME NON-BREAKING LINES IN BIBLIOGRAPHY URLS ARE ANNOYING.
+FIXME NON-BREAKING LINES IN BIBLIOGRAPHY URLS ARE ANNOYING. ALSO REDUCE FONT SIZE.
+
+FIXME PUT ACCESS DATES ON URLS.
 
 \bibliography{report}{}
 \bibliographystyle{plain}
