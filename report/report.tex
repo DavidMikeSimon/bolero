@@ -1,5 +1,8 @@
 \documentclass[10pt,twocolumn,letterpaper]{article}
 
+% Prevent words from being hyphenated
+\hyphenation{OpenOffice}
+
 \usepackage{fullpage}
 \usepackage{graphicx}
 
@@ -22,7 +25,7 @@ the initialization of various programs. To do this, we observed which data block
 used during the initialization of various programs. Then, those blocks were moved
 closer together, in the hope that the quantity and length of drive head seeks
 would be reduced. The results were mixed; some applications received no particular
-benefit from this optimiziation, while others were made to start significantly faster.
+benefit from this optimization, while others were made to start significantly faster.
 \end{abstract}
 
 \section{Introduction}
@@ -39,7 +42,7 @@ Ideally, to mitigate this problem, the next block to be requested should be phys
 and after the current block\cite{autolocality}. When a seek or
 spin wait is unavoidable, then it is better if the travel time required can at least be lessened by reducing the
 physical distance between the current block and the next. The best scenario is when
-as much disk time as possible is spent actually retreiving data, and as little as possible
+as much disk time as possible is spent actually retrieving data, and as little as possible
 wasted travelling from one request location to another.
 
 It should be possible, with intelligent organization of data on the disk, to make the hard drive behave
@@ -86,11 +89,11 @@ recorded during the observational period, to reduce the amount of time taken for
 that particular task. Previous efforts using this approach have been
 successful in reducing large application startup times by over 60\%\cite{ala}.
 
-Because task-specific optimiziation is easier to implement and readily suggests
+Because task-specific optimization is easier to implement and readily suggests
 a metric, we chose it as the approach used by Bolero. However, since that approach is a
-specialization of the general optimiziation approach, its success may be seen
+specialization of the general optimization approach, its success may be seen
 as a motivation to explore the more complex, but potentially more rewarding, area
-of general optimiziation.
+of general optimization.
 
 For this project, we attempted to improve the startup time of the following applications with this approach:
 \begin{itemize}
@@ -105,9 +108,9 @@ ideally, the only factor being tested should be disk usage.
 The test environment was a default installation of Kubuntu 8.04 on a 12GB partition located
 at the end of the 61.4GB test hard disk, a PATA Maxtor 6Y060L0. The test system had
 1GB of RAM, and a 2.4Ghz processor. This combination of a somewhat powerful system and
-a somewhat meidocre hard drive was chosen purposefully: this scenario exacerbates the
+a somewhat mediocre hard drive was chosen purposefully: this scenario exacerbates the
 problem of the hard drive as the bottleneck of the application loading process, and therefore
-any improvement due to the optimization process should be especially noticable.
+any improvement due to the optimization process should be especially noticeable.
 
 \section{Filesystem Manipulation}
 
@@ -146,12 +149,12 @@ basis for later, more sophisticated operations, and also serves as a useful test
 of the system's ability to safely and correctly alter filesystems.
 
 Once the reorganizer can reduce file discontiguity, it is possible to
-use that same mechanism to reduce inter-file discontiguity, as explaiend
+use that same mechanism to reduce inter-file discontiguity, as explained
 in section \ref{sec:motive}. Both types of defragmentation are necessary because the overall goal is to reduce the quantity of seeks and spin waits. The ideal state of affairs is for the disk to travel through
 a sequence of files without interruption\cite{autolocality}, from the first block of the first file to the last
 block of the last file with no delays or seeks.
 
-This ideal is difficult to acheive completely, due to the realities of hard disk
+This ideal is difficult to achieve completely, due to the realities of hard disk
 and filesystem layout. For example, in ext3, data blocks are organized into larger
 collections on disk called \texttt{block groups}\cite{ext2intro}. Each
 block group contains actual data blocks as well as other information, such
@@ -164,13 +167,13 @@ skips over these gaps. A more subtle defragmenter might attempt to arrange
 files around these gaps in anticipation of access patterns.
 
 There are many other issues which present similar complications to a defragmentation
-system, such as track boundaries, unusual varities of file data (i.e. directories, which
+system, such as track boundaries, unusual varieties of file data (i.e. directories, which
 are almost never scanned through linearly), and files which are expected to change
 size or be deleted during normal operations. The Bolero defragmenter makes no attempt to
 solve even these relatively common complications.
 
 However, even an unsubtle implementation such as Bolero can serve as a proof-of-concept
-to demonstrate the validity of the basic idea. If a repeatable, signifiacnt improvement
+to demonstrate the validity of the basic idea. If a repeatable, significant improvement
 is observed after making simplistic improvements to the filesystem layout, it follows
 that more sophisticated improvements should yield even better results.
 
@@ -202,7 +205,7 @@ of these processes were recorded to memory. Afterwords, the information in these
 was collected by the \texttt{fsummarize} tool, which uses it to produce a best-guess list of all the files
 that might be opened the next time the target application starts up, in the order they are most likely to be
 opened in. All files which were opened in even one of the recorded sessions are included in the list. n theory,
-it is better to include an unnecessary file and have the disk head skip over it with relatively little expense than to omit it and force the disk to (even occassionally) perform an expensive seek to some other part of the disk
+it is better to include an unnecessary file and have the disk head skip over it with relatively little expense than to omit it and force the disk to (even occasionally) perform an expensive seek to some other part of the disk
 and then back.
 
 \section{Defragmentation}
@@ -227,6 +230,14 @@ is necessary to have a way to accurately measure the amount of time it takes for
 a program to startup, and then to perform that measurement a statistically significant
 number of times on both a control filesystem and a filesystem optimized for that program.
 
+% This figure is up here in this weird spot so that it appears at the top of the page describing the
+% related results. LaTeX can sometimes be too smart for its own good.
+\begin{figure*}[!htb]
+\includegraphics[scale=0.75]{mysql-chart.eps}
+\caption{Startup times for MySQL}
+\label{mysqlchart}
+\end{figure*}
+
 However, this measurement is more ambiguous than we initially expected, and a few
 somewhat arbitrary choices had to be made. The most important of these is the problem of determing when, exactly,
 a program has ``started up'' entirely. For some programs, this is fairly straightforward to define. For example,
@@ -245,7 +256,7 @@ the same experimental procedure could be applied to each:
 \begin{enumerate}
 \item The target filesystem being tested is restored from backup to an unoptimized control state.
 \item A control measurement of 100 samples is taken as described in section \ref{sec:observing}, with \texttt{frecord} disabled. This data is the baseline for how long the application takes to start up
-on the filesystem before optimiziation.
+on the filesystem before optimization.
 \item This measurement is then repeated 100 more times, but with \texttt{frecord} enabled.
 \item The results from \texttt{frecord} are supplied to \texttt{defragment.py}, and the filesystem is now optimized with task-related data blocks contiguous and sequential near the first related inode.
 \item Another 100 timing samples are taken with \texttt{frecord} disabled.
@@ -256,10 +267,12 @@ on the filesystem before optimiziation.
 
 This provides a clear picture of how well the two defragmentation strategies affect the application's startup time. The results for each application are described in more detail in the following sections.
 
+% This figure is up here in this weird spot so that it appears at the top of the page describing the
+% related results. LaTeX can sometimes be too smart for its own good.
 \begin{figure*}[!htb]
-\includegraphics[scale=0.75]{mysql-chart.eps}
-\caption{Startup times for MySQL}
-\label{mysqlchart}
+\includegraphics[scale=0.75]{openoffice-chart.eps}
+\caption{Startup times for OpenOffice}
+\label{oochart}
 \end{figure*}
 
 \section{Data Collected for MySQL}
@@ -271,19 +284,19 @@ For measurement purposes, a sample database containing two related MyISAM tables
 The timing process, for each sample, takes a beginning timestamp, calls the init.d script for MySQL, and waits for it to return control. Then, it connects to the server using the Python \texttt{MySQLdb} client module, and supplies it with a complex query involving data and indexes for both tables. The query is limited to return 10 rows, and once the
 server supplies those rows to the client, the ending timestamp is taken. The results of these timings are shown in Figure \ref{mysqlchart}.
 
-The mean time elapsed between beginning and ending timestamps for the control was 6558.43 ms, with a standard deviation of 99.82 ms. The \texttt{frecord} observations for MySQL yielded a sequence of 142 files, including the database files themselves, the various programs and libraries used by MySQL, and those resources used by the init.d script. After those files were defragmentated with \texttt{defragment.py}, the mean time elapsed decreased by nearly a second to 5873.32 ms, with a standard deviation of 147.24 ms. The results after defragmentation with \texttt{mdefragment.py} were very similar, with a mean of 5884.01 ms and a standard deviation of 152.76 ms, after the removal of one outlier (8237 ms) from the result set.
+The mean time elapsed between beginning and ending timestamps for the control was 6558.43 ms, with a standard deviation of 99.82 ms. The \texttt{frecord} observations for MySQL yielded a sequence of 142 files, including the database files themselves, the various programs and libraries used by MySQL, and those resources used by the init.d script. After those files were defragmented with \texttt{defragment.py}, the mean time elapsed decreased by nearly a second to 5873.32 ms, with a standard deviation of 147.24 ms. The results after defragmentation with \texttt{mdefragment.py} were very similar, with a mean of 5884.01 ms and a standard deviation of 152.76 ms, after the removal of one outlier (8237 ms) from the result set.
 
-Thus, both types of defragmentation resulted in a statistically significant change in the mean startup time of MySQL, a reduction of about a full second. The optimiziation, however, also increased the variance between samples significantly.
+Thus, both types of defragmentation resulted in a statistically significant change in the mean startup time of MySQL, a reduction of about a full second. The optimization, however, also increased the variance between samples significantly.
 
+% This figure is up here in this weird spot so that it appears at the top of the page describing the
+% related results. LaTeX can sometimes be too smart for its own good.
 \begin{figure*}[!htb]
-\includegraphics[scale=0.75]{openoffice-chart.eps}
-\caption{Startup times for OpenOffice}
-\label{oochart}
+\includegraphics[scale=0.75]{kde4-chart.eps}
+\caption{Startup times for X and KDE4}
+\label{kde4chart}
 \end{figure*}
 
 \section{Data Collected for OpenOffice}
-
-FIXME STOP THE WORD OPENOFFICE BREAKING
 
 As explained in section \ref{sec:results}, using an automated process to measure the startup time of a graphical application is more complicated than it is for a server. The difficulty is in finding a particular task to give to the program that can be easily tested by the script, that requires a substantial portion of the program to be loaded, and that represents a reasonable point at which the user can stop waiting and begin actually working with the program.
 
@@ -292,33 +305,40 @@ For OpenOffice, we defined the ready point to be the time at which an existing d
 The mean elapsed time on the control filesystem was 14551.48 ms, with a standard deviation of 232.81 ms. Observations on the control system gave a list of 496 files used by OpenOffice. After
 defragmentation of those files with \texttt{defragment.py}, and the removal of a high outlier (31889 ms) from the result set, this mean decreased by about two seconds to 12587.40 ms, and the standard deviation increased to 367.09 ms. After defragmentation by \texttt{mdefragment.py}, the mean only decreased from the control by about 0.4 seconds to 14157.44 ms, with a standard deviation among samples of 128.04 ms.
 
-For OpenOffice, in this particular situation, both defragmenters created an observable improvement in OpenOffice's startup time, but the effect of optimization by \texttt{defragment.py} was much greater than that by \texttt{mdefragment.py}. The standard deviation was also noticably affected by the optimization process.
-
-\begin{figure*}[!htb]
-\includegraphics[scale=0.75]{kde4-chart.eps}
-\caption{Startup times for X and KDE4}
-\label{kde4chart}
-\end{figure*}
+For OpenOffice, in this particular situation, both defragmenters created an observable improvement in OpenOffice's startup time, but the effect of optimization by \texttt{defragment.py} was much greater than that by \texttt{mdefragment.py}. The standard deviation was also noticeably affected by the optimization process.
 
 \section{Data Collected for X \& KDE}
 
-As with OpenOffice, the point at which an X/KDE environment can be said to have started up is difficult to define. This is especially true  since desktop environments like KDE are designed
-to perform a wide range of disparate tasks. In one sense, such systems have not really started up \emph{entirely} until they are capable of performing every one of their varied functions. Under this reasoning, t would not be enough to say that KDE has fully loaded when it is, say, possible to use its main menu to launch applications, because at that time KDE might still be busy loading other components, such as the background image manager, or the taskbar, or
-the file management layer. It would be impractical to test a task for each of these distinct features individually,
-as we did for the specific goal of ``loading a document'' within OpenOffice, so another method for finding the startup point was needed.
+Desktop environments such as KDE are complex systems which run several independent but related processes simultaneously. Such systems have not really started up \emph{entirely} until they are capable of performing every one of their varied functions. It would not be enough to say that KDE has fully loaded when it is, say, possible to use its main menu to launch applications, because at that time KDE might still be busy loading other components, such as the background image manager, or the taskbar, or the file management layer. It would be impractical to test a task for each of these distinct features individually, as we did for the specific goal of ``loading a document'' within OpenOffice, so another method for finding the startup point was needed.
 
-tests/kde4/results/kde4-times-control (100 lines):  Mean=29022.81  StdDev=972.04
-tests/kde4/results/kde4-times-control-frecord (100 lines):  Mean=29833.02  StdDev=836.68
-tests/kde4/results/kde4-times-defragged (100 lines):  Mean=29000.14  StdDev=2011.59
-tests/kde4/results/kde4-times-defragged-sansoutlier (99 lines):  Mean=28827.84  StdDev=1057.64
-tests/kde4/results/kde4-times-mdefragged (100 lines):  Mean=31543.05  StdDev=300.57
-Outlier in defragged: 46058
+We decided to use the Konqueror web-browser for the timing metric, by having KDE4 start it automatically upon logging in, and directing it to a local port being managed by the test framework. The ending timestamp is taken as soon as the port is opened. This approach was chosen for several reasons:
+\begin{itemize}
+\item Konqueror depends upon several other KDE components, including its interprocess communication system, and its IO handler system CITETHIS. Therefore, before Konqueror could effectively attempt to contact the test server, a good portion of KDE would have to be loaded first.
+\item KDE's auto-start mechanism, which is used to start up user-specified programs automatically each time a new session is started, is activated near the end of the KDE initialization process CITETHIS. By this point, nearly all of X and KDE will have been loaded, or at least started loading.
+\item Browsing a webpage is a reasonable choice for a task a user would want to do as soon as possible after starting an X/KDE session. 
+\end{itemize}
+
+A user who is starting an X/KDE session in order to open up Konqueror and browse a webpage is working under the same restrictions as the automated timing process. This means that any improvement reported by this metric due to the optimization is an improvement to the actual user-perceived responsiveness of the system. However, this improvement
+did not materialize, as can be seen in Figure \ref{kde4chart}.
+
+On the control filesystem, the mean elapsed time was 29022.81 ms, with a standard deviation of 972.04 ms. The file sequence collected from \texttt{frecord} referenced 1201 files. After the \texttt{defragment.py} optimization process, this mean (after the removal of a single outlier from the result set, 46058 ms) decreased only slightly, to 29000.14 ms, and the standard deviation more than doubled to 2011.59 ms. The results from the \texttt{mdefragment.py} process were even less helpful: the mean elapsed time \emph{increased} to 31543.05 ms, with a standard deviation of 300.57 ms.
 
 \section{Analysis of Results}
 
+Among the three applications tested, both MySQL and OpenOffice saw measurable improvements in their startup times, by approximately 14\% and 11\% respectively. X/KDE4, however, received no improvement in its startup time due to the optimization process. Why didn't X/KDE4 benefit as the other applications did? We hypothesize that the difference in effectiveness of the optimizer is due to a major architectural difference between X/KDE and the other two tested applications: the number of simultaneous processes.
+
+MySQL and OpenOffice start up relatively few processes, but an X/KDE4 session involves the creation of many processes, all of which are started in the same short time period. These processes, all running concurrently and attempting to load resources, create a situation that is very different from the ideal disk usage scenario, a single pass read of all necessary resources. Many concurrent requests for different resources on the disk would require that the disk head seek back and forth to fulfill them. This occurs because, even if the optimizer is correctly ordering all data blocks on disk into the order in which the process of reading those blocks \emph{begins}, the disk must still often break away from the predicted sequences in order to continue concurrent, in-progress reads. However, although we feel that this is the most plausible explanation for why optimization of X/KDE4 was ineffective, this explanation has not been verified through experiment.
+
+Another odd aspect of the results that we were not expecting was the dramatic change in standard deviation among test results after optimization was applied. In MySQL, the standard deviation increased by about 50\% after both forms of optimization. For OpenOffice, the standard deviation approximately doubled after \texttt{defragment.py} was used, but approximately halved after application of \texttt{mdefragment.py}, and similar effects on the standard deviation were seen when these tools were applied to X/KDE. In particular, we found it surprising that, throughout the results collected, the most effective optimization tended to \emph{increase} deviation, rather than decreasing it. There does not seem to be an obvious explanation for these odd results. It would be difficult to tell if these changing delays are even disk-related without first collecting more detailed information about the disk's behavior during the tests.
+
+One final result that surprised us was that, in all cases, the \texttt{mdefragment.py} tool was \emph{less} effective than \texttt{defragment.py}. This appears to contradict the original theory about why the type of optimization being performed should be effective. Reducing the average seek distance between inodes and their data blocks should have, under that theory, reduced the overall time elapsed. Again, we are unable to adequately explain this result, and feel that the next step in understanding this issue would be to obtain more detailed information about the disk's internal activity during the tests.
+
 \section{Future Work}\label{sec:future}
 
-FIXME THIS IS JUST A PARAGRAPH DUMP, AND MORE CONTENT IS NEEDED
+FIXME THIS SECTION IS JUST A PARAGRAPH DUMP AND MUST BE LARGELY REWRITTEN.
+
+A significant property of both Bolero reorganizers is that \emph{only data blocks} are moved; inodes are
+unaltered by the process. This is because the \texttt{pyext2} library included with Bolero is not capable of moving inodes. This is the most significant remaining theoretical problem with the project. A given file's inode entry must be read first to locate its data blocks. Therefore, depending upon how scattered the inodes are on disk and in what order they must be read, they are almost certainly a significant remaining source of optimizable disk delays and seeks.
 
 For example, many hard disks, upon discovering that a particular block has gone bad, will silently
 remap that block to some other place on disk\cite{remapping}. This is a good thing for ensuring
@@ -331,9 +351,6 @@ is unexpectedly long, then we may be able to assume that one of the blocks invol
 has been silently remapped to some distant part of the disk. Such blocks can then be
 assumed by the reorganizer to have poor contiguity regardless of proximity to other
 blocks.
-
-A significant property of both Bolero reorganizers is that \emph{only data blocks} are moved; inodes are
-unaltered by the process. This is because the \texttt{pyext2} library included with Bolero is not capable of moving inodes. This is the most significant remaining theoretical problem with the project. A given file's inode entry must be read first to locate its data blocks. Therefore, depending upon how scattered the inodes are on disk and in what order they must be read, they are almost certainly a significant remaining source of optimizable disk delays and seeks.
 
 Concurrency presents another possible measurement hurdle. As mentioned above, the applications for
 which startup time would benefit the most from Bolero are those applications which involve a
@@ -357,6 +374,8 @@ in the tests, because Bolero's optimizations have to do with the physical limita
 Bolero can't deal well with large filesystems.
 
 \section{Conclusion}
+
+FIXME THIS SECTION IS LEFT OVER FROM THE OLDER DOCUMENT.
 
 Assuming that Bolero does end up being significantly useful, there are a number of directions that
 the project could go in. A few of them are mentioned above: Bolero might be portable to other
