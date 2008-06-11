@@ -307,7 +307,7 @@ defragmentation of those files with \texttt{defragment.py}, and the removal of a
 
 For OpenOffice, in this particular situation, both defragmenters created an observable improvement in OpenOffice's startup time, but the effect of optimization by \texttt{defragment.py} was much greater than that by \texttt{mdefragment.py}. The standard deviation was also noticeably affected by the optimization process.
 
-\section{Data Collected for X \& KDE}
+\section{Data Collected for X \& KDE}\label{sec:kderesults}
 
 Desktop environments such as KDE are complex systems which run several independent but related processes simultaneously. Such systems have not really started up \emph{entirely} until they are capable of performing every one of their varied functions. It would not be enough to say that KDE has fully loaded when it is, say, possible to use its main menu to launch applications, because at that time KDE might still be busy loading other components, such as the background image manager, or the taskbar, or the file management layer. It would be impractical to test a task for each of these distinct features individually, as we did for the specific goal of ``loading a document'' within OpenOffice, so another method for finding the startup point was needed.
 
@@ -327,72 +327,61 @@ On the control filesystem, the mean elapsed time was 29022.81 ms, with a standar
 
 Among the three applications tested, both MySQL and OpenOffice saw measurable improvements in their startup times, by approximately 14\% and 11\% respectively. X/KDE4, however, received no improvement in its startup time due to the optimization process. Why didn't X/KDE4 benefit as the other applications did? We hypothesize that the difference in effectiveness of the optimizer is due to a major architectural difference between X/KDE and the other two tested applications: the number of simultaneous processes.
 
-MySQL and OpenOffice start up relatively few processes, but an X/KDE4 session involves the creation of many processes, all of which are started in the same short time period. These processes, all running concurrently and attempting to load resources, create a situation that is very different from the ideal disk usage scenario, a single pass read of all necessary resources. Many concurrent requests for different resources on the disk would require that the disk head seek back and forth to fulfill them. This occurs because, even if the optimizer is correctly ordering all data blocks on disk into the order in which the process of reading those blocks \emph{begins}, the disk must still often break away from the predicted sequences in order to continue concurrent, in-progress reads. However, although we feel that this is the most plausible explanation for why optimization of X/KDE4 was ineffective, this explanation has not been verified through experiment.
+MySQL and OpenOffice start up relatively few processes, but an X/KDE4 session involves the creation of many processes, all of which are started in the same short time period. These processes, all running concurrently and attempting to load resources, create a situation that is very different from the ideal disk usage scenario, a single pass read of all necessary resources. Many concurrent requests for different resources on the disk would require that the disk head seek back and forth to fulfill them. This occurs because, even if the optimizer is correctly ordering all data blocks on disk into the order in which the process of reading those blocks \emph{begins}, the disk must still often break away from the predicted sequences in order to continue concurrent, in-progress reads. However, although we feel that this is the most plausible explanation for why optimization of X/KDE4 was ineffective, this explanation should be verified through experiment.
 
 Another odd aspect of the results that we were not expecting was the dramatic change in standard deviation among test results after optimization was applied. In MySQL, the standard deviation increased by about 50\% after both forms of optimization. For OpenOffice, the standard deviation approximately doubled after \texttt{defragment.py} was used, but approximately halved after application of \texttt{mdefragment.py}, and similar effects on the standard deviation were seen when these tools were applied to X/KDE. In particular, we found it surprising that, throughout the results collected, the most effective optimization tended to \emph{increase} deviation, rather than decreasing it. There does not seem to be an obvious explanation for these odd results. It would be difficult to tell if these changing delays are even disk-related without first collecting more detailed information about the disk's behavior during the tests.
 
-One final result that surprised us was that, in all cases, the \texttt{mdefragment.py} tool was \emph{less} effective than \texttt{defragment.py}. This appears to contradict the original theory about why the type of optimization being performed should be effective. Reducing the average seek distance between inodes and their data blocks should have, under that theory, reduced the overall time elapsed. Again, we are unable to adequately explain this result, and feel that the next step in understanding this issue would be to obtain more detailed information about the disk's internal activity during the tests.
+One final result that surprised us was that, in all cases, the \texttt{mdefragment.py} tool was \emph{less} effective than \texttt{defragment.py}. This appears to contradict our original theory about why this type of optimization should be effective. Reducing the average seek distance between inodes and their data blocks should have, under that theory, reduced the overall time elapsed. The next step in understanding this issue would be to obtain more detailed information about the disk's internal activity during the tests.
 
 \section{Future Work}\label{sec:future}
 
-FIXME THIS SECTION IS JUST A PARAGRAPH DUMP AND MUST BE LARGELY REWRITTEN.
+We assert that the project, as it currently stands, is enough to demonstrate the basic validity of this approach to disk optimization. However, the project is far from a state where it would be effective in a production setting. As it currently stands, the gains in performance created by the Bolero optimizer are insufficient to outweigh the trouble of applying it. There are many areas in the project where future work could address this problem from both angles: increasing the performance gain, and reducing the administrative hassle of using the system.
+
+Correcting the latter problem, allowing administrators to take advantage of disk contiguity optimization easily, would require addressing two significant problems:
+\begin{itemize}
+\item Before applications can be optimized, time-consuming file usage recordings must first be taken. During these recordings, the application is being repeatedly started and stopped, and other applications should not be running. During this long period, therefore, the system is useless for actual production work, and that is unacceptable in many scenarios.
+\item The filesystem cannot be optimized while it is mounted. Therefore, if a system-critical partition is to be optimized (and, since Bolero is meant to optimize major applications, this is likely), the system must be brought down and booted from an alternate partition. The defragmentation process itself is also fairly slow, and no production work can be done with the target filesystem while it is being defragmented.
+\end{itemize}
+
+These problems are particularly troublesome considering that filesystems often change, necessitating that the entire sequence be re-done if benefits are to be maintained. The current implementation of Bolero assumes that it can place a data block down in a particular spot on disk and rely on it staying there, but there are many reasons why this assumption is invalid. The most obvious of these is that production filesystems tend to change as time passes. Log files expand and are rotated, databases are manipulated, libraries and programs undergo regular updates, and so on. In a typical filesystem, no file can be relied upon to stay in one place or one state forever, but this is exactly the assumption that the Bolero optimizer makes.
+
+An improved optimization system could correct this problem somewhat by re-optimizing the filesystem continuously or at regular intervals, but the ideal solution would also involve giving the optimizer more information about the \emph{purpose} of files. This information could allow an improved version of Bolero to predict which files are likely to be deleted or expanded or changed in other ways, and which files will most likely stay unaltered for long periods of time. With this information, the optimizer could allocate extra space as needed to allow such changes to occur without affecting on-disk contiguity.
+
+However, this still doesn't address the chief problem with Bolero in its current state: the long time periods during which the filesystem is being measured or defragmented, and therefore cannot be used productively. We propose that the solution to this issue is two-fold: the file usage data must be gathered on development systems rather than the production system, and it must be possible to optimize a running filesystem without interrupting its work. After these improvements, the process of optimizing (or re-optimizing) a particular application might be as follows:
+\begin{enumerate}
+\item A new application, or a new version of some existing application, is released. The administrator of a production system wishes to install it on disk in an optimized fashion, so that its start-up time is as short as possible.
+\item The administrator fetches and installs the new application, and additionally obtains information describing its expected file usage patterns. This information was prepared by the administrator on a non-critical development system. Or, alternately, perhaps this information was prepared in advance by the application's developers, and included with the new release.
+\item The administrator gives the optimizer this file usage information, and the optimizer defragments the filesystem in-place, without unmounting it or interrupting it.
+\end{enumerate}
+
+The first major change presented in this scenario is the source of the file access information; instead of being generated by the administrator on the target machine, it's created on some other machine and possibly by an entirely different person. This requires little or no change to the technology itself; although a given application may be installed differently on each machine, the process of starting it up should be about the same on all machines. Depending on the application, there may be optional components that are loaded or not loaded on a per-system basis, but this is easy to work around: as long as the file access information is as comprehensive as possible, particular files which are listed in that information but not found on the target filesystem can simply be skipped over, and contiguity is maintained.
+
+The second change in the above scenario, however, is more involved: the optimizer must be able to act on live filesystems. This would require abandoning the current \texttt{libext2fs}-based mechanism, which requires that the filesystem be unmounted while it is altered. However, existing mechanisms exist in the Linux kernel for manipulating filesystems at a deep live while they are mounted\cite{ext3online}, and Bolero could most likely be adapted to use those.
+
+The improvements listed above, if implemented, would do much to deal with the administrative barrier-to-entry of the system. However, there is also a great deal of room for possible further work on the other side of the system: the effectiveness of the optimization itself.
 
 A significant property of both Bolero reorganizers is that \emph{only data blocks} are moved; inodes are
-unaltered by the process. This is because the \texttt{pyext2} library included with Bolero is not capable of moving inodes. This is the most significant remaining theoretical problem with the project. A given file's inode entry must be read first to locate its data blocks. Therefore, depending upon how scattered the inodes are on disk and in what order they must be read, they are almost certainly a significant remaining source of optimizable disk delays and seeks.
+unaltered by the process. This is because the \texttt{pyext2} library included with Bolero is incapable of moving inodes.  A given file's inode entry must be read first to locate its data blocks. Therefore, depending upon how scattered the inodes are on disk and in what order are read, their placement is almost certainly a significant remaining source of optimizable disk delays and seeks. This is the most significant theoretical problem remaining with the project, and we suspect that implementation of inode defragmentation would increase the effectiveness of the optimization a great deal.
 
-For example, many hard disks, upon discovering that a particular block has gone bad, will silently
-remap that block to some other place on disk\cite{remapping}. This is a good thing for ensuring
-data integrity, but it makes Bolero's optimization strategy more difficult, because
+In particular, we suspect that implementing inode defragmentation would help the optimization to be more effective in scenarios such as the X/KDE test described in section \ref{sec:kderesults}. Bolero was able to move data blocks related to X and KDE files from 34 block groups scattered around the test filesystem into only 2 tightly packed block groups. However, the many inodes for these files remained spread out around 32 groups, and each of these inodes must be accessed. We know from the results on OpenOffice and MySQL that the general principle of reducing average inter-data distance on disk \emph{is} effective. It is therefore reasonable to think that the reason we saw no benefit from optimization of X and KDE is not that Bolero optimization is inapplicable, but that Bolero simply didn't do \emph{enough} optimization.
+
+There is one final area of the project which could benefit from additional work: the assumptions made in the design of the file usage analysis system, and the interpretation of the results it generates. Most egregiously among these is the assumption that files, when they are read at all, are read in their entirety from beginning to end. For many situations, however, this assumption does not hold true. For example, an application may link to a library which is quite large, but only need to use a small subset of its functionality. Many of that library's data blocks will never be read, but the defragmenter will still put all the library's data blocks into the contiguous sequence, potentially creating unnecessary seeks.
+
+Other unsound assumptions are made in regards to the nature of disks themselves. Many hard disks, upon discovering that a particular block has gone bad, will silently remap that block to some other place on disk\cite{remapping}. This is good for ensuring data integrity, but it makes Bolero's optimization strategy more difficult, because
 its idea of the ``physical'' disk location is actually still a level of abstraction away from
-the actual disk. To overcome this, the observer can compare its recorded response
+the actual disk. To overcome this, the observer might attempt to compare its recorded response
 times with expected times, based on an understanding of how disks typically work.
 If the delay in going from one seemingly ``contiguous'' block to the next
 is unexpectedly long, then we may be able to assume that one of the blocks involved
 has been silently remapped to some distant part of the disk. Such blocks can then be
-assumed by the reorganizer to have poor contiguity regardless of proximity to other
+assumed by the defragmenter to have poor contiguity regardless of proximity to other
 blocks.
-
-Concurrency presents another possible measurement hurdle. As mentioned above, the applications for
-which startup time would benefit the most from Bolero are those applications which involve a
-large number of pieces, all potentially scattered around the filesystem. However, there is no guarantee
-that these pieces will always be loaded in the same order by the application. KDE, for example, might reasonably start its window manager and its taskbar at the same time. Because of a certain amount of random
-variation in the computer's state before and during the loading process, this might result in
-slightly different disk access patterns for the same application. During one run, the taskbar might finish loading just before the window manager, while in another run, the opposite might be true. Multiple
-measurements will be necessary to see how much the optimization helps despite this unpredictability.
-
-One final issue that must be addressed for accurate measurement is the effect of caching. Both
-the operating system and the drive itself will be, in light of the inherent slowness of hard drives,
-doing a lot of caching. The operating system's cache can probably be manipulated directly; more
-investigation into the Linux kernel will be required, but I suspect that clearing the software
-cache may be as simple as unmounting and remounting the partition. The hard drive's internal cache
-may be tricker to deal with, but one possible strategy might be to simply load several large chunks of
-unused data from the drive, thereby filling the drive cache entirely or mostly (depending upon the mapping
-and replacement schemes used) with garbage information that has nothing to do with the activities being tested.
-The purpose of all of this cache-busting is to involve the actual hard drive as much as possible
-in the tests, because Bolero's optimizations have to do with the physical limitations of hard drives. Although caching certainly helps programs to start up faster, it also interferes with my ability to test Bolero's actual effectiveness.
-
-Bolero can't deal well with large filesystems.
 
 \section{Conclusion}
 
-FIXME THIS SECTION IS LEFT OVER FROM THE OLDER DOCUMENT.
+Despite all of these suggestions as to possible improvements to the proof-of-concept implementation, the basic idea of Bolero should be considered distinct from it. The most important goal of this project was to demonstrate that, at its core, the idea of reorganizing on-disk information so that related data are nearby is sound. Although the resulting improvements were minor at best, that there was noticeable improvement at all served the desired purpose: conclusively, \emph{this optimization strategy can potentially be effective}.
 
-Assuming that Bolero does end up being significantly useful, there are a number of directions that
-the project could go in. A few of them are mentioned above: Bolero might be portable to other
-operating systems or filesystems, or it might be possible to use it on more complicated multi-partition
-or multi-disk setups. Additionally, there are probably other, more complex observation-based reorganization schemes
-besides the two suggested above.
-
-Before any of this is worth considering, though, the basic premise must first be tested. Can disk
-blocks be reorganized based on observations of usage patterns to significantly improve performance?
-There might be tremendous performance gains. Or, the unpredictability and complexity of modern
-computers and applications may mean that careful organization of blocks in a seemingly helpful
-sequence may really result in little to no perceivable benefit. The development of Bolero should conclusively
-show which of these is the case.
-
-FIXME NON-BREAKING LINES IN BIBLIOGRAPHY URLS ARE ANNOYING. ALSO REDUCE FONT SIZE.
-
-FIXME PUT ACCESS DATES ON URLS.
+The implementation we wrote to demonstrate this may be useful for further implementations of this strategy on Linux and using ext3. However, an approach which is more likely to be useful would be to create \emph{new} implementations of this strategy, possibly for different operating systems and different filesystems, with an eye towards practicality rather than experimental validity.
 
 \bibliography{report}{}
 \bibliographystyle{plain}
