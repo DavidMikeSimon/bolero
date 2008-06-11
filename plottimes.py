@@ -33,6 +33,7 @@ a1rect = (0.09, 0.08, 0.67, 0.85)
 a2rect = (0.82, 0.08, 0.16, 0.85)
 lines = []
 ptitles = []
+n = 0
 for name in sys.argv[1:]:
 	match = pat.match(name)
 	if match:
@@ -42,8 +43,10 @@ for name in sys.argv[1:]:
 			vals.append(int(line.strip())/1000.0)
 		
 		# Time graph
+		chr = ('x', 'o', 's')[n]
+		n += 1
 		a = fig.add_axes(a1rect)
-		lines.append(a.plot(vals, '.'))
+		lines.append(a.plot(vals, chr))
 		
 		# Histogram
 		flabels = []

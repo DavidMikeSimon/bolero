@@ -25,7 +25,7 @@ the initialization of various programs. To do this, we observed which data block
 used during the initialization of various programs. Then, those blocks were moved
 closer together, in the hope that the quantity and length of drive head seeks
 would be reduced. The results were mixed; some applications received no particular
-benefit from this optimization, while others were made to start significantly faster.
+benefit from this optimization, while others started significantly faster.
 \end{abstract}
 
 \section{Introduction}
@@ -39,8 +39,7 @@ often still a long delay waiting for the desired block to spin around to the hea
 many disk operations are required, tasks that would otherwise be immediately performing computations on data must first wait for these slow, mechanical processes to complete.
 
 Ideally, to mitigate this problem, the next block to be requested should be physically near to
-and after the current block\cite{autolocality}. When a seek or
-spin wait is unavoidable, then it is better if the travel time required can at least be lessened by reducing the
+and after the current block\cite{autolocality}. When seeking or spin latency is unavoidable, then it is better if the travel time required can at least be lessened by reducing the
 physical distance between the current block and the next. The best scenario is when
 as much disk time as possible is spent actually retrieving data, and as little as possible
 wasted travelling from one request location to another.
@@ -68,7 +67,7 @@ As important as these advancements have been, however, they do not address anoth
 Just as slowdowns result when the various blocks of a file are distant from each other, when \emph{files} accessed in sequence are far from each other on the disk, significant unnecessary delays may result. For example, a large application such as an office suite or desktop environment requires numerous programs, shared libraries, icons, fonts, and other resources before it can start up completely. If these files must be read from disk but are spread apart from each other, the application's startup time will increase.
 
 The objective of Bolero is to reduce this type of fragmentation for that specific case, that of applications
-starting up and loading a variety of resources from disk. It accomplishes this by moving data blocks that are typically accessed at about the same time closer together, and re-sequencing them into the order they are expected to be accessed. There are two possible strategies to accomplish this : general optimization and task-specific optimization.
+starting up and loading a variety of resources from disk. It accomplishes this by moving data blocks that are accessed at about the same time closer together, and re-sequencing them into the order they are expected to be accessed. There are two possible strategies to accomplish this: general optimization and task-specific optimization.
 
 With general optimization, the reorganizer would use the recorded observations
 to determine which files tend to be accessed within a short time from each
@@ -123,11 +122,13 @@ filesystems.
 
 The basic mechanism used by Bolero is the \texttt{libext2fs} library. This C
 library, part of the standard \texttt{e2fstools} package, allows user-space programs
-to open, scan, and make changes to ext2 filesystems. For Bolero, we wrote
+to open, scan, and make changes to ext2 filesystems. To make development simpler, we wrote
 a Python wrapper called \texttt{pyext2} around a subset of this library's functionality.
 This library can open and scan through an ext2 or ext3 filesystem, report
 various information about its contents, and swap the locations of arbitrary data
-blocks while maintaining the filesystem's internal consistency.
+blocks while maintaining the filesystem's internal consistency. With this library,
+it was easy for us to write a wide variety of quick Python scripts to accomplish
+a variety of filesystem-related tasks.
 
 Although there are some tentative mechanisms to allow the online rearrangement
 of ext3 blocks\cite{ext3online}, Bolero is designed to run only on unmounted filesystems.
@@ -150,7 +151,7 @@ of the system's ability to safely and correctly alter filesystems.
 
 Once the reorganizer can reduce file discontiguity, it is possible to
 use that same mechanism to reduce inter-file discontiguity, as explained
-in section \ref{sec:motive}. Both types of defragmentation are necessary because the overall goal is to reduce the quantity of seeks and spin waits. The ideal state of affairs is for the disk to travel through
+in section \ref{sec:motive}. Both types of defragmentation are necessary because the overall goal is to reduce the quantity of seeks and increase contiguity. The ideal state of affairs is for the disk to travel through
 a sequence of files without interruption\cite{autolocality}, from the first block of the first file to the last
 block of the last file with no delays or seeks.
 
@@ -196,7 +197,7 @@ files they opened.
 \item A timestamp is taken, and the target program is started.
 \item When the program is finished loading (the definition of which is dependent upon the particular program being observed), the elapsed time is recorded, and \texttt{frecord} is stopped if it had been started earlier. It is at this
 point that \texttt{frecord} writes its collected information to disk.
-\item The target program is killed.
+\item The target program is terminated, and the procedure can begin again.
 \end{enumerate}
 
 For each target program, this procedure was repeated 100 times. For each run of the procedure, the \texttt{frecord}
@@ -204,7 +205,7 @@ process noted which processes started up after its initialization. Every 3 milli
 of these processes were recorded to memory. Afterwords, the information in these 100 recordings of file usage
 was collected by the \texttt{fsummarize} tool, which uses it to produce a best-guess list of all the files
 that might be opened the next time the target application starts up, in the order they are most likely to be
-opened in. All files which were opened in even one of the recorded sessions are included in the list. n theory,
+opened in. All files which were opened in even one of the recorded sessions are included in the list. In theory,
 it is better to include an unnecessary file and have the disk head skip over it with relatively little expense than to omit it and force the disk to (even occasionally) perform an expensive seek to some other part of the disk
 and then back.
 
@@ -227,7 +228,7 @@ In order to gauge how successful any optimization is, it is important to have
 repeatable, objective measurements. For the specific task that Bolero was written
 to address, optimizing the startup time of various applications, this means that it
 is necessary to have a way to accurately measure the amount of time it takes for
-a program to startup, and then to perform that measurement a statistically significant
+a program to startup, and then to perform that measurement a significant
 number of times on both a control filesystem and a filesystem optimized for that program.
 
 % This figure is up here in this weird spot so that it appears at the top of the page describing the
@@ -286,7 +287,7 @@ server supplies those rows to the client, the ending timestamp is taken. The res
 
 The mean time elapsed between beginning and ending timestamps for the control was 6558.43 ms, with a standard deviation of 99.82 ms. The \texttt{frecord} observations for MySQL yielded a sequence of 142 files, including the database files themselves, the various programs and libraries used by MySQL, and those resources used by the init.d script. After those files were defragmented with \texttt{defragment.py}, the mean time elapsed decreased by nearly a second to 5873.32 ms, with a standard deviation of 147.24 ms. The results after defragmentation with \texttt{mdefragment.py} were very similar, with a mean of 5884.01 ms and a standard deviation of 152.76 ms, after the removal of one outlier (8237 ms) from the result set.
 
-Thus, both types of defragmentation resulted in a statistically significant change in the mean startup time of MySQL, a reduction of about a full second. The optimization, however, also increased the variance between samples significantly.
+Thus, both types of defragmentation resulted in a significant change in the mean startup time of MySQL, a reduction of about a full second. The optimization, however, also increased the variance between samples significantly.
 
 % This figure is up here in this weird spot so that it appears at the top of the page describing the
 % related results. LaTeX can sometimes be too smart for its own good.
