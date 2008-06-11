@@ -50,14 +50,14 @@ more closely to this ideal. Bolero, the Block Organizer that Localizes Empirical
 \section{Motivation for Bolero}\label{sec:motive}
 
 In most filesystems, files are divided up
-into one or more fixed-size chunks, called \texttt{blocks}CITETHIS. When a file's blocks
+into one or more fixed-size chunks, typically called \texttt{blocks} or \texttt{clusters} (throughout the rest of this paper, we will use the former term). When a file's blocks
 are not contiguous on disk, then the file is \texttt{fragmented}
 and operations that require more than one block from the file are slow due to
 seek and spin delays. The best proactive way to prevent fragmentation is to find contiguous
 chunks of available space when allocating new files. Some older filesystems, such as FAT, were
 very ineffective at doing this\cite{fathistory}.
 FAT filesystems frequently had to be \texttt{defragmented} to maintain performance.
-Modern filesystems, such as NTFS CITETHIS and ext3 CITETHIS, keep better track of free space,
+Modern filesystems keep better track of free space,
 and do not tend to fragment until the filesystem becomes nearly full. Advanced filesystems sometimes
 use even more sophisticated strategies to prevent fragmentation, such as preallocating extra room to allow 
 contiguous appending, or delaying physical allocation as long as possible so that better guesses
@@ -190,7 +190,7 @@ the optimization process was yielding, as described in section \ref{sec:results}
 For each task in each state (either the untouched control state or an optimized state), the
 following procedure was used to collect observational data:
 \begin{enumerate}
-\item A \texttt{proc}-based mechanism is used to clear the Linux system's software-based disk cache. CITETHIS
+\item A \texttt{proc}-based mechanism is used to clear the Linux system's software-based disk cache.
 \item Thirty MB is read from the beginning of the target drive, far from the target filesystem, in order to deceive the drive's internal cache. Without this step, test results tended to change as subsequent tests were performed, as the drive restored information from its cache rather than seeking to and reading the physical data itself.
 \item If applicable, a tool called \texttt{frecord} is started, which would monitor for new processes starting up and record which
 files they opened.
@@ -314,8 +314,8 @@ Desktop environments such as KDE are complex systems which run several independe
 
 We decided to use the Konqueror web-browser for the timing metric, by having KDE4 start it automatically upon logging in, and directing it to a local port being managed by the test framework. The ending timestamp is taken as soon as the port is opened. This approach was chosen for several reasons:
 \begin{itemize}
-\item Konqueror depends upon several other KDE components, including its interprocess communication system, and its IO handler system CITETHIS. Therefore, before Konqueror could effectively attempt to contact the test server, a good portion of KDE would have to be loaded first.
-\item KDE's auto-start mechanism, which is used to start up user-specified programs automatically each time a new session is started, is activated near the end of the KDE initialization process CITETHIS. By this point, nearly all of X and KDE will have been loaded, or at least started loading.
+\item Konqueror depends upon several other KDE components and depdencies, such as the interprocess communication system \texttt{DBUS}\cite{dbus}, and its IO abstraction layer \texttt{KIO}. Therefore, before Konqueror could initialize to the point of being able to contact the test server, a good portion of KDE and KDE's dependencies would have to be loaded first.
+\item KDE's auto-start mechanism, which is used to start up user-specified programs automatically each time a new session is started, is activated near the end of the KDE initialization process\cite{kdeautostart}. By this point, nearly all of X and KDE will have been loaded, or at least started loading.
 \item Browsing a webpage is a reasonable choice for a task a user would want to do as soon as possible after starting an X/KDE session. 
 \end{itemize}
 
